@@ -15,5 +15,5 @@ make
 ## Running
 ```bash
 cd bin
-./fuse <filename.fuse>
+./fuse <filename>.fuse
 ```
