@@ -1,5 +1,5 @@
-# Ignore custom cmake directories
 bin/
-
-# Ignore generated ANTLR sources
 gen/
+build/
+.cache/
+.DS_Store
