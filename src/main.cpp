@@ -3,6 +3,7 @@
 
 #include "ANTLRFileStream.h"
 #include "CommonTokenStream.h"
+#include "ast/ast_builder.h"
 #include "tree/ParseTree.h"
 
 #include <iostream>
@@ -22,16 +23,9 @@ int main(int argc, char** argv) {
     antlr4::CommonTokenStream tokens(&lexer);
     fusion::FusionParser parser(&tokens);
 
-    // Get the root of the parse tree. Use your base rule name.
     antlr4::tree::ParseTree* tree = parser.file();
-
-    // MyVisitor visitor;
-    // Visit the tree
-    // visitor.visit(tree);
-
-    // HOW TO WRITE OUT.
-    // std::ofstream out(argv[2]);
-    // out << "This is out...\n";
+    AstBuilder builder;
+    builder.visit(tree);
 
     return 0;
 }

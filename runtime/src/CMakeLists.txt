@@ -1,7 +1,7 @@
 # Gather our source files in this directory.
 set(
   fusion_rt_files
-  "${CMAKE_CURRENT_SOURCE_DIR}/placeholder.c"
+  "${CMAKE_CURRENT_SOURCE_DIR}/io.c"
 )
 
 # Build our executable from the source files.
