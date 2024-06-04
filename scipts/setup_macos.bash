@@ -157,7 +157,7 @@ if [ ! -d "$HOME/llvm-project" ]; then
 
 	ninja check-all -j $THREADS
 
-	PATH="$MLIR_INS/bin:$PATH"
+	PATH="$MLIR_INS/bin:'$PATH'"
 	echo "export MLIR_INS=\"$MLIR_INS\"" >>~/.zshrc
 	echo "export MLIR_DIR=\"$MLIR_DIR\"" >>~/.zshrc
 	echo "export PATH=\"$PATH\"" >>~/.zshrc
