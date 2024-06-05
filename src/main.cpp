@@ -3,16 +3,15 @@
 
 #include "ANTLRFileStream.h"
 #include "CommonTokenStream.h"
-#include "ast/ast_builder.h"
+#include "ast/builder.h"
 #include "tree/ParseTree.h"
 
 #include <iostream>
 
 int main(int argc, char** argv) {
     if (argc < 3) {
-        std::cout
-            << "Missing required argument.\n"
-            << "Required arguments: <input file path> <output file path>\n";
+        std::cout << "Missing required argument.\n"
+                  << "Required arguments: <input.fuse> <output>\n";
         return 1;
     }
 
