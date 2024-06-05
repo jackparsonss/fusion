@@ -1,5 +1,7 @@
 #include "backend/backend.h"
 
+Backend::Backend(ast::Block* ast) : BackendVisitor(ast) {}
+
 ast::Block* Backend::traverse() {
     visit(ast);
 
@@ -7,10 +9,6 @@ ast::Block* Backend::traverse() {
     return ast;
 }
 
-mlir::Value Backend::visit_block(ast::Block* node) {
-    for (ast::Node* const& statement : node->nodes) {
-        visit(statement);
-    }
+void Backend::to_object(std::string filename) {}
 
-    return nullptr;
-}
+void Backend::codegen(std::ostream& outstream) {}
