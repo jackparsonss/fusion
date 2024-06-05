@@ -10,13 +10,6 @@
 #include <iostream>
 
 int main(int argc, char** argv) {
-    if (argc < 3) {
-        std::cout << "Missing required argument.\n"
-                  << "Required arguments: <input.fuse> <output>\n";
-        return 1;
-    }
-
-    // Open the file then parse and lex it.
     antlr4::ANTLRFileStream afs;
     afs.loadFromFile(argv[1]);
     fusion::FusionLexer lexer(&afs);

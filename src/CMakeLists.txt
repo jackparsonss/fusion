@@ -19,12 +19,25 @@ set(LLVM_LINK_COMPONENTS Core Support)
 llvm_map_components_to_libnames(llvm_libs core)
 get_property(dialect_libs GLOBAL PROPERTY MLIR_DIALECT_LIBS)
 
+execute_process(
+    COMMAND ${LLVM_TOOLS_BINARY_DIR}/llvm-config --ldflags
+    OUTPUT_VARIABLE LLVM_LD_FLAGS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LLVM_LD_FLAGS}")
+set(CMAKE_SYSTEM_PROCESSOR "${LLVM_SYSTEM_LIBS}")
+foreach(target ${LLVM_TARGETS_TO_BUILD})
+  list(APPEND targets "LLVM${target}CodeGen")
+endforeach()
+
 # Add the antlr runtime and parser as libraries to link.
 target_link_libraries(fuse PRIVATE
     parser
     antlr4-runtime
     ${llvm_libs}
     ${dialect_libs}
+    ${targets}
 )
 
 # Symbolic link our executable to the base directory so we don't have to go searching for it.
