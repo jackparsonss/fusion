@@ -3,6 +3,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/backend.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/visitor.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/backend/context.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/builder.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/ast.cpp"
 )
