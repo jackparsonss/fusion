@@ -12,7 +12,8 @@ extern std::unique_ptr<mlir::ModuleOp> module;
 extern std::shared_ptr<mlir::OpBuilder> builder;
 extern mlir::MLIRContext context;
 
-extern mlir::Type t_int;
+extern mlir::Type i32;
+extern mlir::Type t_void;
 
 extern void initialize_context();
 }  // namespace ctx

@@ -5,6 +5,7 @@
 
 #include "ast/ast.h"
 #include "backend/context.h"
+#include "backend/io.h"
 #include "backend/visitor.h"
 
 #include "llvm/IR/LegacyPassManager.h"
@@ -20,6 +21,7 @@
 #include "llvm/Transforms/InstCombine/InstCombine.h"
 #include "llvm/Transforms/Scalar.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
+#include "mlir/Dialect/LLVMIR/LLVMTypes.h"
 #include "mlir/IR/Value.h"
 #include "mlir/IR/Verifier.h"
 #include "mlir/Target/LLVMIR/Dialect/LLVMIR/LLVMToLLVMIRTranslation.h"

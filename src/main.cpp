@@ -5,6 +5,7 @@
 #include "CommonTokenStream.h"
 #include "ast/builder.h"
 #include "backend/backend.h"
+#include "backend/context.h"
 #include "tree/ParseTree.h"
 
 #include <iostream>
@@ -17,6 +18,8 @@ int main(int argc, char** argv) {
     fusion::FusionParser parser(&tokens);
 
     antlr4::tree::ParseTree* tree = parser.file();
+
+    ctx::initialize_context();
     AstBuilder builder;
     builder.visit(tree);
     assert(builder.has_ast());
@@ -46,7 +49,7 @@ int main(int argc, char** argv) {
             backend.to_object(filename + ".o");
 
             std::string command = "clang " + filename + ".o -o " + filename +
-                                  " -L./ -lgazrt -Wl,-rpath,./";
+                                  " -L./ -lfusert -Wl,-rpath,./";
             system(command.c_str());
 
             command = "rm " + filename + ".o";
