@@ -5,8 +5,8 @@ Backend::Backend(std::shared_ptr<ast::Block> ast) : BackendVisitor(ast) {}
 std::shared_ptr<ast::Block> Backend::traverse() {
     visit(ast);
 
-    if (mlir::failed(mlir::verify(ctx::module))) {
-        ctx::module.emitError("module failed to verify");
+    if (mlir::failed(mlir::verify(*ctx::module))) {
+        ctx::module->emitError("module failed to verify");
         return nullptr;
     }
 
@@ -18,7 +18,7 @@ void Backend::to_object(std::string filename) {
 
     llvm::LLVMContext llvm_context;
     std::unique_ptr<llvm::Module> llvm_module =
-        mlir::translateModuleToLLVMIR(ctx::module, llvm_context);
+        mlir::translateModuleToLLVMIR(*ctx::module, llvm_context);
 
     if (!llvm_module) {
         std::cerr << "Failed to lower MLIR to LLVM" << std::endl;
@@ -79,7 +79,7 @@ void Backend::codegen(std::ostream& outstream) {
 
     llvm::LLVMContext llvm_context;
     std::unique_ptr<llvm::Module> llvm_module =
-        mlir::translateModuleToLLVMIR(ctx::module, llvm_context);
+        mlir::translateModuleToLLVMIR(*ctx::module, llvm_context);
 
     if (!llvm_module) {
         std::cerr << "Failed to translate to LLVM IR" << std::endl;
