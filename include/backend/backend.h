@@ -6,6 +6,7 @@
 #include "ast/ast.h"
 #include "backend/context.h"
 #include "backend/io.h"
+#include "backend/types/integer.h"
 #include "backend/visitor.h"
 
 #include "llvm/IR/LegacyPassManager.h"
