@@ -1,6 +1,10 @@
 #include "ast/ast.h"
 
 ast::Node::Node(Token* token) {
+    if (token == nullptr) {
+        return;
+    }
+
     this->token = new antlr4::CommonToken(token);
 }
 
