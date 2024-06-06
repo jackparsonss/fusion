@@ -19,7 +19,7 @@ class Node {
 
 class Block : public Node {
    public:
-    std::vector<Node*> nodes;
+    std::vector<std::shared_ptr<Node>> nodes;
 
     explicit Block(Token* token);
     void xml(int level) override;

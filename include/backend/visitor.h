@@ -1,16 +1,18 @@
 #pragma once
 
+#include <memory>
+
 #include "ast/ast.h"
 #include "mlir/IR/Value.h"
 
 class BackendVisitor {
    protected:
-    mlir::Value visit(ast::Node*);
+    mlir::Value visit(std::shared_ptr<ast::Node>);
 
    public:
-    ast::Block* ast;
+    std::shared_ptr<ast::Block> ast;
 
-    explicit BackendVisitor(ast::Block*);
-    virtual ast::Block* traverse() = 0;
-    virtual mlir::Value visit_block(ast::Block*) = 0;
+    explicit BackendVisitor(std::shared_ptr<ast::Block>);
+    virtual std::shared_ptr<ast::Block> traverse() = 0;
+    virtual mlir::Value visit_block(std::shared_ptr<ast::Block>) = 0;
 };

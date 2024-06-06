@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <ostream>
 
 #include "ast/ast.h"
@@ -26,11 +27,11 @@
 
 class Backend : public BackendVisitor {
    public:
-    explicit Backend(ast::Block*);
+    explicit Backend(std::shared_ptr<ast::Block>);
 
     void codegen(std::ostream& outstream);
     void to_object(std::string filename);
 
-    ast::Block* traverse() override;
-    mlir::Value visit_block(ast::Block*) override;
+    std::shared_ptr<ast::Block> traverse() override;
+    mlir::Value visit_block(std::shared_ptr<ast::Block>) override;
 };

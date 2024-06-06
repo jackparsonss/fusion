@@ -1,8 +1,8 @@
 #include "backend/backend.h"
 
-Backend::Backend(ast::Block* ast) : BackendVisitor(ast) {}
+Backend::Backend(std::shared_ptr<ast::Block> ast) : BackendVisitor(ast) {}
 
-ast::Block* Backend::traverse() {
+std::shared_ptr<ast::Block> Backend::traverse() {
     visit(ast);
 
     if (mlir::failed(mlir::verify(ctx::module))) {

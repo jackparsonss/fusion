@@ -9,7 +9,7 @@ ast::Block::Block(Token* token) : Node(token) {}
 void ast::Block::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "<block>\n";
 
-    for (Node* const& node : this->nodes) {
+    for (std::shared_ptr<Node> const& node : this->nodes) {
         node->xml(level + 1);
         std::cout << std::endl;
     }
