@@ -1,4 +1,3 @@
-#include "backend/visitor.h"
 #include "backend/backend.h"
 
 BackendVisitor::BackendVisitor(std::shared_ptr<ast::Block> ast) {
