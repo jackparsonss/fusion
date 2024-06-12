@@ -9,6 +9,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/types/integer.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/builder.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/ast.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type.cpp"
 )
 
 # Build our executable from the source files.
