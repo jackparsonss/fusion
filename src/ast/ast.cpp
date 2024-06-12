@@ -20,3 +20,24 @@ void ast::Block::xml(int level) {
 
     std::cout << std::string(level * 4, ' ') << "</block>\n";
 }
+
+ast::Expression::Expression(TypePtr type, Token* token) : Node(token) {
+    this->type = type;
+}
+
+void ast::Expression::set_type(TypePtr type) {
+    this->type = type;
+}
+
+TypePtr ast::Expression::get_type() const {
+    return this->type;
+}
+
+ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
+    : Expression(make_shared<Type>(NativeType::Int), token) {
+    this->value = value;
+}
+
+int ast::IntegerLiteral::get_value() const {
+    return this->value;
+}
