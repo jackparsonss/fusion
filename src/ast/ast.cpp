@@ -41,3 +41,8 @@ ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
 int ast::IntegerLiteral::get_value() const {
     return this->value;
 }
+
+void ast::IntegerLiteral::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<i32 literal value=\""
+              << this->value << "\"/>\n";
+}

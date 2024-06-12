@@ -46,5 +46,7 @@ class IntegerLiteral : public Expression {
    public:
     explicit IntegerLiteral(int value, Token* token);
     int get_value() const;
+
+    void xml(int level) override;
 };
 }  // namespace ast
