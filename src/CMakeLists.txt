@@ -8,6 +8,9 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/utils.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/types/integer.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/builder.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/scope.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/symbol.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/symbol_table.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/ast.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/shared/type.cpp"
 )
