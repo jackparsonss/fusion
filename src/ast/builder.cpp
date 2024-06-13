@@ -1,4 +1,5 @@
 #include "ast/builder.h"
+#include "ast/ast.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
@@ -16,7 +17,7 @@ std::any Builder::visitFile(FusionParser::FileContext* ctx) {
     this->ast = std::make_shared<ast::Block>(nullptr);
 
     for (auto const& s : ctx->statement()) {
-        shared_ptr<ast::Node> node = cast_node(ast::Node, this->visit(s));
+        shared_ptr<ast::Node> node = cast_node(ast::Node, visit(s));
 
         this->ast->nodes.push_back(node);
     }
@@ -32,7 +33,21 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
     throw std::runtime_error("found an invalid statement");
 }
 
-std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {}
+std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
+    std::string name = ctx->ID()->getText();
+    Token* token = ctx->ID()->getSymbol();
+
+    ast::Qualifier qualifier =
+        std::any_cast<ast::Qualifier>(visit(ctx->qualifier()));
+    auto type = std::any_cast<shared_ptr<Type>>(visit(ctx->type()));
+    shared_ptr<ast::Expression> expr =
+        cast_node(ast::Expression, visit(ctx->expr()));
+
+    auto var = make_shared<ast::Variable>(qualifier, type, name, token);
+    auto decl = make_shared<ast::Declaration>(var, expr, token);
+
+    return to_node(decl);
+}
 
 std::any Builder::visitType(FusionParser::TypeContext* ctx) {
     if (ctx->I32() != nullptr) {

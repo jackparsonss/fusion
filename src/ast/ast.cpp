@@ -42,7 +42,6 @@ void ast::Block::xml(int level) {
 
     for (shared_ptr<Node> const& node : this->nodes) {
         node->xml(level + 1);
-        std::cout << std::endl;
     }
 
     std::cout << std::string(level * 4, ' ') << "</block>\n";
@@ -71,7 +70,7 @@ int ast::IntegerLiteral::get_value() const {
 
 void ast::IntegerLiteral::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "<i32 value=\"" << this->value
-              << "\"/>";
+              << "\"/>\n";
 }
 
 ast::Variable::Variable(Qualifier qualifier,
