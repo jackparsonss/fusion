@@ -43,6 +43,6 @@ int ast::IntegerLiteral::get_value() const {
 }
 
 void ast::IntegerLiteral::xml(int level) {
-    std::cout << std::string(level * 4, ' ') << "<i32 literal value=\""
-              << this->value << "\"/>\n";
+    std::cout << std::string(level * 4, ' ') << "<i32 value=\"" << this->value
+              << "\"/>";
 }
