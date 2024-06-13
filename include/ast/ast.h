@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include "CommonToken.h"
@@ -10,6 +11,7 @@
 
 using antlr4::Token;
 using std::make_shared;
+using std::shared_ptr;
 
 namespace ast {
 class Node {
