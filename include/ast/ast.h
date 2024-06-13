@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include <random>
 #include <string>
 
 #include "CommonToken.h"
@@ -18,6 +19,9 @@ enum class Qualifier {
     Const,
     Let,
 };
+
+std::string random_name();
+std::string qualifier_to_string(Qualifier qualifier);
 
 class Node {
    public:
@@ -53,6 +57,35 @@ class IntegerLiteral : public Expression {
    public:
     explicit IntegerLiteral(int value, Token* token);
     int get_value() const;
+
+    void xml(int level) override;
+};
+
+class Variable : public Expression {
+   private:
+    std::string name;
+    std::string ref_name;
+
+   public:
+    Qualifier qualifier;
+
+    explicit Variable(Qualifier qualifier,
+                      TypePtr type,
+                      std::string name,
+                      Token* token);
+
+    std::string get_ref_name();
+    std::string get_name();
+    void xml(int level) override;
+};
+
+class Declaration : public Node {
+   public:
+    shared_ptr<Variable> var;
+    shared_ptr<Expression> expr;
+    explicit Declaration(shared_ptr<Variable> var,
+                         shared_ptr<Expression> expr,
+                         Token* token);
 
     void xml(int level) override;
 };

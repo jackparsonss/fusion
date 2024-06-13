@@ -15,7 +15,8 @@ std::shared_ptr<Type> Symbol::get_type() {
     return this->type;
 }
 
-BuiltinTypeSymbol::BuiltinTypeSymbol(std::string name) : Symbol(name) {}
+BuiltinTypeSymbol::BuiltinTypeSymbol(std::string name, NativeType base)
+    : Symbol(name), Type(base) {}
 
 std::string BuiltinTypeSymbol::get_name() {
     return Symbol::get_name();

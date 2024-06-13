@@ -22,7 +22,7 @@ typedef std::shared_ptr<Symbol> SymbolPtr;
 
 class BuiltinTypeSymbol : public Symbol, public Type {
    public:
-    BuiltinTypeSymbol(std::string name);
+    BuiltinTypeSymbol(std::string name, NativeType base);
     std::string get_name() override;
 };
 

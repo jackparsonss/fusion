@@ -1,6 +1,4 @@
 #include "ast/builder.h"
-#include "ast/ast.h"
-#include "shared/type.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
