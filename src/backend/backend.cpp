@@ -16,8 +16,6 @@ std::shared_ptr<ast::Block> Backend::traverse() {
     visit(ast);
 
     mlir::Value zero = integer::create_i32(0);
-    io::print(zero);
-
     ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
 
     if (mlir::failed(mlir::verify(*ctx::module))) {

@@ -5,8 +5,11 @@
 
 #include "FusionBaseVisitor.h"
 #include "FusionParser.h"
-#include "ast/ast.h"
 
+#include "ast/ast.h"
+#include "shared/type.h"
+
+using std::make_shared;
 using namespace fusion;
 
 class AstBuilder : public FusionBaseVisitor {
