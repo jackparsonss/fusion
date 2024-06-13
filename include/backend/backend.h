@@ -28,6 +28,8 @@
 #include "mlir/Target/LLVMIR/Dialect/LLVMIR/LLVMToLLVMIRTranslation.h"
 #include "mlir/Target/LLVMIR/Export.h"
 
+using std::shared_ptr;
+
 class Backend : public BackendVisitor {
    public:
     explicit Backend(std::shared_ptr<ast::Block>);
@@ -37,4 +39,6 @@ class Backend : public BackendVisitor {
 
     std::shared_ptr<ast::Block> traverse() override;
     mlir::Value visit_block(std::shared_ptr<ast::Block>) override;
+    mlir::Value visit_integer_literal(
+        shared_ptr<ast::IntegerLiteral> node) override;
 };

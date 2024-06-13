@@ -15,4 +15,6 @@ class BackendVisitor {
     explicit BackendVisitor(std::shared_ptr<ast::Block>);
     virtual std::shared_ptr<ast::Block> traverse() = 0;
     virtual mlir::Value visit_block(std::shared_ptr<ast::Block>) = 0;
+    virtual mlir::Value visit_integer_literal(
+        std::shared_ptr<ast::IntegerLiteral>) = 0;
 };
