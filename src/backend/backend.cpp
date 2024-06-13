@@ -1,10 +1,10 @@
 #include "backend/backend.h"
 
-Backend::Backend(std::shared_ptr<ast::Block> ast) : BackendVisitor(ast) {
+Backend::Backend(shared_ptr<ast::Block> ast) : BackendVisitor(ast) {
     ctx::builder->setInsertionPointToStart(ctx::module->getBody());
 }
 
-std::shared_ptr<ast::Block> Backend::traverse() {
+shared_ptr<ast::Block> Backend::traverse() {
     // temporarily set up main since llvm requires it, eventually all functions
     // will be handled together
     auto t_main = mlir::LLVM::LLVMFunctionType::get(ctx::i32, {}, false);
@@ -16,8 +16,6 @@ std::shared_ptr<ast::Block> Backend::traverse() {
     visit(ast);
 
     mlir::Value zero = integer::create_i32(0);
-    io::print(zero);
-
     ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
 
     if (mlir::failed(mlir::verify(*ctx::module))) {
