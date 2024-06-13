@@ -3,7 +3,7 @@
 #include <memory>
 
 enum class NativeType {
-    Int,
+    Int32,
 };
 
 class Type {

@@ -34,7 +34,7 @@ TypePtr ast::Expression::get_type() const {
 }
 
 ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
-    : Expression(make_shared<Type>(NativeType::Int), token) {
+    : Expression(make_shared<Type>(NativeType::Int32), token) {
     this->value = value;
 }
 

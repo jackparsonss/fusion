@@ -14,6 +14,11 @@ using std::make_shared;
 using std::shared_ptr;
 
 namespace ast {
+enum class Qualifier {
+    Const,
+    Let,
+};
+
 class Node {
    public:
     Token* token;

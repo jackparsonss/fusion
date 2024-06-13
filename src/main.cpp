@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     antlr4::tree::ParseTree* tree = parser.file();
 
     ctx::initialize_context();
-    AstBuilder builder;
+    Builder builder;
     builder.visit(tree);
     assert(builder.has_ast());
 
