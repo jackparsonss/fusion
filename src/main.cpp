@@ -3,11 +3,13 @@
 
 #include "ANTLRFileStream.h"
 #include "CommonTokenStream.h"
+#include "tree/ParseTree.h"
+
 #include "ast/builder.h"
+#include "ast/passes/pass.h"
 #include "ast/symbol/symbol_table.h"
 #include "backend/backend.h"
 #include "backend/context.h"
-#include "tree/ParseTree.h"
 
 #include <iostream>
 
@@ -25,6 +27,9 @@ int main(int argc, char** argv) {
 
     Builder builder = Builder(symtab);
     builder.visit(tree);
+    assert(builder.has_ast());
+
+    pass::run_passes(builder.get_ast());
     assert(builder.has_ast());
 
     Backend backend = Backend(builder.get_ast());
