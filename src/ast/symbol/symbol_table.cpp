@@ -8,7 +8,7 @@ SymbolTable::SymbolTable() {
 }
 
 void SymbolTable::init_types() {
-    define(make_shared<BuiltinTypeSymbol>("int"));
+    define(make_shared<BuiltinTypeSymbol>("i32", NativeType::Int32));
 }
 
 void SymbolTable::push() {

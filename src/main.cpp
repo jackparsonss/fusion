@@ -4,6 +4,7 @@
 #include "ANTLRFileStream.h"
 #include "CommonTokenStream.h"
 #include "ast/builder.h"
+#include "ast/symbol/symbol_table.h"
 #include "backend/backend.h"
 #include "backend/context.h"
 #include "tree/ParseTree.h"
@@ -20,7 +21,9 @@ int main(int argc, char** argv) {
     antlr4::tree::ParseTree* tree = parser.file();
 
     ctx::initialize_context();
-    AstBuilder builder;
+    std::shared_ptr<SymbolTable> symtab = std::make_shared<SymbolTable>();
+
+    Builder builder = Builder(symtab);
     builder.visit(tree);
     assert(builder.has_ast());
 

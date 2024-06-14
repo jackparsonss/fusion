@@ -7,20 +7,27 @@
 #include "FusionParser.h"
 
 #include "ast/ast.h"
+#include "ast/symbol/symbol_table.h"
 #include "shared/type.h"
 
 using std::make_shared;
+using std::shared_ptr;
 using namespace fusion;
 
-class AstBuilder : public FusionBaseVisitor {
+class Builder : public FusionBaseVisitor {
    private:
-    std::shared_ptr<ast::Block> ast;
+    shared_ptr<ast::Block> ast;
+    shared_ptr<SymbolTable> symbol_table;
 
    public:
+    Builder(shared_ptr<SymbolTable> symbol_table);
     bool has_ast();
-    std::shared_ptr<ast::Block> get_ast();
+    shared_ptr<ast::Block> get_ast();
 
     std::any visitFile(FusionParser::FileContext* ctx) override;
     std::any visitStatement(FusionParser::StatementContext* ctx) override;
     std::any visitLiteralInt(FusionParser::LiteralIntContext* ctx) override;
+    std::any visitDeclaration(FusionParser::DeclarationContext* ctx) override;
+    std::any visitType(FusionParser::TypeContext* ctx) override;
+    std::any visitQualifier(FusionParser::QualifierContext* ctx) override;
 };
