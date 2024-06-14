@@ -3,18 +3,17 @@
 #include <memory>
 #include <string>
 
-enum class NativeType {
-    Int32,
-};
-
 class Type {
    private:
-    NativeType base;
+    std::string name;
 
    public:
-    explicit Type(NativeType type);
-    NativeType get_base() const;
-    std::string to_string();
+    explicit Type(std::string name);
+    std::string get_name() const;
+
+    bool operator==(Type rhs) const;
+
+    static const Type i32;
 };
 
 typedef std::shared_ptr<Type> TypePtr;

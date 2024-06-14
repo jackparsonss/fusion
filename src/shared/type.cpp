@@ -1,18 +1,15 @@
 #include "shared/type.h"
 
-Type::Type(NativeType type) {
-    this->base = type;
+const Type Type::i32 = Type("i32");
+
+Type::Type(std::string name) {
+    this->name = name;
 }
 
-NativeType Type::get_base() const {
-    return this->base;
+bool Type::operator==(Type rhs) const {
+    return this->name == rhs.name;
 }
 
-std::string Type::to_string() {
-    switch (this->base) {
-        case NativeType::Int32:
-            return "i32";
-    }
-
-    throw std::runtime_error("found type without a native type");
+std::string Type::get_name() const {
+    return this->name;
 }

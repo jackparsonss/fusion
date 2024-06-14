@@ -40,7 +40,7 @@ class Block : public Node {
 };
 
 class Expression : public Node {
-   private:
+   protected:
     TypePtr type;
 
    public:

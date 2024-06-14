@@ -60,7 +60,7 @@ TypePtr ast::Expression::get_type() const {
 }
 
 ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
-    : Expression(make_shared<Type>(NativeType::Int32), token) {
+    : Expression(make_shared<Type>(Type::i32), token) {
     this->value = value;
 }
 
@@ -94,7 +94,7 @@ std::string ast::Variable::get_ref_name() {
 void ast::Variable::xml(int level) {
     std::cout << std::string(level * 4, ' ');
     std::cout << "<variable qualifier=\"" << ast::qualifier_to_string(qualifier)
-              << "\" type=\"" << get_type()->to_string() << "\" name=\"" << name
+              << "\" type=\"" << type->get_name() << "\" name=\"" << name
               << "\" ref_name=\"" << ref_name << "\"/>\n";
 }
 
