@@ -7,6 +7,7 @@
 #include "FusionParser.h"
 
 #include "ast/ast.h"
+#include "ast/symbol/symbol_table.h"
 #include "shared/type.h"
 
 using std::make_shared;
@@ -15,6 +16,7 @@ using namespace fusion;
 class Builder : public FusionBaseVisitor {
    private:
     std::shared_ptr<ast::Block> ast;
+    SymbolTable symbol_table;
 
    public:
     bool has_ast();

@@ -2,7 +2,7 @@
 
 Symbol::Symbol(std::string name) : Symbol(name, nullptr) {}
 
-Symbol::Symbol(std::string name, std::shared_ptr<Type> type) {
+Symbol::Symbol(std::string name, TypePtr type) {
     this->name = name;
     this->type = type;
 }
@@ -22,5 +22,5 @@ std::string BuiltinTypeSymbol::get_name() {
     return Symbol::get_name();
 }
 
-VariableSymbol::VariableSymbol(std::string name, std::shared_ptr<Type> type)
+VariableSymbol::VariableSymbol(std::string name, TypePtr type)
     : Symbol(name, type) {}

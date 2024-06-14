@@ -1,5 +1,4 @@
 #include "ast/builder.h"
-#include "ast/ast.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
@@ -39,7 +38,8 @@ std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
 
     ast::Qualifier qualifier =
         std::any_cast<ast::Qualifier>(visit(ctx->qualifier()));
-    auto type = std::any_cast<shared_ptr<Type>>(visit(ctx->type()));
+    auto type = std::any_cast<TypePtr>(visit(ctx->type()));
+
     shared_ptr<ast::Expression> expr =
         cast_node(ast::Expression, visit(ctx->expr()));
 
@@ -50,11 +50,12 @@ std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
 }
 
 std::any Builder::visitType(FusionParser::TypeContext* ctx) {
-    if (ctx->I32() != nullptr) {
-        return make_shared<Type>(NativeType::Int32);
+    auto type = symbol_table.resolve(ctx->getText());
+    if (!type.has_value()) {
+        throw std::runtime_error("invalid type found");
     }
 
-    throw std::runtime_error("invalid type found");
+    return dynamic_pointer_cast<Type>(type.value());
 }
 
 std::any Builder::visitQualifier(FusionParser::QualifierContext* ctx) {
