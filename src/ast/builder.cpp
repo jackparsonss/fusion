@@ -4,6 +4,10 @@
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
 #define to_node(a) static_cast<shared_ptr<ast::Node>>(a)
 
+Builder::Builder(shared_ptr<SymbolTable> symbol_table) {
+    this->symbol_table = symbol_table;
+}
+
 bool Builder::has_ast() {
     return this->ast != nullptr;
 }
@@ -50,7 +54,7 @@ std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
 }
 
 std::any Builder::visitType(FusionParser::TypeContext* ctx) {
-    auto type = symbol_table.resolve(ctx->getText());
+    auto type = symbol_table->resolve(ctx->getText());
     if (!type.has_value()) {
         throw std::runtime_error("invalid type found");
     }

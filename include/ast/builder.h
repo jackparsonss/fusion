@@ -11,16 +11,18 @@
 #include "shared/type.h"
 
 using std::make_shared;
+using std::shared_ptr;
 using namespace fusion;
 
 class Builder : public FusionBaseVisitor {
    private:
-    std::shared_ptr<ast::Block> ast;
-    SymbolTable symbol_table;
+    shared_ptr<ast::Block> ast;
+    shared_ptr<SymbolTable> symbol_table;
 
    public:
+    Builder(shared_ptr<SymbolTable> symbol_table);
     bool has_ast();
-    std::shared_ptr<ast::Block> get_ast();
+    shared_ptr<ast::Block> get_ast();
 
     std::any visitFile(FusionParser::FileContext* ctx) override;
     std::any visitStatement(FusionParser::StatementContext* ctx) override;
