@@ -1,6 +1,8 @@
 #include "ast/passes/pass.h"
 #include "ast/passes/def_ref.h"
 
+constexpr bool debug = false;
+
 void pass::run_passes(std::shared_ptr<ast::Block> ast,
                       shared_ptr<SymbolTable> symtab) {
     std::vector<std::shared_ptr<Pass>> passes = {
@@ -8,8 +10,18 @@ void pass::run_passes(std::shared_ptr<ast::Block> ast,
     };
 
     for (std::shared_ptr<Pass>& pass : passes) {
+        if (debug) {
+            std::cout << "Running Pass: " << pass->name << std::endl;
+        }
         pass->run(ast);
+        if (debug) {
+            std::cout << "Exiting Pass: " << pass->name << std::endl;
+        }
     }
+}
+
+Pass::Pass(std::string name) {
+    this->name = name;
 }
 
 void Pass::run(shared_ptr<ast::Block> ast) {

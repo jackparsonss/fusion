@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "ast/ast.h"
 #include "ast/symbol/symbol_table.h"
@@ -12,6 +13,8 @@ class Pass {
     void visit(shared_ptr<ast::Node>);
 
    public:
+    std::string name;
+    explicit Pass(std::string name);
     virtual void run(shared_ptr<ast::Block> ast);
     virtual void visit_block(shared_ptr<ast::Block>);
     virtual void visit_integer_literal(shared_ptr<ast::IntegerLiteral>);

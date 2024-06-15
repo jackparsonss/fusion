@@ -1,6 +1,6 @@
 #include "ast/passes/def_ref.h"
 
-DefRef::DefRef(shared_ptr<SymbolTable> symbol_table) {
+DefRef::DefRef(shared_ptr<SymbolTable> symbol_table) : Pass("DefRef") {
     this->symbol_table = symbol_table;
 }
 
