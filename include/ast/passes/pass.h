@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "ast/ast.h"
+#include "ast/symbol/symbol_table.h"
 
 using std::shared_ptr;
 
@@ -19,5 +20,5 @@ class Pass {
 };
 
 namespace pass {
-void run_passes(shared_ptr<ast::Block> ast);
+void run_passes(shared_ptr<ast::Block> ast, shared_ptr<SymbolTable>);
 }

@@ -1,4 +1,5 @@
 #include "ast/builder.h"
+#include "ast/ast.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
@@ -86,4 +87,15 @@ std::any Builder::visitLiteralInt(FusionParser::LiteralIntContext* ctx) {
 
     auto node = make_shared<ast::IntegerLiteral>(value, token);
     return to_node(node);
+}
+
+std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
+    Token* token = ctx->ID()->getSymbol();
+    std::string name = ctx->ID()->getText();
+    TypePtr type = make_shared<Type>(Type::unset);
+
+    auto var =
+        make_shared<ast::Variable>(ast::Qualifier::Let, type, name, token);
+
+    return to_node(var);
 }

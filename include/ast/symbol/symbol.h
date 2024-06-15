@@ -3,22 +3,25 @@
 #include <memory>
 #include <string>
 
+#include "ast/ast.h"
 #include "shared/type.h"
+
+using std::shared_ptr;
 
 class Symbol {
    private:
     std::string name;
-    std::shared_ptr<Type> type;
+    shared_ptr<Type> type;
 
    public:
     virtual std::string get_name();
-    virtual std::shared_ptr<Type> get_type();
+    virtual shared_ptr<Type> get_type();
 
     Symbol(std::string name);
-    Symbol(std::string name, std::shared_ptr<Type> type);
+    Symbol(std::string name, shared_ptr<Type> type);
 };
 
-typedef std::shared_ptr<Symbol> SymbolPtr;
+typedef shared_ptr<Symbol> SymbolPtr;
 
 class BuiltinTypeSymbol : public Symbol, public Type {
    public:
@@ -28,5 +31,6 @@ class BuiltinTypeSymbol : public Symbol, public Type {
 
 class VariableSymbol : public Symbol {
    public:
-    VariableSymbol(std::string name, std::shared_ptr<Type> type);
+    shared_ptr<ast::Variable> variable;
+    VariableSymbol(shared_ptr<ast::Variable> variable);
 };

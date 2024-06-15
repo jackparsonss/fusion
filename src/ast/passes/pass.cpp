@@ -1,10 +1,14 @@
 #include "ast/passes/pass.h"
+#include "ast/passes/def_ref.h"
 
-void pass::run_passes(std::shared_ptr<ast::Block> ast) {
-    std::vector<Pass> passes = {};
+void pass::run_passes(std::shared_ptr<ast::Block> ast,
+                      shared_ptr<SymbolTable> symtab) {
+    std::vector<std::shared_ptr<Pass>> passes = {
+        std::make_shared<DefRef>(symtab),
+    };
 
-    for (Pass& pass : passes) {
-        pass.run(ast);
+    for (std::shared_ptr<Pass>& pass : passes) {
+        pass->run(ast);
     }
 }
 

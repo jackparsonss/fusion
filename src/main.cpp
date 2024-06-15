@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     builder.visit(tree);
     assert(builder.has_ast());
 
-    pass::run_passes(builder.get_ast());
+    pass::run_passes(builder.get_ast(), symtab);
     assert(builder.has_ast());
 
     Backend backend = Backend(builder.get_ast());

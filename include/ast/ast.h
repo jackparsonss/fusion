@@ -65,10 +65,9 @@ class Variable : public Expression {
    private:
     std::string name;
     std::string ref_name;
-
-   public:
     Qualifier qualifier;
 
+   public:
     explicit Variable(Qualifier qualifier,
                       TypePtr type,
                       std::string name,
@@ -76,6 +75,10 @@ class Variable : public Expression {
 
     std::string get_ref_name();
     std::string get_name();
+    Qualifier get_qualifier();
+
+    void set_qualifier(Qualifier qualifer);
+    void set_ref_name(std::string name);
     void xml(int level) override;
 };
 

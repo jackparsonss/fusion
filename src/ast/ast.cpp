@@ -83,6 +83,18 @@ ast::Variable::Variable(Qualifier qualifier,
     this->ref_name = random_name();
 }
 
+ast::Qualifier ast::Variable::get_qualifier() {
+    return this->qualifier;
+}
+
+void ast::Variable::set_qualifier(Qualifier qualifier) {
+    this->qualifier = qualifier;
+}
+
+void ast::Variable::set_ref_name(std::string name) {
+    this->ref_name = name;
+}
+
 std::string ast::Variable::get_name() {
     return this->name;
 }

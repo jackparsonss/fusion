@@ -22,5 +22,7 @@ std::string BuiltinTypeSymbol::get_name() {
     return Symbol::get_name();
 }
 
-VariableSymbol::VariableSymbol(std::string name, TypePtr type)
-    : Symbol(name, type) {}
+VariableSymbol::VariableSymbol(shared_ptr<ast::Variable> variable)
+    : Symbol(variable->get_name(), variable->get_type()) {
+    this->variable = variable;
+}

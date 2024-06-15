@@ -10,8 +10,9 @@ declaration:
     qualifier ID COLON type EQ expr SEMI
     ;
 
-expr:
-    INT #literalInt
+expr
+    : INT #literalInt
+    | ID  #variable
     ;
 
 qualifier: CONST | LET;
