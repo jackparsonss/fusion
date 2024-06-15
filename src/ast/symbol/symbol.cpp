@@ -15,12 +15,14 @@ std::shared_ptr<Type> Symbol::get_type() {
     return this->type;
 }
 
-BuiltinTypeSymbol::BuiltinTypeSymbol(std::string name, NativeType base)
-    : Symbol(name), Type(base) {}
+BuiltinTypeSymbol::BuiltinTypeSymbol(std::string name)
+    : Symbol(name), Type(name) {}
 
 std::string BuiltinTypeSymbol::get_name() {
     return Symbol::get_name();
 }
 
-VariableSymbol::VariableSymbol(std::string name, TypePtr type)
-    : Symbol(name, type) {}
+VariableSymbol::VariableSymbol(shared_ptr<ast::Variable> variable)
+    : Symbol(variable->get_name(), variable->get_type()) {
+    this->variable = variable;
+}

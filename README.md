@@ -17,3 +17,16 @@ make
 cd bin
 ./fuse <filename>.fuse
 ```
+
+## Documentation
+### Declarations
+The `let` keyword signifies that the variable can be later changed.
+The `const` keyword signifies that the variable cannot be later changed;
+```
+let x: i32 = 5;
+const y: i32 = x;
+```
+
+### Types
+#### i32
+A 32-bit integer
