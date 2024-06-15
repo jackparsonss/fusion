@@ -14,6 +14,7 @@ class Type {
     bool operator==(Type rhs) const;
 
     static const Type i32;
+    static const Type none;
     static const Type unset;
 };
 

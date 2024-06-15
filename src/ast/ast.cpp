@@ -128,3 +128,31 @@ void ast::Declaration::xml(int level) {
 
     std::cout << std::string(level * 4, ' ') << "</declaration>\n";
 }
+
+ast::Function::Function(std::string name,
+                        shared_ptr<Block> body,
+                        TypePtr return_type,
+                        Token* token)
+    : Expression(return_type, token) {
+    this->name = name;
+    this->ref_name = random_name();
+    this->body = body;
+}
+
+std::string ast::Function::get_name() {
+    return this->name;
+}
+
+std::string ast::Function::get_ref_name() {
+    return this->ref_name;
+}
+
+void ast::Function::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<function return_type=\""
+              << type->get_name() << "\" name=\"" << name << "\" ref_name=\""
+              << ref_name << "\">";
+
+    body->xml(level + 1);
+
+    std::cout << std::string(level * 4, ' ') << "</function>";
+}

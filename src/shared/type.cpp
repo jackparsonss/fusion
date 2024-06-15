@@ -1,6 +1,7 @@
 #include "shared/type.h"
 
 const Type Type::i32 = Type("i32");
+const Type Type::none = Type("none");
 const Type Type::unset = Type("unset");
 
 Type::Type(std::string name) {

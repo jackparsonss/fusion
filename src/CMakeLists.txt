@@ -11,6 +11,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/scope.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/symbol.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/symbol_table.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/function_symbol.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/ast.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/pass.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/def_ref.cpp"

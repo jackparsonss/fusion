@@ -92,4 +92,21 @@ class Declaration : public Node {
 
     void xml(int level) override;
 };
+
+class Function : public Expression {
+   private:
+    std::string name;
+    std::string ref_name;
+
+   public:
+    Function(std::string name,
+             shared_ptr<Block> body,
+             TypePtr return_type,
+             Token* token);
+    shared_ptr<Block> body;
+
+    std::string get_name();
+    std::string get_ref_name();
+    void xml(int level) override;
+};
 }  // namespace ast
