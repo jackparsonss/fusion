@@ -3,6 +3,7 @@
 SymbolTable::SymbolTable() {
     ScopePtr global_scope = make_shared<Scope>(nullptr);
     this->scopes.push_back(global_scope);
+    current_scope = global_scope;
 
     init_types();
 }
@@ -13,12 +14,14 @@ void SymbolTable::init_types() {
 
 void SymbolTable::push() {
     ScopePtr scope = make_shared<Scope>(this->scopes.back());
+    current_scope = scope;
     this->scopes.back()->enclose_scope(scope);
     this->scopes.push_back(scope);
 }
 
 void SymbolTable::pop() {
     this->scopes.pop_back();
+    current_scope = this->scopes.back();
 }
 
 void SymbolTable::define(SymbolPtr symbol) {

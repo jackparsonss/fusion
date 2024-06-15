@@ -33,3 +33,15 @@ void DefRef::visit_declaration(shared_ptr<ast::Declaration> node) {
 
     visit(node->expr);
 }
+
+void DefRef::visit_function(shared_ptr<ast::Function> node) {
+    if (symbol_table->resolve_bottom(name).has_value()) {
+        throw std::runtime_error("function already defined");
+    }
+
+    shared_ptr<FunctionSymbol> sym =
+        std::make_shared<FunctionSymbol>(node, symbol_table->current_scope);
+    symbol_table->define(sym);
+
+    visit(node->body);
+}

@@ -13,6 +13,7 @@ class SymbolTable {
     std::deque<ScopePtr> scopes;
 
    public:
+    ScopePtr current_scope;
     SymbolTable();
     void push();
     void pop();

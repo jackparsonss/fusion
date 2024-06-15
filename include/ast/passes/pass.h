@@ -20,6 +20,7 @@ class Pass {
     virtual void visit_integer_literal(shared_ptr<ast::IntegerLiteral>);
     virtual void visit_declaration(shared_ptr<ast::Declaration>);
     virtual void visit_variable(shared_ptr<ast::Variable>);
+    virtual void visit_function(shared_ptr<ast::Function>);
 };
 
 namespace pass {
