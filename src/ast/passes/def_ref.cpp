@@ -24,7 +24,8 @@ void DefRef::visit_variable(shared_ptr<ast::Variable> node) {
 
 void DefRef::visit_declaration(shared_ptr<ast::Declaration> node) {
     if (symbol_table->resolve_local(node->var->get_name()).has_value()) {
-        throw std::runtime_error("variable already defined");
+        throw std::runtime_error("variable already defined: " +
+                                 node->var->get_name());
     }
 
     auto var = node->var;
@@ -50,7 +51,8 @@ void DefRef::visit_function(shared_ptr<ast::Function> node) {
 void DefRef::visit_call(shared_ptr<ast::Call> node) {
     std::optional<SymbolPtr> var = symbol_table->resolve(node->get_name());
     if (!var.has_value()) {
-        throw std::runtime_error("found undefined function");
+        throw std::runtime_error("found undefined function: " +
+                                 node->get_name());
     }
 
     shared_ptr<FunctionSymbol> vs =

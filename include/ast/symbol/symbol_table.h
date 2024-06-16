@@ -2,6 +2,8 @@
 
 #include <deque>
 
+#include "CommonToken.h"
+#include "ast/symbol/function_symbol.h"
 #include "ast/symbol/scope.h"
 #include "ast/symbol/symbol.h"
 

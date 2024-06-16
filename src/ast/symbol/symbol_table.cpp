@@ -9,7 +9,14 @@ SymbolTable::SymbolTable() {
 }
 
 void SymbolTable::init_types() {
+    Token* token = new antlr4::CommonToken(1);
+
     define(make_shared<BuiltinTypeSymbol>("i32"));
+
+    auto print_body = make_shared<ast::Block>(token);
+    auto print = make_shared<ast::Function>(
+        "print", print_body, make_shared<Type>(Type::i32), token);
+    define(make_shared<FunctionSymbol>(print, this->current_scope));
 }
 
 void SymbolTable::push() {
