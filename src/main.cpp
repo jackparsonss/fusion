@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
     for (unsigned i = 0; i < argc; i++) {
         std::string arg = std::string(argv[i]);
-        if (arg == "--post-pass") {
+        if (arg == "--xml") {
             builder.get_ast()->xml(0);
         }
 

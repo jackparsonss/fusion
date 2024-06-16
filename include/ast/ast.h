@@ -109,4 +109,20 @@ class Function : public Expression {
     std::string get_ref_name();
     void xml(int level) override;
 };
+
+class Call : public Expression {
+   private:
+    std::string name;
+
+   public:
+    std::vector<shared_ptr<Expression>> arguments;
+    shared_ptr<Function> function;
+    Call(std::string name,
+         shared_ptr<Function> func,
+         std::vector<shared_ptr<Expression>> args,
+         Token* token);
+
+    std::string get_name();
+    void xml(int level) override;
+};
 }  // namespace ast

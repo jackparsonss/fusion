@@ -156,3 +156,32 @@ void ast::Function::xml(int level) {
 
     std::cout << std::string(level * 4, ' ') << "</function>\n";
 }
+
+ast::Call::Call(std::string name,
+                shared_ptr<Function> func,
+                std::vector<shared_ptr<Expression>> args,
+                Token* token)
+    : Expression(func->get_type(), token) {
+    this->function = func;
+    this->arguments = args;
+}
+
+std::string ast::Call::get_name() {
+    return this->name;
+}
+
+void ast::Call::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<call name=\"" << this->name
+              << "\" ref_name=\"" << this->function->get_ref_name()
+              << "\" type=\"" << this->type->get_name() << "\" >\n";
+
+    if (arguments.size() > 0) {
+        std::cout << std::string((level + 1) * 4, ' ') << "<args>\n";
+        for (auto const& a : arguments) {
+            a->xml(level + 2);
+        }
+        std::cout << std::string((level + 1) * 4, ' ') << "</args>\n";
+    }
+
+    std::cout << std::string(level * 4, ' ') << "</call>";
+}
