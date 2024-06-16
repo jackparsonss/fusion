@@ -1,5 +1,4 @@
 #include "ast/builder.h"
-#include "ast/ast.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
@@ -34,6 +33,14 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->declaration());
     }
 
+    if (ctx->function() != nullptr) {
+        return visit(ctx->function());
+    }
+
+    if (ctx->block() != nullptr) {
+        return visit(ctx->block());
+    }
+
     throw std::runtime_error("found an invalid statement");
 }
 
@@ -43,7 +50,7 @@ std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
 
     ast::Qualifier qualifier =
         std::any_cast<ast::Qualifier>(visit(ctx->qualifier()));
-    auto type = std::any_cast<TypePtr>(visit(ctx->type()));
+    TypePtr type = std::any_cast<TypePtr>(visit(ctx->type()));
 
     shared_ptr<ast::Expression> expr =
         cast_node(ast::Expression, visit(ctx->expr()));
@@ -98,4 +105,27 @@ std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
         make_shared<ast::Variable>(ast::Qualifier::Let, type, name, token);
 
     return to_node(var);
+}
+
+std::any Builder::visitBlock(FusionParser::BlockContext* ctx) {
+    Token* token = ctx->L_CURLY()->getSymbol();
+    auto block = std::make_shared<ast::Block>(token);
+
+    for (auto const& s : ctx->statement()) {
+        shared_ptr<ast::Node> node = cast_node(ast::Node, visit(s));
+
+        block->nodes.push_back(node);
+    }
+
+    return to_node(block);
+}
+
+std::any Builder::visitFunction(FusionParser::FunctionContext* ctx) {
+    Token* token = ctx->FUNCTION()->getSymbol();
+    TypePtr type = std::any_cast<TypePtr>(visit(ctx->type()));
+    std::string name = ctx->ID()->getText();
+    auto block = cast_node(ast::Block, visit(ctx->block()));
+
+    auto func = make_shared<ast::Function>(name, block, type, token);
+    return to_node(func);
 }

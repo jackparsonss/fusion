@@ -150,9 +150,9 @@ std::string ast::Function::get_ref_name() {
 void ast::Function::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "<function return_type=\""
               << type->get_name() << "\" name=\"" << name << "\" ref_name=\""
-              << ref_name << "\">";
+              << ref_name << "\">\n";
 
     body->xml(level + 1);
 
-    std::cout << std::string(level * 4, ' ') << "</function>";
+    std::cout << std::string(level * 4, ' ') << "</function>\n";
 }
