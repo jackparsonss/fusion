@@ -1,4 +1,5 @@
 #include "ast/builder.h"
+#include "ast/ast.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
@@ -39,6 +40,10 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
 
     if (ctx->block() != nullptr) {
         return visit(ctx->block());
+    }
+
+    if (ctx->call() != nullptr) {
+        return visit(ctx->call());
     }
 
     throw std::runtime_error("found an invalid statement");
@@ -128,4 +133,13 @@ std::any Builder::visitFunction(FusionParser::FunctionContext* ctx) {
 
     auto func = make_shared<ast::Function>(name, block, type, token);
     return to_node(func);
+}
+
+std::any Builder::visitCall(FusionParser::CallContext* ctx) {
+    Token* token = ctx->L_PAREN()->getSymbol();
+    std::string name = ctx->ID()->getText();
+    std::vector<shared_ptr<ast::Expression>> args;
+
+    auto call = make_shared<ast::Call>(name, args, token);
+    return to_node(call);
 }

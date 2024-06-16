@@ -4,6 +4,7 @@ file: statement* EOF;
 
 statement
     : function
+    | call
     | declaration
     | block
     ;
@@ -15,6 +16,8 @@ declaration:
 block: L_CURLY statement* R_CURLY;
 
 function: FUNCTION ID L_PAREN R_PAREN COLON type block;
+
+call: ID L_PAREN R_PAREN SEMI;
 
 expr
     : INT #literalInt

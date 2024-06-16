@@ -1,4 +1,5 @@
 #include "ast/passes/def_ref.h"
+#include "ast/symbol/function_symbol.h"
 
 DefRef::DefRef(shared_ptr<SymbolTable> symbol_table) : Pass("DefRef") {
     this->symbol_table = symbol_table;
@@ -44,4 +45,22 @@ void DefRef::visit_function(shared_ptr<ast::Function> node) {
     symbol_table->define(sym);
 
     visit(node->body);
+}
+
+void DefRef::visit_call(shared_ptr<ast::Call> node) {
+    std::optional<SymbolPtr> var = symbol_table->resolve(node->get_name());
+    if (!var.has_value()) {
+        throw std::runtime_error("found undefined function");
+    }
+
+    shared_ptr<FunctionSymbol> vs =
+        dynamic_pointer_cast<FunctionSymbol>(var.value());
+    if (vs == nullptr) {
+        throw std::runtime_error("found non function in symbol table");
+    }
+
+    node->set_function(vs->function);
+    for (const auto& arg : node->arguments) {
+        visit(arg);
+    }
 }

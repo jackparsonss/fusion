@@ -162,8 +162,18 @@ ast::Call::Call(std::string name,
                 std::vector<shared_ptr<Expression>> args,
                 Token* token)
     : Expression(func->get_type(), token) {
+    this->name = name;
     this->function = func;
     this->arguments = args;
+}
+
+ast::Call::Call(std::string name,
+                std::vector<shared_ptr<Expression>> args,
+                Token* token)
+    : Expression(make_shared<Type>(Type::unset), token) {
+    this->name = name;
+    this->arguments = args;
+    this->function = nullptr;
 }
 
 std::string ast::Call::get_name() {
@@ -173,7 +183,7 @@ std::string ast::Call::get_name() {
 void ast::Call::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "<call name=\"" << this->name
               << "\" ref_name=\"" << this->function->get_ref_name()
-              << "\" type=\"" << this->type->get_name() << "\" >\n";
+              << "\" type=\"" << this->type->get_name() << "\">\n";
 
     if (arguments.size() > 0) {
         std::cout << std::string((level + 1) * 4, ' ') << "<args>\n";
@@ -183,5 +193,18 @@ void ast::Call::xml(int level) {
         std::cout << std::string((level + 1) * 4, ' ') << "</args>\n";
     }
 
-    std::cout << std::string(level * 4, ' ') << "</call>";
+    std::cout << std::string(level * 4, ' ') << "</call>\n";
+}
+
+void ast::Call::set_function(shared_ptr<Function> func) {
+    if (this->function != nullptr) {
+        throw std::runtime_error("this call already has a function");
+    }
+
+    this->function = func;
+    this->set_type(func->get_type());
+}
+
+shared_ptr<ast::Function> ast::Call::get_function() {
+    return this->function;
 }

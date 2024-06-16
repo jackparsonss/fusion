@@ -48,6 +48,10 @@ void Pass::visit(shared_ptr<ast::Node> node) {
     if (const auto func = dynamic_pointer_cast<ast::Function>(node)) {
         visit_function(func);
     }
+
+    if (const auto call = dynamic_pointer_cast<ast::Call>(node)) {
+        visit_call(call);
+    }
 }
 
 void Pass::visit_block(shared_ptr<ast::Block> node) {
@@ -67,4 +71,10 @@ void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
 
 void Pass::visit_function(shared_ptr<ast::Function> node) {
     visit(node->body);
+}
+
+void Pass::visit_call(shared_ptr<ast::Call> node) {
+    for (const auto& arg : node->arguments) {
+        visit(arg);
+    }
 }
