@@ -16,6 +16,7 @@ extern unique_ptr<mlir::ModuleOp> module;
 extern shared_ptr<mlir::OpBuilder> builder;
 extern mlir::MLIRContext context;
 
+extern shared_ptr<Type> ch;
 extern shared_ptr<Type> i32;
 extern shared_ptr<Type> none;
 

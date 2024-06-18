@@ -3,6 +3,7 @@
 #include "backend/types/integer.h"
 #include "backend/utils.h"
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
+#include "mlir/IR/ValueRange.h"
 #include "shared/context.h"
 
 #define to_node(a, b) dynamic_pointer_cast<b>(a)
@@ -78,5 +79,13 @@ mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
 }
 
 mlir::Value Backend::visit_call(shared_ptr<ast::Call> node) {
-    return nullptr;
+    mlir::LLVM::LLVMFuncOp func = utils::get_function(node->get_function());
+    std::vector<mlir::Value> args(node->arguments.size());
+
+    for (size_t i = 0; i < node->arguments.size(); i++) {
+        mlir::Value arg = visit(node->arguments[i]);
+        args[i] = arg;
+    }
+
+    return utils::call(func, mlir::ValueRange(args));
 }
