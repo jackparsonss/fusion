@@ -1,7 +1,5 @@
 #pragma once
 
-#include "backend/context.h"
-
 #include "mlir/IR/Value.h"
 
 namespace integer {

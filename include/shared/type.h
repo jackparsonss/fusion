@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include "mlir/IR/Types.h"
 
 class Type {
    private:
@@ -10,6 +11,7 @@ class Type {
    public:
     explicit Type(std::string name);
     std::string get_name() const;
+    mlir::Type get_mlir() const;
 
     bool operator==(Type rhs) const;
 

@@ -1,4 +1,9 @@
 #include "ast/ast.h"
+#include "CommonToken.h"
+#include "shared/context.h"
+
+#include <iostream>
+#include <random>
 
 std::string ast::random_name() {
     std::string s = "_";
@@ -60,7 +65,7 @@ TypePtr ast::Expression::get_type() const {
 }
 
 ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
-    : Expression(make_shared<Type>(Type::i32), token) {
+    : Expression(ctx::i32, token) {
     this->value = value;
 }
 

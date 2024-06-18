@@ -2,7 +2,6 @@
 
 #include "ast/ast.h"
 #include "ast/passes/pass.h"
-#include "ast/symbol/function_symbol.h"
 #include "ast/symbol/symbol.h"
 #include "ast/symbol/symbol_table.h"
 

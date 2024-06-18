@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <stdexcept>
 
 #include "FusionBaseVisitor.h"
 #include "FusionParser.h"

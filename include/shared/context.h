@@ -6,14 +6,18 @@
 #include <mlir/IR/Types.h>
 #include <memory>
 
+#include "shared/type.h"
+
+using std::shared_ptr, std::make_shared, std::unique_ptr;
+
 namespace ctx {
-extern std::unique_ptr<mlir::Location> loc;
-extern std::unique_ptr<mlir::ModuleOp> module;
-extern std::shared_ptr<mlir::OpBuilder> builder;
+extern unique_ptr<mlir::Location> loc;
+extern unique_ptr<mlir::ModuleOp> module;
+extern shared_ptr<mlir::OpBuilder> builder;
 extern mlir::MLIRContext context;
 
-extern mlir::Type i32;
-extern mlir::Type t_void;
+extern shared_ptr<Type> i32;
+extern shared_ptr<Type> none;
 
 extern void initialize_context();
 }  // namespace ctx

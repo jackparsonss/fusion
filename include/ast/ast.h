@@ -1,11 +1,8 @@
 #pragma once
 
-#include <iostream>
 #include <memory>
-#include <random>
 #include <string>
 
-#include "CommonToken.h"
 #include "Token.h"
 
 #include "shared/type.h"

@@ -3,7 +3,6 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/backend.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/visitor.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/backend/context.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/io.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/utils.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/types/integer.cpp"
@@ -16,6 +15,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/pass.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/def_ref.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/shared/type.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/context.cpp"
 )
 
 # Build our executable from the source files.

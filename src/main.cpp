@@ -9,7 +9,7 @@
 #include "ast/passes/pass.h"
 #include "ast/symbol/symbol_table.h"
 #include "backend/backend.h"
-#include "backend/context.h"
+#include "shared/context.h"
 
 #include <iostream>
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
             return 1;
         }
 
-        if (arg == "--emit-llvm" && i == argc - 1 && argv[i + 1][0] != '-') {
+        if (arg == "--emit-llvm" && i == argc - 1) {
             std::cerr << "You must provide a file to target llvm ir"
                       << std::endl;
             return 1;

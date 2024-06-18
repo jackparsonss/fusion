@@ -1,4 +1,7 @@
 #include "ast/symbol/symbol_table.h"
+#include "CommonToken.h"
+#include "ast/symbol/function_symbol.h"
+#include "shared/context.h"
 
 SymbolTable::SymbolTable() {
     ScopePtr global_scope = make_shared<Scope>(nullptr);
@@ -14,8 +17,8 @@ void SymbolTable::init_types() {
     define(make_shared<BuiltinTypeSymbol>("i32"));
 
     auto print_body = make_shared<ast::Block>(token);
-    auto print = make_shared<ast::Function>(
-        "print", print_body, make_shared<Type>(Type::i32), token);
+    auto print =
+        make_shared<ast::Function>("print", print_body, ctx::i32, token);
     define(make_shared<FunctionSymbol>(print, this->current_scope));
 }
 
