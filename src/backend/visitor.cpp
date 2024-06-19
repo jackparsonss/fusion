@@ -23,6 +23,7 @@ mlir::Value BackendVisitor::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Declaration, this->visit_declaration);
     try_visit(node, ast::Function, this->visit_function);
     try_visit(node, ast::Call, this->visit_call);
+    try_visit(node, ast::Parameter, this->visit_parameter);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -43,7 +44,8 @@ mlir::Value Backend::visit_integer_literal(
 mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
     auto pair = variables.find(node->get_ref_name());
     if (pair == variables.end()) {
-        throw std::runtime_error("backend found undefined variable");
+        throw std::runtime_error("backend found undefined variable: " +
+                                 node->get_ref_name());
     }
 
     mlir::Value address = pair->second;
@@ -61,19 +63,33 @@ mlir::Value Backend::visit_declaration(shared_ptr<ast::Declaration> node) {
     return nullptr;
 }
 
+mlir::Value Backend::visit_parameter(shared_ptr<ast::Parameter> node) {
+    std::string name = node->var->get_ref_name();
+    mlir::Value address =
+        utils::stack_allocate(node->var->get_type()->get_mlir());
+
+    variables[name] = address;
+
+    return address;
+}
+
 mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
     mlir::LLVM::LLVMFuncOp func = utils::get_function(node);
 
     mlir::Block* b_body = func.addEntryBlock();
     ctx::builder->setInsertionPointToStart(b_body);
 
+    for (size_t i = 0; i < node->params.size(); i++) {
+        mlir::Value address = visit(node->params[i]);
+        mlir::Value arg = func.getArgument(i);
+        utils::store(address, arg);
+    }
+
     visit(node->body);
 
     // TODO: remove
-    if (node->get_name() == "main") {
-        mlir::Value zero = integer::create_i32(0);
-        ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
-    }
+    mlir::Value zero = integer::create_i32(0);
+    ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
 
     ctx::builder->setInsertionPointToEnd(ctx::module->getBody());
 

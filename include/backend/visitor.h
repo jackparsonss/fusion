@@ -24,4 +24,5 @@ class BackendVisitor {
     virtual mlir::Value visit_declaration(shared_ptr<ast::Declaration>) = 0;
     virtual mlir::Value visit_function(shared_ptr<ast::Function>) = 0;
     virtual mlir::Value visit_call(shared_ptr<ast::Call>) = 0;
+    virtual mlir::Value visit_parameter(shared_ptr<ast::Parameter>) = 0;
 };
