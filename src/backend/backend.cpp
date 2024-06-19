@@ -24,8 +24,6 @@ Backend::Backend(shared_ptr<ast::Block> ast) : BackendVisitor(ast) {
 shared_ptr<ast::Block> Backend::traverse() {
     visit(ast);
 
-    ctx::module->dump();
-
     if (mlir::failed(mlir::verify(*ctx::module))) {
         ctx::module->emitError("module failed to verify");
         return nullptr;
