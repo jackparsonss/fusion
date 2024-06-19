@@ -1,4 +1,9 @@
 #include "ast/ast.h"
+#include "CommonToken.h"
+#include "shared/context.h"
+
+#include <iostream>
+#include <random>
 
 std::string ast::random_name() {
     std::string s = "_";
@@ -60,7 +65,7 @@ TypePtr ast::Expression::get_type() const {
 }
 
 ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
-    : Expression(make_shared<Type>(Type::i32), token) {
+    : Expression(ctx::i32, token) {
     this->value = value;
 }
 
@@ -127,4 +132,111 @@ void ast::Declaration::xml(int level) {
     std::cout << std::string((level + 1) * 4, ' ') << "</rhs>\n";
 
     std::cout << std::string(level * 4, ' ') << "</declaration>\n";
+}
+
+ast::Parameter::Parameter(shared_ptr<Variable> var, Token* token)
+    : Node(token) {
+    this->var = var;
+}
+
+void ast::Parameter::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<parameter>\n";
+    this->var->xml(level + 1);
+    std::cout << std::string(level * 4, ' ') << "</parameter>\n";
+}
+
+ast::Function::Function(std::string name,
+                        shared_ptr<Block> body,
+                        TypePtr return_type,
+                        std::vector<shared_ptr<ast::Parameter>> params,
+                        Token* token)
+    : Expression(return_type, token) {
+    this->name = name;
+
+    if (name == "main") {
+        this->ref_name = "main";
+    } else {
+        this->ref_name = random_name();
+    }
+    this->body = body;
+    this->params = params;
+}
+
+std::string ast::Function::get_name() {
+    return this->name;
+}
+
+std::string ast::Function::get_ref_name() {
+    return this->ref_name;
+}
+
+void ast::Function::set_ref_name(std::string name) {
+    this->ref_name = name;
+}
+
+void ast::Function::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<function return_type=\""
+              << type->get_name() << "\" name=\"" << name << "\" ref_name=\""
+              << ref_name << "\">\n";
+
+    std::cout << std::string(level * 4, ' ') << "<parameters>\n";
+    for (const auto& param : params) {
+        param->xml(level + 1);
+    }
+    std::cout << std::string(level * 4, ' ') << "</parameters>\n";
+    body->xml(level + 1);
+
+    std::cout << std::string(level * 4, ' ') << "</function>\n";
+}
+
+ast::Call::Call(std::string name,
+                shared_ptr<Function> func,
+                std::vector<shared_ptr<Expression>> args,
+                Token* token)
+    : Expression(func->get_type(), token) {
+    this->name = name;
+    this->function = func;
+    this->arguments = args;
+}
+
+ast::Call::Call(std::string name,
+                std::vector<shared_ptr<Expression>> args,
+                Token* token)
+    : Expression(make_shared<Type>(Type::unset), token) {
+    this->name = name;
+    this->arguments = args;
+    this->function = nullptr;
+}
+
+std::string ast::Call::get_name() {
+    return this->name;
+}
+
+void ast::Call::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<call name=\"" << this->name
+              << "\" ref_name=\"" << this->function->get_ref_name()
+              << "\" type=\"" << this->type->get_name() << "\">\n";
+
+    if (arguments.size() > 0) {
+        std::cout << std::string((level + 1) * 4, ' ') << "<args>\n";
+        for (auto const& a : arguments) {
+            a->xml(level + 2);
+        }
+        std::cout << std::string((level + 1) * 4, ' ') << "</args>\n";
+    }
+
+    std::cout << std::string(level * 4, ' ') << "</call>\n";
+}
+
+void ast::Call::set_function(shared_ptr<Function> func) {
+    if (this->function != nullptr) {
+        throw std::runtime_error("this call already has a function");
+    }
+
+    this->function = func;
+    this->set_type(func->get_type());
+}
+
+shared_ptr<ast::Function> ast::Call::get_function() {
+    return this->function;
 }

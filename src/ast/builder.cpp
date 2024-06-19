@@ -1,5 +1,9 @@
-#include "ast/builder.h"
+#include <stdexcept>
+#include <vector>
+
+#include "FusionParser.h"
 #include "ast/ast.h"
+#include "ast/builder.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
@@ -34,21 +38,26 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->declaration());
     }
 
+    if (ctx->function() != nullptr) {
+        return visit(ctx->function());
+    }
+
+    if (ctx->block() != nullptr) {
+        return visit(ctx->block());
+    }
+
+    if (ctx->call() != nullptr) {
+        return visit(ctx->call());
+    }
+
     throw std::runtime_error("found an invalid statement");
 }
 
 std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
-    std::string name = ctx->ID()->getText();
-    Token* token = ctx->ID()->getSymbol();
+    Token* token = ctx->EQ()->getSymbol();
 
-    ast::Qualifier qualifier =
-        std::any_cast<ast::Qualifier>(visit(ctx->qualifier()));
-    auto type = std::any_cast<TypePtr>(visit(ctx->type()));
-
-    shared_ptr<ast::Expression> expr =
-        cast_node(ast::Expression, visit(ctx->expr()));
-
-    auto var = make_shared<ast::Variable>(qualifier, type, name, token);
+    auto expr = cast_node(ast::Expression, visit(ctx->expr()));
+    auto var = cast_node(ast::Variable, visit(ctx->variable()));
     auto decl = make_shared<ast::Declaration>(var, expr, token);
 
     return to_node(decl);
@@ -89,7 +98,7 @@ std::any Builder::visitLiteralInt(FusionParser::LiteralIntContext* ctx) {
     return to_node(node);
 }
 
-std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
+std::any Builder::visitIdentifier(FusionParser::IdentifierContext* ctx) {
     Token* token = ctx->ID()->getSymbol();
     std::string name = ctx->ID()->getText();
     TypePtr type = make_shared<Type>(Type::unset);
@@ -98,4 +107,59 @@ std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
         make_shared<ast::Variable>(ast::Qualifier::Let, type, name, token);
 
     return to_node(var);
+}
+
+std::any Builder::visitBlock(FusionParser::BlockContext* ctx) {
+    Token* token = ctx->L_CURLY()->getSymbol();
+    auto block = std::make_shared<ast::Block>(token);
+
+    for (auto const& s : ctx->statement()) {
+        shared_ptr<ast::Node> node = cast_node(ast::Node, visit(s));
+
+        block->nodes.push_back(node);
+    }
+
+    return to_node(block);
+}
+
+std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
+    Token* token = ctx->ID()->getSymbol();
+    std::string name = ctx->ID()->getText();
+
+    ast::Qualifier qualifier =
+        std::any_cast<ast::Qualifier>(visit(ctx->qualifier()));
+    TypePtr type = std::any_cast<TypePtr>(visit(ctx->type()));
+
+    auto var = make_shared<ast::Variable>(qualifier, type, name, token);
+    return to_node(var);
+}
+
+std::any Builder::visitFunction(FusionParser::FunctionContext* ctx) {
+    Token* token = ctx->FUNCTION()->getSymbol();
+    TypePtr type = std::any_cast<TypePtr>(visit(ctx->type()));
+    std::string name = ctx->ID()->getText();
+    auto block = cast_node(ast::Block, visit(ctx->block()));
+
+    auto vars = ctx->variable();
+    std::vector<shared_ptr<ast::Parameter>> params(vars.size());
+    for (size_t i = 0; i < vars.size(); i++) {
+        auto var = cast_node(ast::Variable, visit(vars[i]));
+        params[i] = make_shared<ast::Parameter>(var, token);
+    }
+
+    auto func = make_shared<ast::Function>(name, block, type, params, token);
+    return to_node(func);
+}
+
+std::any Builder::visitCall(FusionParser::CallContext* ctx) {
+    Token* token = ctx->L_PAREN()->getSymbol();
+    std::string name = ctx->ID()->getText();
+    std::vector<shared_ptr<ast::Expression>> args;
+
+    for (const auto& arg : ctx->expr()) {
+        args.push_back(cast_node(ast::Expression, visit(arg)));
+    }
+
+    auto call = make_shared<ast::Call>(name, args, token);
+    return to_node(call);
 }

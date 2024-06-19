@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <stdexcept>
 
 #include "FusionBaseVisitor.h"
 #include "FusionParser.h"
@@ -30,5 +29,9 @@ class Builder : public FusionBaseVisitor {
     std::any visitDeclaration(FusionParser::DeclarationContext* ctx) override;
     std::any visitType(FusionParser::TypeContext* ctx) override;
     std::any visitQualifier(FusionParser::QualifierContext* ctx) override;
+    std::any visitIdentifier(FusionParser::IdentifierContext* ctx) override;
+    std::any visitBlock(FusionParser::BlockContext* ctx) override;
+    std::any visitFunction(FusionParser::FunctionContext* ctx) override;
+    std::any visitCall(FusionParser::CallContext* ctx) override;
     std::any visitVariable(FusionParser::VariableContext* ctx) override;
 };

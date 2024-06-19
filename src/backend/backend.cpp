@@ -1,22 +1,30 @@
 #include "backend/backend.h"
+#include "backend/builtin/print.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/MC/TargetRegistry.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/TargetSelect.h"
+#include "llvm/Support/raw_os_ostream.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Target/TargetMachine.h"
+#include "llvm/Target/TargetOptions.h"
+#include "llvm/TargetParser/Host.h"
+#include "llvm/Transforms/InstCombine/InstCombine.h"
+#include "llvm/Transforms/Scalar.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
+#include "mlir/IR/Verifier.h"
+#include "mlir/Target/LLVMIR/Dialect/LLVMIR/LLVMToLLVMIRTranslation.h"
+#include "mlir/Target/LLVMIR/Export.h"
+#include "shared/context.h"
 
 Backend::Backend(shared_ptr<ast::Block> ast) : BackendVisitor(ast) {
     ctx::builder->setInsertionPointToStart(ctx::module->getBody());
+    builtin::define_all();
 }
 
 shared_ptr<ast::Block> Backend::traverse() {
-    // temporarily set up main since llvm requires it, eventually all functions
-    // will be handled together
-    auto t_main = mlir::LLVM::LLVMFunctionType::get(ctx::i32, {}, false);
-    mlir::LLVM::LLVMFuncOp main =
-        ctx::builder->create<mlir::LLVM::LLVMFuncOp>(*ctx::loc, "main", t_main);
-    mlir::Block* entry = main.addEntryBlock();
-    ctx::builder->setInsertionPointToStart(entry);
-
     visit(ast);
-
-    mlir::Value zero = integer::create_i32(0);
-    ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
 
     if (mlir::failed(mlir::verify(*ctx::module))) {
         ctx::module->emitError("module failed to verify");

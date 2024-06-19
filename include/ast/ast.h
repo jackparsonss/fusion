@@ -1,11 +1,8 @@
 #pragma once
 
-#include <iostream>
 #include <memory>
-#include <random>
 #include <string>
 
-#include "CommonToken.h"
 #include "Token.h"
 
 #include "shared/type.h"
@@ -90,6 +87,54 @@ class Declaration : public Node {
                          shared_ptr<Expression> expr,
                          Token* token);
 
+    void xml(int level) override;
+};
+
+class Parameter : public Node {
+   public:
+    shared_ptr<Variable> var;
+    explicit Parameter(shared_ptr<Variable> var, Token* token);
+    void xml(int level) override;
+};
+
+class Function : public Expression {
+   private:
+    std::string name;
+    std::string ref_name;
+
+   public:
+    Function(std::string name,
+             shared_ptr<Block> body,
+             TypePtr return_type,
+             std::vector<shared_ptr<Parameter>> params,
+             Token* token);
+    shared_ptr<Block> body;
+    std::vector<shared_ptr<Parameter>> params;
+
+    std::string get_name();
+    std::string get_ref_name();
+    void set_ref_name(std::string name);
+    void xml(int level) override;
+};
+
+class Call : public Expression {
+   private:
+    std::string name;
+    shared_ptr<Function> function;
+
+   public:
+    std::vector<shared_ptr<Expression>> arguments;
+    Call(std::string name,
+         shared_ptr<Function> func,
+         std::vector<shared_ptr<Expression>> args,
+         Token* token);
+    Call(std::string name,
+         std::vector<shared_ptr<Expression>> args,
+         Token* token);
+
+    std::string get_name();
+    void set_function(shared_ptr<Function> func);
+    shared_ptr<Function> get_function();
     void xml(int level) override;
 };
 }  // namespace ast
