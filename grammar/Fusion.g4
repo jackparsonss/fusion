@@ -10,18 +10,20 @@ statement
     ;
 
 declaration:
-    qualifier ID COLON type EQ expr SEMI
+    variable EQ expr SEMI
     ;
 
 block: L_CURLY statement* R_CURLY;
 
-function: FUNCTION ID L_PAREN R_PAREN COLON type block;
+function: FUNCTION ID L_PAREN variable* R_PAREN COLON type block;
 
-call: ID L_PAREN R_PAREN SEMI;
+variable: qualifier ID COLON type;
+
+call: ID L_PAREN expr* R_PAREN SEMI;
 
 expr
     : INT #literalInt
-    | ID  #variable
+    | ID  #identifier
     ;
 
 qualifier: CONST | LET;

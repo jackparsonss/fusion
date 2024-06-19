@@ -1,5 +1,7 @@
 #include "ast/symbol/symbol_table.h"
+#include <memory>
 #include "CommonToken.h"
+#include "ast/ast.h"
 #include "ast/symbol/function_symbol.h"
 #include "shared/context.h"
 
@@ -17,8 +19,17 @@ void SymbolTable::init_types() {
     define(make_shared<BuiltinTypeSymbol>("i32"));
 
     auto print_body = make_shared<ast::Block>(token);
-    auto print =
-        make_shared<ast::Function>("print", print_body, ctx::i32, token);
+    std::vector<shared_ptr<ast::Parameter>> print_params = {
+        make_shared<ast::Parameter>(
+            make_shared<ast::Variable>(ast::Qualifier::Let, ctx::i32, "arg",
+                                       token),
+            token),
+    };
+
+    auto print = make_shared<ast::Function>("print", print_body, ctx::i32,
+                                            print_params, token);
+    print->set_ref_name("print");
+
     define(make_shared<FunctionSymbol>(print, this->current_scope));
 }
 

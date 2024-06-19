@@ -90,6 +90,13 @@ class Declaration : public Node {
     void xml(int level) override;
 };
 
+class Parameter : public Node {
+   public:
+    shared_ptr<Variable> var;
+    explicit Parameter(shared_ptr<Variable> var, Token* token);
+    void xml(int level) override;
+};
+
 class Function : public Expression {
    private:
     std::string name;
@@ -99,11 +106,14 @@ class Function : public Expression {
     Function(std::string name,
              shared_ptr<Block> body,
              TypePtr return_type,
+             std::vector<shared_ptr<Parameter>> params,
              Token* token);
     shared_ptr<Block> body;
+    std::vector<shared_ptr<Parameter>> params;
 
     std::string get_name();
     std::string get_ref_name();
+    void set_ref_name(std::string name);
     void xml(int level) override;
 };
 

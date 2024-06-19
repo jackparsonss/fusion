@@ -134,14 +134,32 @@ void ast::Declaration::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "</declaration>\n";
 }
 
+ast::Parameter::Parameter(shared_ptr<Variable> var, Token* token)
+    : Node(token) {
+    this->var = var;
+}
+
+void ast::Parameter::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<parameter>\n";
+    this->var->xml(level + 1);
+    std::cout << std::string(level * 4, ' ') << "</parameter>\n";
+}
+
 ast::Function::Function(std::string name,
                         shared_ptr<Block> body,
                         TypePtr return_type,
+                        std::vector<shared_ptr<ast::Parameter>> params,
                         Token* token)
     : Expression(return_type, token) {
     this->name = name;
-    this->ref_name = random_name();
+
+    if (name == "main") {
+        this->ref_name = "main";
+    } else {
+        this->ref_name = random_name();
+    }
     this->body = body;
+    this->params = params;
 }
 
 std::string ast::Function::get_name() {
@@ -152,11 +170,20 @@ std::string ast::Function::get_ref_name() {
     return this->ref_name;
 }
 
+void ast::Function::set_ref_name(std::string name) {
+    this->ref_name = name;
+}
+
 void ast::Function::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "<function return_type=\""
               << type->get_name() << "\" name=\"" << name << "\" ref_name=\""
               << ref_name << "\">\n";
 
+    std::cout << std::string(level * 4, ' ') << "<parameters>\n";
+    for (const auto& param : params) {
+        param->xml(level + 1);
+    }
+    std::cout << std::string(level * 4, ' ') << "</parameters>\n";
     body->xml(level + 1);
 
     std::cout << std::string(level * 4, ' ') << "</function>\n";

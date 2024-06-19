@@ -70,8 +70,10 @@ mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
     visit(node->body);
 
     // TODO: remove
-    mlir::Value zero = integer::create_i32(0);
-    ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
+    if (node->get_name() == "main") {
+        mlir::Value zero = integer::create_i32(0);
+        ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
+    }
 
     ctx::builder->setInsertionPointToEnd(ctx::module->getBody());
 
