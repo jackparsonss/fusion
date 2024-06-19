@@ -1,7 +1,12 @@
 #include "ast/passes/pass.h"
+#include "ast/ast.h"
 #include "ast/passes/def_ref.h"
 
 constexpr bool debug = false;
+#define try_visit(node, t, f)                                    \
+    if (const shared_ptr<t> n = dynamic_pointer_cast<t>(node)) { \
+        return f(n);                                             \
+    }
 
 void pass::run_passes(std::shared_ptr<ast::Block> ast,
                       shared_ptr<SymbolTable> symtab) {
@@ -29,29 +34,13 @@ void Pass::run(shared_ptr<ast::Block> ast) {
 }
 
 void Pass::visit(shared_ptr<ast::Node> node) {
-    if (const auto block = dynamic_pointer_cast<ast::Block>(node)) {
-        visit_block(block);
-    }
-
-    if (const auto literal = dynamic_pointer_cast<ast::IntegerLiteral>(node)) {
-        visit_integer_literal(literal);
-    }
-
-    if (const auto decl = dynamic_pointer_cast<ast::Declaration>(node)) {
-        visit_declaration(decl);
-    }
-
-    if (const auto var = dynamic_pointer_cast<ast::Variable>(node)) {
-        visit_variable(var);
-    }
-
-    if (const auto func = dynamic_pointer_cast<ast::Function>(node)) {
-        visit_function(func);
-    }
-
-    if (const auto call = dynamic_pointer_cast<ast::Call>(node)) {
-        visit_call(call);
-    }
+    try_visit(node, ast::Block, this->visit_block);
+    try_visit(node, ast::IntegerLiteral, this->visit_integer_literal);
+    try_visit(node, ast::Variable, this->visit_variable);
+    try_visit(node, ast::Declaration, this->visit_declaration);
+    try_visit(node, ast::Function, this->visit_function);
+    try_visit(node, ast::Call, this->visit_call);
+    try_visit(node, ast::Parameter, this->visit_parameter);
 }
 
 void Pass::visit_block(shared_ptr<ast::Block> node) {
@@ -69,7 +58,13 @@ void Pass::visit_declaration(shared_ptr<ast::Declaration> node) {
 
 void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
 
+void Pass::visit_parameter(shared_ptr<ast::Parameter> node) {}
+
 void Pass::visit_function(shared_ptr<ast::Function> node) {
+    for (const auto& param : node->params) {
+        visit(param);
+    }
+
     visit(node->body);
 }
 

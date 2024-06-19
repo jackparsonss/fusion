@@ -22,6 +22,7 @@ class Pass {
     virtual void visit_variable(shared_ptr<ast::Variable>);
     virtual void visit_function(shared_ptr<ast::Function>);
     virtual void visit_call(shared_ptr<ast::Call>);
+    virtual void visit_parameter(shared_ptr<ast::Parameter>);
 };
 
 namespace pass {

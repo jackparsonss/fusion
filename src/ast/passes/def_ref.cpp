@@ -1,4 +1,5 @@
 #include "ast/passes/def_ref.h"
+#include "ast/ast.h"
 #include "ast/symbol/function_symbol.h"
 
 DefRef::DefRef(shared_ptr<SymbolTable> symbol_table) : Pass("DefRef") {
@@ -36,6 +37,17 @@ void DefRef::visit_declaration(shared_ptr<ast::Declaration> node) {
     visit(node->expr);
 }
 
+void DefRef::visit_parameter(shared_ptr<ast::Parameter> node) {
+    if (symbol_table->resolve_local(node->var->get_name()).has_value()) {
+        throw std::runtime_error("parameter already defined: " +
+                                 node->var->get_name());
+    }
+
+    auto var = node->var;
+    shared_ptr<VariableSymbol> sym = std::make_shared<VariableSymbol>(var);
+    symbol_table->define(sym);
+}
+
 void DefRef::visit_function(shared_ptr<ast::Function> node) {
     if (symbol_table->resolve_bottom(name).has_value()) {
         throw std::runtime_error("function already defined");
@@ -44,6 +56,10 @@ void DefRef::visit_function(shared_ptr<ast::Function> node) {
     shared_ptr<FunctionSymbol> sym =
         std::make_shared<FunctionSymbol>(node, symbol_table->current_scope);
     symbol_table->define(sym);
+
+    for (const auto& param : node->params) {
+        visit(param);
+    }
 
     visit(node->body);
 }

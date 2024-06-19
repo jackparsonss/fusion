@@ -1,5 +1,4 @@
 #include "shared/context.h"
-#include "backend/builtin/print.h"
 
 mlir::MLIRContext ctx::context;
 std::unique_ptr<mlir::Location> ctx::loc =
@@ -20,6 +19,4 @@ void ctx::initialize_context() {
     ctx::none = std::make_shared<Type>(Type::none);
     module = std::make_unique<mlir::ModuleOp>(
         mlir::ModuleOp::create(builder->getUnknownLoc()));
-
-    builtin::define_all();
 }

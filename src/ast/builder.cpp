@@ -140,10 +140,11 @@ std::any Builder::visitFunction(FusionParser::FunctionContext* ctx) {
     std::string name = ctx->ID()->getText();
     auto block = cast_node(ast::Block, visit(ctx->block()));
 
-    std::vector<shared_ptr<ast::Parameter>> params(ctx->variable().size());
-    for (size_t i = 0; i < ctx->variable().size(); i++) {
-        auto var = cast_node(ast::Variable, visit(ctx->variable()[i]));
-        params.push_back(make_shared<ast::Parameter>(var, token));
+    auto vars = ctx->variable();
+    std::vector<shared_ptr<ast::Parameter>> params(vars.size());
+    for (size_t i = 0; i < vars.size(); i++) {
+        auto var = cast_node(ast::Variable, visit(vars[i]));
+        params[i] = make_shared<ast::Parameter>(var, token);
     }
 
     auto func = make_shared<ast::Function>(name, block, type, params, token);

@@ -1,5 +1,5 @@
 #include <stdio.h>
 
-void print(int i) {
+void print_integer(int i) {
     printf("%d", i);
 }

@@ -1,4 +1,5 @@
 #include "backend/backend.h"
+#include "backend/builtin/print.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/MC/TargetRegistry.h"
@@ -19,6 +20,7 @@
 
 Backend::Backend(shared_ptr<ast::Block> ast) : BackendVisitor(ast) {
     ctx::builder->setInsertionPointToStart(ctx::module->getBody());
+    builtin::define_all();
 }
 
 shared_ptr<ast::Block> Backend::traverse() {
