@@ -119,6 +119,13 @@ class Function : public Expression {
              TypePtr return_type,
              std::vector<shared_ptr<Parameter>> params,
              Token* token);
+
+    Function(std::string name,
+             std::string ref_name,
+             shared_ptr<Block> body,
+             TypePtr return_type,
+             std::vector<shared_ptr<Parameter>> params,
+             Token* token);
     shared_ptr<Block> body;
     std::vector<shared_ptr<Parameter>> params;
 

@@ -8,6 +8,7 @@
 class DefRef : public Pass {
    private:
     shared_ptr<SymbolTable> symbol_table;
+    bool is_builtin(std::string name);
 
    public:
     explicit DefRef(shared_ptr<SymbolTable> symbol_table);

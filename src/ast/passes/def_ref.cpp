@@ -65,10 +65,18 @@ void DefRef::visit_function(shared_ptr<ast::Function> node) {
 }
 
 void DefRef::visit_call(shared_ptr<ast::Call> node) {
-    std::optional<SymbolPtr> var = symbol_table->resolve(node->get_name());
+    for (const auto& arg : node->arguments) {
+        visit(arg);
+    }
+
+    std::string name = node->get_name();
+    if (is_builtin(name) && node->arguments.size() > 0) {
+        name += "_" + node->arguments[0]->get_type()->get_name();
+    }
+
+    std::optional<SymbolPtr> var = symbol_table->resolve(name);
     if (!var.has_value()) {
-        throw std::runtime_error("found undefined function: " +
-                                 node->get_name());
+        throw std::runtime_error("found undefined function: " + name);
     }
 
     shared_ptr<FunctionSymbol> vs =
@@ -78,7 +86,12 @@ void DefRef::visit_call(shared_ptr<ast::Call> node) {
     }
 
     node->set_function(vs->function);
-    for (const auto& arg : node->arguments) {
-        visit(arg);
+}
+
+bool DefRef::is_builtin(std::string name) {
+    if (name == "print") {
+        return true;
     }
+
+    return false;
 }

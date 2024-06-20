@@ -176,6 +176,16 @@ ast::Function::Function(std::string name,
     this->params = params;
 }
 
+ast::Function::Function(std::string name,
+                        std::string ref_name,
+                        shared_ptr<Block> body,
+                        TypePtr return_type,
+                        std::vector<shared_ptr<ast::Parameter>> params,
+                        Token* token)
+    : Function(name, body, return_type, params, token) {
+    this->ref_name = ref_name;
+}
+
 std::string ast::Function::get_name() {
     return this->name;
 }
