@@ -29,17 +29,19 @@ const y: i32 = x;
 
 ### Types
 - **i32**: 32-bit integer
+- **ch**: 8-bit character
 
 ### Functions
 ```
-fn foo(let x: i32): i32 {
+fn foo(let x: i32, let y: ch): i32 {
     print(x);
+    print(y);
 
     return x + 1;
 }
 
 fn main(): i32 {
-    foo(5);
+    foo(5, '\n');
     return 0;
 }
 ```
