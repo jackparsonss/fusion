@@ -3,4 +3,6 @@ fn main(): i32 {
     const y: i32 = x;
     print(x);
     print(y);
+
+    return 0;
 }

@@ -55,7 +55,7 @@ fn main(): i32 {
 ```
 
 ##### print
-Prints the argument passed to it to stdout
+Prints the argument passed into stdout
 ```
 print(5);
 ```

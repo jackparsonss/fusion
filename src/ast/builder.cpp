@@ -50,6 +50,10 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->call());
     }
 
+    if (ctx->return_() != nullptr) {
+        return visit(ctx->return_());
+    }
+
     throw std::runtime_error("found an invalid statement");
 }
 
@@ -162,4 +166,16 @@ std::any Builder::visitCall(FusionParser::CallContext* ctx) {
 
     auto call = make_shared<ast::Call>(name, args, token);
     return to_node(call);
+}
+
+std::any Builder::visitCallExpr(FusionParser::CallExprContext* ctx) {
+    return visit(ctx->call());
+}
+
+std::any Builder::visitReturn(FusionParser::ReturnContext* ctx) {
+    Token* token = ctx->RETURN()->getSymbol();
+    auto expr = cast_node(ast::Expression, visit(ctx->expr()));
+    auto ret = make_shared<ast::Return>(expr, token);
+
+    return to_node(ret);
 }

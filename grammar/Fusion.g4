@@ -4,9 +4,10 @@ file: statement* EOF;
 
 statement
     : function
-    | call
+    | call SEMI
     | declaration
     | block
+    | return
     ;
 
 declaration:
@@ -19,11 +20,14 @@ function: FUNCTION ID L_PAREN variable* R_PAREN COLON type block;
 
 variable: qualifier ID COLON type;
 
-call: ID L_PAREN expr* R_PAREN SEMI;
+call: ID L_PAREN expr* R_PAREN;
+
+return: RETURN expr SEMI;
 
 expr
-    : INT #literalInt
-    | ID  #identifier
+    : INT   #literalInt
+    | ID    #identifier
+    | call  #callExpr 
     ;
 
 qualifier: CONST | LET;
@@ -31,6 +35,7 @@ qualifier: CONST | LET;
 type: I32;
 
 // keywords
+RETURN: 'return';
 FUNCTION: 'fn';
 CONST: 'const';
 LET: 'let';

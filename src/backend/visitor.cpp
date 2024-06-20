@@ -1,7 +1,9 @@
+#include <memory>
 #include "ast/ast.h"
 #include "backend/backend.h"
 #include "backend/types/integer.h"
 #include "backend/utils.h"
+
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
 #include "mlir/IR/ValueRange.h"
 #include "shared/context.h"
@@ -24,6 +26,7 @@ mlir::Value BackendVisitor::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Function, this->visit_function);
     try_visit(node, ast::Call, this->visit_call);
     try_visit(node, ast::Parameter, this->visit_parameter);
+    try_visit(node, ast::Return, this->visit_return);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -87,10 +90,6 @@ mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
 
     visit(node->body);
 
-    // TODO: remove
-    mlir::Value zero = integer::create_i32(0);
-    ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, zero);
-
     ctx::builder->setInsertionPointToEnd(ctx::module->getBody());
 
     return nullptr;
@@ -106,4 +105,11 @@ mlir::Value Backend::visit_call(shared_ptr<ast::Call> node) {
     }
 
     return utils::call(func, mlir::ValueRange(args));
+}
+
+mlir::Value Backend::visit_return(shared_ptr<ast::Return> node) {
+    mlir::Value expr = visit(node->expr);
+    ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, expr);
+
+    return nullptr;
 }
