@@ -28,5 +28,34 @@ const y: i32 = x;
 ```
 
 ### Types
-#### i32
-A 32-bit integer
+- **i32**: 32-bit integer
+
+### Functions
+```
+fn foo(let x: i32): i32 {
+    print(x);
+
+    return x + 1;
+}
+
+fn main(): i32 {
+    foo(5);
+    return 0;
+}
+```
+
+#### Builtin Functions
+##### main
+Must be defined by the user, is the entry point to the fusion program
+```
+fn main(): i32 {
+    // do stuff
+    return 0;
+}
+```
+
+##### print
+Prints the argument passed to it to stdout
+```
+print(5);
+```
