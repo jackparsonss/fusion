@@ -1,0 +1,9 @@
+fn foo(): i32 {
+    return 90;
+}
+
+fn main(): i32 {
+    print(foo())
+
+    return 0;
+}

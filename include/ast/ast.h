@@ -137,4 +137,11 @@ class Call : public Expression {
     shared_ptr<Function> get_function();
     void xml(int level) override;
 };
+
+class Return : public Node {
+   public:
+    shared_ptr<Expression> expr;
+    Return(shared_ptr<Expression> expr, Token* token);
+    void xml(int level) override;
+};
 }  // namespace ast

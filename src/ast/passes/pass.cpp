@@ -41,6 +41,7 @@ void Pass::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Function, this->visit_function);
     try_visit(node, ast::Call, this->visit_call);
     try_visit(node, ast::Parameter, this->visit_parameter);
+    try_visit(node, ast::Return, this->visit_return);
 }
 
 void Pass::visit_block(shared_ptr<ast::Block> node) {
@@ -72,4 +73,8 @@ void Pass::visit_call(shared_ptr<ast::Call> node) {
     for (const auto& arg : node->arguments) {
         visit(arg);
     }
+}
+
+void Pass::visit_return(shared_ptr<ast::Return> node) {
+    visit(node->expr);
 }

@@ -240,3 +240,13 @@ void ast::Call::set_function(shared_ptr<Function> func) {
 shared_ptr<ast::Function> ast::Call::get_function() {
     return this->function;
 }
+
+ast::Return::Return(shared_ptr<Expression> expr, Token* token) : Node(token) {
+    this->expr = expr;
+}
+
+void ast::Return::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<return>\n";
+    this->expr->xml(level + 1);
+    std::cout << std::string(level * 4, ' ') << "</return>\n";
+}

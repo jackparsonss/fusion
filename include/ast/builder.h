@@ -7,7 +7,6 @@
 
 #include "ast/ast.h"
 #include "ast/symbol/symbol_table.h"
-#include "shared/type.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -34,4 +33,6 @@ class Builder : public FusionBaseVisitor {
     std::any visitFunction(FusionParser::FunctionContext* ctx) override;
     std::any visitCall(FusionParser::CallContext* ctx) override;
     std::any visitVariable(FusionParser::VariableContext* ctx) override;
+    std::any visitReturn(FusionParser::ReturnContext* ctx) override;
+    std::any visitCallExpr(FusionParser::CallExprContext* ctx) override;
 };

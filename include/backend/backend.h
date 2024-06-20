@@ -30,4 +30,5 @@ class Backend : public BackendVisitor {
     mlir::Value visit_function(shared_ptr<ast::Function>) override;
     mlir::Value visit_call(shared_ptr<ast::Call>) override;
     mlir::Value visit_parameter(shared_ptr<ast::Parameter>) override;
+    mlir::Value visit_return(shared_ptr<ast::Return>) override;
 };
