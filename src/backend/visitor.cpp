@@ -1,6 +1,8 @@
 #include <memory>
+
 #include "ast/ast.h"
 #include "backend/backend.h"
+#include "backend/types/character.h"
 #include "backend/types/integer.h"
 #include "backend/utils.h"
 
@@ -14,13 +16,10 @@
         return f(n);                                \
     }
 
-BackendVisitor::BackendVisitor(shared_ptr<ast::Block> ast) {
-    this->ast = ast;
-}
-
-mlir::Value BackendVisitor::visit(shared_ptr<ast::Node> node) {
+mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Block, this->visit_block);
     try_visit(node, ast::IntegerLiteral, this->visit_integer_literal);
+    try_visit(node, ast::CharacterLiteral, this->visit_character_literal);
     try_visit(node, ast::Variable, this->visit_variable);
     try_visit(node, ast::Declaration, this->visit_declaration);
     try_visit(node, ast::Function, this->visit_function);
@@ -42,6 +41,11 @@ mlir::Value Backend::visit_block(shared_ptr<ast::Block> node) {
 mlir::Value Backend::visit_integer_literal(
     shared_ptr<ast::IntegerLiteral> node) {
     return integer::create_i32(node->get_value());
+}
+
+mlir::Value Backend::visit_character_literal(
+    shared_ptr<ast::CharacterLiteral> node) {
+    return character::create_ch(node->get_value());
 }
 
 mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {

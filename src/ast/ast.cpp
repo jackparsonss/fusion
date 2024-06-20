@@ -64,6 +64,20 @@ TypePtr ast::Expression::get_type() const {
     return this->type;
 }
 
+ast::CharacterLiteral::CharacterLiteral(char value, Token* token)
+    : Expression(ctx::ch, token) {
+    this->value = value;
+}
+
+char ast::CharacterLiteral::get_value() const {
+    return this->value;
+}
+
+void ast::CharacterLiteral::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<ch value=\"" << this->value
+              << "\"/>\n";
+}
+
 ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
     : Expression(ctx::i32, token) {
     this->value = value;
@@ -160,6 +174,16 @@ ast::Function::Function(std::string name,
     }
     this->body = body;
     this->params = params;
+}
+
+ast::Function::Function(std::string name,
+                        std::string ref_name,
+                        shared_ptr<Block> body,
+                        TypePtr return_type,
+                        std::vector<shared_ptr<ast::Parameter>> params,
+                        Token* token)
+    : Function(name, body, return_type, params, token) {
+    this->ref_name = ref_name;
 }
 
 std::string ast::Function::get_name() {

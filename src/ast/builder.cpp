@@ -102,6 +102,26 @@ std::any Builder::visitLiteralInt(FusionParser::LiteralIntContext* ctx) {
     return to_node(node);
 }
 
+std::any Builder::visitLiteralChar(FusionParser::LiteralCharContext* ctx) {
+    std::unordered_map<std::string, char> special_characters = {
+        {"\\0", '\0'},  {"\\a", '\a'},  {"\\b", '\b'},
+        {"\\t", '\t'},  {"\\n", '\n'},  {"\\r", '\r'},
+        {"\\\"", '\"'}, {"\\\'", '\''}, {"\\\\", '\\'},
+    };
+    Token* token = ctx->CHARACTER()->getSymbol();
+    std::string literal = ctx->CHARACTER()->getText();
+    char value;
+
+    if (literal.size() == 3) {
+        value = literal[1];
+    } else {
+        value = special_characters[literal.substr(1, 2)];
+    }
+
+    auto node = make_shared<ast::CharacterLiteral>(value, token);
+    return to_node(node);
+}
+
 std::any Builder::visitIdentifier(FusionParser::IdentifierContext* ctx) {
     Token* token = ctx->ID()->getSymbol();
     std::string name = ctx->ID()->getText();

@@ -1,8 +1,9 @@
-#include "ast/symbol/symbol_table.h"
 #include <memory>
+
 #include "CommonToken.h"
 #include "ast/ast.h"
 #include "ast/symbol/function_symbol.h"
+#include "ast/symbol/symbol_table.h"
 #include "shared/context.h"
 
 SymbolTable::SymbolTable() {
@@ -11,26 +12,36 @@ SymbolTable::SymbolTable() {
     current_scope = global_scope;
 
     init_types();
+    init_builtins();
 }
 
 void SymbolTable::init_types() {
+    define(make_shared<BuiltinTypeSymbol>(ctx::i32->get_name()));
+    define(make_shared<BuiltinTypeSymbol>(ctx::ch->get_name()));
+}
+
+shared_ptr<ast::Function> make_print(shared_ptr<Type> type) {
     Token* token = new antlr4::CommonToken(1);
+    auto body = make_shared<ast::Block>(token);
 
-    define(make_shared<BuiltinTypeSymbol>("i32"));
-
-    auto print_body = make_shared<ast::Block>(token);
-    std::vector<shared_ptr<ast::Parameter>> print_params = {
+    std::vector<shared_ptr<ast::Parameter>> params = {
         make_shared<ast::Parameter>(
-            make_shared<ast::Variable>(ast::Qualifier::Let, ctx::i32, "arg",
-                                       token),
+            make_shared<ast::Variable>(ast::Qualifier::Let, type, "arg", token),
             token),
     };
 
-    auto print = make_shared<ast::Function>("print", print_body, ctx::i32,
-                                            print_params, token);
-    print->set_ref_name("print");
+    std::string name = "print_" + type->get_name();
+    auto print =
+        make_shared<ast::Function>(name, name, body, type, params, token);
+    return print;
+}
 
-    define(make_shared<FunctionSymbol>(print, this->current_scope));
+void SymbolTable::init_builtins() {
+    auto print_i32 = make_print(ctx::i32);
+    auto print_ch = make_print(ctx::ch);
+
+    define(make_shared<FunctionSymbol>(print_i32, this->current_scope));
+    define(make_shared<FunctionSymbol>(print_ch, this->current_scope));
 }
 
 void SymbolTable::push() {

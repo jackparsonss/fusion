@@ -32,9 +32,7 @@ int main(int argc, char** argv) {
     pass::run_passes(builder.get_ast(), symtab);
     assert(builder.has_ast());
 
-    Backend backend = Backend(builder.get_ast());
-    backend.traverse();
-
+    // frontend args
     for (unsigned i = 0; i < argc; i++) {
         std::string arg = std::string(argv[i]);
         if (arg == "--xml") {
@@ -45,7 +43,14 @@ int main(int argc, char** argv) {
             std::cerr << "You must provide a file to target" << std::endl;
             return 1;
         }
+    }
 
+    Backend backend = Backend(builder.get_ast());
+    backend.traverse();
+
+    // backend args
+    for (unsigned i = 0; i < argc; i++) {
+        std::string arg = std::string(argv[i]);
         if (arg == "--emit-llvm" && i == argc - 1) {
             std::cerr << "You must provide a file to target llvm ir"
                       << std::endl;

@@ -10,6 +10,7 @@ using std::make_shared;
 class SymbolTable {
    private:
     void init_types();
+    void init_builtins();
     std::deque<ScopePtr> scopes;
 
    public:

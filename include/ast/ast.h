@@ -58,6 +58,17 @@ class IntegerLiteral : public Expression {
     void xml(int level) override;
 };
 
+class CharacterLiteral : public Expression {
+   private:
+    char value;
+
+   public:
+    explicit CharacterLiteral(char value, Token* token);
+    char get_value() const;
+
+    void xml(int level) override;
+};
+
 class Variable : public Expression {
    private:
     std::string name;
@@ -104,6 +115,13 @@ class Function : public Expression {
 
    public:
     Function(std::string name,
+             shared_ptr<Block> body,
+             TypePtr return_type,
+             std::vector<shared_ptr<Parameter>> params,
+             Token* token);
+
+    Function(std::string name,
+             std::string ref_name,
              shared_ptr<Block> body,
              TypePtr return_type,
              std::vector<shared_ptr<Parameter>> params,

@@ -4,5 +4,10 @@ fn main(): i32 {
     print(x);
     print(y);
 
+    let z: ch = 'a';
+    const w: ch = '\n';
+    print(z);
+    print(w);
+
     return 0;
 }
