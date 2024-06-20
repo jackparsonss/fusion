@@ -18,7 +18,8 @@
 #include "mlir/Target/LLVMIR/Export.h"
 #include "shared/context.h"
 
-Backend::Backend(shared_ptr<ast::Block> ast) : BackendVisitor(ast) {
+Backend::Backend(shared_ptr<ast::Block> ast) {
+    this->ast = ast;
     ctx::builder->setInsertionPointToStart(ctx::module->getBody());
     builtin::define_all();
 }

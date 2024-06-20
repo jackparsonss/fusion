@@ -64,6 +64,20 @@ TypePtr ast::Expression::get_type() const {
     return this->type;
 }
 
+ast::CharacterLiteral::CharacterLiteral(char value, Token* token)
+    : Expression(ctx::ch, token) {
+    this->value = value;
+}
+
+char ast::CharacterLiteral::get_value() const {
+    return this->value;
+}
+
+void ast::CharacterLiteral::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<ch value=\"" << this->value
+              << "\"/>\n";
+}
+
 ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
     : Expression(ctx::i32, token) {
     this->value = value;

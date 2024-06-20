@@ -25,14 +25,15 @@ call: ID L_PAREN expr* R_PAREN;
 return: RETURN expr SEMI;
 
 expr
-    : INT   #literalInt
-    | ID    #identifier
-    | call  #callExpr 
+    : call      #callExpr 
+    | CHARACTER #literalChar
+    | INT       #literalInt
+    | ID        #identifier
     ;
 
 qualifier: CONST | LET;
 
-type: I32;
+type: I32 | CHAR;
 
 // keywords
 RETURN: 'return';
@@ -55,10 +56,12 @@ COMMENT: '/*' .*? '*/' -> skip;
 
 // types
 I32: 'i32';
+CHAR: 'ch';
 
 // literals
 INT: [0-9]+;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
+CHARACTER: '\'' ( '\\\\' | '\\0' | '\\a' | '\\b' | '\\t' | '\\n' | '\\r' | '\\"' | '\\\'' | ~[\\'] ) '\'';
 
 // skip whitespace
 WS : [ \t\r\n]+ -> skip ;

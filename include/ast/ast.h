@@ -58,6 +58,17 @@ class IntegerLiteral : public Expression {
     void xml(int level) override;
 };
 
+class CharacterLiteral : public Expression {
+   private:
+    char value;
+
+   public:
+    explicit CharacterLiteral(char value, Token* token);
+    char get_value() const;
+
+    void xml(int level) override;
+};
+
 class Variable : public Expression {
    private:
     std::string name;

@@ -17,6 +17,7 @@ void SymbolTable::init_types() {
     Token* token = new antlr4::CommonToken(1);
 
     define(make_shared<BuiltinTypeSymbol>("i32"));
+    define(make_shared<BuiltinTypeSymbol>("ch"));
 
     auto print_body = make_shared<ast::Block>(token);
     std::vector<shared_ptr<ast::Parameter>> print_params = {
