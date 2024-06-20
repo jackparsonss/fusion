@@ -1,0 +1,11 @@
+fn foo(let n: ch): ch {
+    print(n);
+
+    return '\n';
+}
+
+fn main(): i32 {
+    print(foo('y'));
+
+    return 0;
+}
