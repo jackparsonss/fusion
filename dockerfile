@@ -87,3 +87,7 @@ RUN rm -rf /llvm-project/openmp
 RUN rm -rf /llvm-project/polly
 RUN rm -rf /llvm-project/pstl
 RUN rm -rf /llvm-project/third-party
+
+SHELL ["/bin/bash", "-c"]
+
+ENTRYPOINT ["/bin/bash"]
