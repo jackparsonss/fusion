@@ -7,11 +7,14 @@ on:
     branches: [ "main" ]
 
 jobs:
-  my-job:
+  build:
     runs-on: ubuntu-latest
+    container:
+      image: jackpar/fusion:latest 
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: build
-      uses: ./ 
+      run: mkdir build && cd build && cmake .. && make && cd ../tests && tester ./tester_config.json
