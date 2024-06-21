@@ -1,0 +1,13 @@
+name: "Fusion-Env"
+description: "environment for fusion"
+author: "Jack Parsons"
+runs:
+  using: "docker"
+  image: "jackpar/fusion:latest"
+  entrypoint: ["/bin/bash", "-c"]
+  args:
+    - |
+      apk add --no-cache bash && \
+      cp -r $GITHUB_WORKSPACE /workspace && \
+      cd /workspace && \
+      ./entrypoint.sh
