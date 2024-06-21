@@ -24,4 +24,4 @@ jobs:
       run: chmod +x entrypoint.sh
 
     - name: build and test
-      run: ./entrypoint
+      run: ./entrypoint.sh
