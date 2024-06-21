@@ -51,19 +51,19 @@ RUN cd /llvm-project/build && cmake -G Ninja ../llvm \
 
 RUN cd /llvm-project/build && ninja check-all -j 8 || true
 
+RUN cd / && git clone https://github.com/cmput415/Tester.git
+RUN mkdir /Tester/build
+RUN cd /Tester/build && cmake .. && make -j 8
+
 RUN echo 'export ANTLR_INS="/antlr/install"' >> ~/.bashrc
 RUN echo 'export ANTLR_JAR="/antlr/install/bin/antlr.jar"' >> ~/.bashrc
 RUN echo 'export CLASSPATH="$ANTLR_JAR:$CLASSPATH"' >> ~/.bashrc
 RUN echo 'alias antlr4="java -Xmx500M org.antlr.v4.Tool"' >> ~/.bashrc
 RUN echo 'alias grun="java org.antlr.v4.gui.TestRig"' >> ~/.bashrc
 
-RUN echo 'export MLIR_INS=\"/llvm-project/build/"' >> ~/.bashrc
-RUN echo 'export MLIR_DIR=\"/llvm-project/build/lib/cmake/mlir/"' >> ~/.bashrc
+RUN echo 'export MLIR_INS="/llvm-project/build"' >> ~/.bashrc
+RUN echo 'export MLIR_DIR="/llvm-project/build/lib/cmake/mlir"' >> ~/.bashrc
 RUN echo 'export PATH="/llvm-project/build/bin:$PATH"' >> ~/.bashrc
-
-RUN cd / && git clone https://github.com/cmput415/Tester.git
-RUN mkdir /Tester/build
-RUN cd /Tester/build && cmake .. && make
 
 RUN echo 'export PATH="/Tester/bin/:$PATH"' >> ~/.bashrc
 
