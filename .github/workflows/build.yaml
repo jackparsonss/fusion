@@ -9,12 +9,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./scripts
+
     container:
-      image: jackpar/fusion:1.0.0 
+      image: jackpar/fusion:latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: build
-      run: mkdir build && cd build && cmake .. && make && cd ../tests && tester ./tester_config.json
+    - name: make executable
+      run: chmod +x entrypoint.sh
+
+    - name: build and test
+      run: ./entrypoint

@@ -10,7 +10,7 @@ RUN apt-get update
 RUN apt-get install uuid-dev -y
 
 RUN apt-get update
-RUN apt-get install openjdk-21-jre -y
+RUN apt-get install openjdk-17-jre -y
 
 RUN apt-get update
 RUN apt-get install git -y
@@ -21,6 +21,9 @@ RUN apt-get install cmake -y
 RUN apt-get update
 RUN apt-get install ninja-build -y
 
+RUN apt-get update
+RUN apt-get install curl -y
+
 RUN mkdir /antlr
 RUN cd /antlr && git clone https://github.com/antlr/antlr4.git
 RUN cd /antlr/antlr4 && git checkout 4.13.1
@@ -29,11 +32,8 @@ RUN mkdir /antlr/antlr4/build
 RUN mkdir /antlr/install
 RUN cd /antlr/antlr4/build && cmake /antlr/antlr4/runtime/Cpp/ \
     -DCMAKE_BUILD_TYPE=RELEASE \
-    -DCMAKE_INSTALL_PREFIX="/antlr/install" && make install
+    -DCMAKE_INSTALL_PREFIX="/antlr/install" && make install -j 8
 
-
-RUN apt-get update
-RUN apt-get install curl -y
 
 RUN mkdir /antlr/install/bin
 RUN curl https://www.antlr.org/download/antlr-4.13.1-complete.jar \
@@ -49,7 +49,7 @@ RUN cd /llvm-project/build && cmake -G Ninja ../llvm \
     -DCMAKE_BUILD_TYPE=Release \
     -DLLVM_ENABLE_ASSERTIONS=ON
 
-RUN cd /llvm-project/build && ninja check-all -j 16 || true
+RUN cd /llvm-project/build && ninja check-all -j 8 || true
 
 RUN echo "export ANTLR_INS=\"/antlr/install\"" >> ~/.bashrc
 RUN echo "export ANTLR_JAR=\"/antlr/install/bin/antlr.jar\"" >> ~/.bashrc
