@@ -3,7 +3,7 @@ description: "environment for fusion"
 author: "Jack Parsons"
 runs:
   using: "docker"
-  image: "jackpar/fusion:latest"
+  image: "jackpar/fusion:1.0.0"
   entrypoint: ["/bin/bash", "-c"]
   args:
     - |
