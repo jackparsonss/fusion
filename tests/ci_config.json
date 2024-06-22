@@ -1,0 +1,36 @@
+{
+    "inDir": "/root/fusion/tests/input",
+    "outDir": "/root/fusion/tests/output",
+    "testedExecutablePaths": {
+        "fusion": "/root/fusion/bin/fuse"
+    },
+    "runtimes": {
+        "fusion": "/root/fusion/bin/libfusert.dylib"
+    },
+    "toolchains": {
+        "fusion": [
+            {
+                "stepName": "fuse",
+                "executablePath": "$EXE",
+                "arguments": [
+                    "$INPUT",
+                    "--emit-llvm",
+                    "$OUTPUT"
+                ],
+                "output": "fuse.ll",
+                "allowError": true
+            },
+            {
+                "stepName": "lli",
+                "executablePath": "/root/llvm-project/build/bin/lli",
+                "arguments": [
+                    "$INPUT"
+                ],
+                "output": "-",
+                "usesRuntime": true,
+                "usesInStr": false,
+                "allowError": true
+            }
+        ]
+    }
+}

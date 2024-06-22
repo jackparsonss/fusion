@@ -10,4 +10,4 @@ cmake ..
 make
 
 cd ../tests
-tester ./tester_config.json
+tester ./ci_config.json
