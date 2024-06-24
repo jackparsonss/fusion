@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     assert(builder.has_ast());
 
     // frontend args
-    for (unsigned i = 0; i < argc; i++) {
+    for (size_t i = 0; i < argc; i++) {
         std::string arg = std::string(argv[i]);
         if (arg == "--xml") {
             builder.get_ast()->xml(0);
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     backend.traverse();
 
     // backend args
-    for (unsigned i = 0; i < argc; i++) {
+    for (size_t i = 0; i < argc; i++) {
         std::string arg = std::string(argv[i]);
         if (arg == "--emit-llvm" && i == argc - 1) {
             std::cerr << "You must provide a file to target llvm ir"
