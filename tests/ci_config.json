@@ -5,7 +5,7 @@
         "fusion": "/__w/fusion/fusion/bin/fuse"
     },
     "runtimes": {
-        "fusion": "/__w/fusion/fusion/bin/libfusert.dylib"
+        "fusion": "/__w/fusion/fusion/bin/libfusert.so"
     },
     "toolchains": {
         "fusion": [
