@@ -9,5 +9,8 @@ cd build
 cmake ..
 make
 
+echo "DIRECTORY"
+pwd
+
 cd ../tests
 tester ./ci_config.json
