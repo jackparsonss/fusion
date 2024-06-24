@@ -1,11 +1,11 @@
 {
-    "inDir": "/github/home/fusion/tests/input",
-    "outDir": "/github/home/fusion/tests/output",
+    "inDir": "/__w/fusion/fusion/tests/input",
+    "outDir": "/__w/fusion/fusion/tests/output",
     "testedExecutablePaths": {
-        "fusion": "/github/home/fusion/bin/fuse"
+        "fusion": "/__w/fusion/fusion/bin/fuse"
     },
     "runtimes": {
-        "fusion": "/github/home/fusion/bin/libfusert.dylib"
+        "fusion": "/__w/fusion/fusion/bin/libfusert.dylib"
     },
     "toolchains": {
         "fusion": [
