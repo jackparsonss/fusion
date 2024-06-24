@@ -57,9 +57,17 @@ fn main(): i32 {
 ```
 
 ##### print
-Prints the argument passed into stdout
+Prints the argument passed to stdout
 ```
 print(5);
+```
+
+##### println
+Prints the argument passed to stdout with a newline at the end
+```
+println(100);
+```
+```
 ```
 
 #### Arithmetic
