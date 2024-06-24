@@ -6,9 +6,10 @@ std::unique_ptr<mlir::Location> ctx::loc =
 std::shared_ptr<mlir::OpBuilder> ctx::builder;
 std::unique_ptr<mlir::ModuleOp> ctx::module;
 
-shared_ptr<Type> ctx::ch;
-shared_ptr<Type> ctx::i32;
-shared_ptr<Type> ctx::none;
+TypePtr ctx::ch;
+TypePtr ctx::i32;
+TypePtr ctx::f32;
+TypePtr ctx::none;
 
 void ctx::initialize_context() {
     context.loadDialect<mlir::LLVM::LLVMDialect>();
@@ -16,6 +17,7 @@ void ctx::initialize_context() {
 
     ctx::ch = std::make_shared<Type>(Type::ch);
     ctx::i32 = std::make_shared<Type>(Type::i32);
+    ctx::f32 = std::make_shared<Type>(Type::f32);
     ctx::none = std::make_shared<Type>(Type::none);
     module = std::make_unique<mlir::ModuleOp>(
         mlir::ModuleOp::create(builder->getUnknownLoc()));

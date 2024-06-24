@@ -11,7 +11,7 @@ std::string Symbol::get_name() {
     return this->name;
 }
 
-std::shared_ptr<Type> Symbol::get_type() {
+TypePtr Symbol::get_type() {
     return this->type;
 }
 

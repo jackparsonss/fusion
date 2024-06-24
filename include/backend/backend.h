@@ -33,4 +33,5 @@ class Backend {
     mlir::Value visit_parameter(shared_ptr<ast::Parameter>);
     mlir::Value visit_return(shared_ptr<ast::Return>);
     mlir::Value visit_character_literal(shared_ptr<ast::CharacterLiteral>);
+    mlir::Value visit_binary_operator(shared_ptr<ast::BinaryOperator>);
 };
