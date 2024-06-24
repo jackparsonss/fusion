@@ -1,5 +1,7 @@
 fn main(): i32 {
+    let x: i32 = 100;
     print(5);
+    println(x);
 
     return 0;
 }

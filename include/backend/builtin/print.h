@@ -4,5 +4,6 @@
 
 namespace builtin {
 void define_all();
-void define_print(std::shared_ptr<Type> type);
+void define_print(TypePtr type);
+void define_println(TypePtr type);
 }  // namespace builtin

@@ -21,6 +21,22 @@ std::string Type::get_name() const {
     return this->name;
 }
 
+std::string Type::get_specifier() const {
+    if (*this == Type::ch) {
+        return "%c";
+    }
+
+    if (*this == Type::i32) {
+        return "%d";
+    }
+
+    if (*this == Type::f32) {
+        return "%g";
+    }
+
+    throw std::runtime_error("type is not printable");
+}
+
 mlir::Type Type::get_mlir() const {
     if (*this == Type::ch) {
         return ctx::builder->getI8Type();
@@ -39,4 +55,8 @@ mlir::Type Type::get_mlir() const {
     }
 
     throw std::runtime_error("invalid mlir type found");
+}
+
+mlir::Type Type::get_pointer() {
+    return mlir::LLVM::LLVMPointerType::get(get_mlir());
 }

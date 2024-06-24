@@ -4,9 +4,6 @@
     "testedExecutablePaths": {
         "fusion": "/Users/jackparsons/Storage/Repositories/fusion/bin/fuse"
     },
-    "runtimes": {
-        "fusion": "/Users/jackparsons/Storage/Repositories/fusion/bin/libfusert.dylib"
-    },
     "toolchains": {
         "fusion": [
             {
@@ -27,7 +24,7 @@
                     "$INPUT"
                 ],
                 "output": "-",
-                "usesRuntime": true,
+                "usesRuntime": false,
                 "usesInStr": false,
                 "allowError": true
             }

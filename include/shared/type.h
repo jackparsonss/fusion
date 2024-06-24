@@ -11,7 +11,9 @@ class Type {
    public:
     explicit Type(std::string name);
     std::string get_name() const;
+    std::string get_specifier() const;
     mlir::Type get_mlir() const;
+    mlir::Type get_pointer();
 
     bool operator==(const Type rhs) const;
 

@@ -61,8 +61,7 @@ int main(int argc, char** argv) {
             std::string filename = std::string(argv[i + 1]);
             backend.to_object(filename + ".o");
 
-            std::string command = "clang " + filename + ".o -o " + filename +
-                                  " -L./ -lfusert -Wl,-rpath,./";
+            std::string command = "clang " + filename + ".o -o " + filename;
             system(command.c_str());
 
             command = "rm " + filename + ".o";

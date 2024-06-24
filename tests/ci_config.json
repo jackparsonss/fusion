@@ -4,9 +4,6 @@
     "testedExecutablePaths": {
         "fusion": "/__w/fusion/fusion/bin/fuse"
     },
-    "runtimes": {
-        "fusion": "/__w/fusion/fusion/bin/libfusert.so"
-    },
     "toolchains": {
         "fusion": [
             {
@@ -27,7 +24,7 @@
                     "$INPUT"
                 ],
                 "output": "-",
-                "usesRuntime": true,
+                "usesRuntime": false,
                 "usesInStr": false,
                 "allowError": true
             }
