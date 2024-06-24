@@ -4,5 +4,5 @@
 #include "shared/type.h"
 
 namespace io {
-void print(mlir::Value, std::shared_ptr<Type>);
+void printf(mlir::Value value, TypePtr type);
 }  // namespace io
