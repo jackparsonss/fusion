@@ -11,7 +11,7 @@ statement
     ;
 
 declaration:
-    variable EQ expr SEMI
+    variable EQUAL expr SEMI
     ;
 
 block: L_CURLY statement* R_CURLY;
@@ -25,10 +25,15 @@ call: ID L_PAREN expr? (COMMA expr)* R_PAREN;
 return: RETURN expr SEMI;
 
 expr
-    : call      #callExpr 
-    | CHARACTER #literalChar
-    | INT       #literalInt
-    | ID        #identifier
+    : call                                               #callExpr
+    | <assoc='right'> expr CARET expr                    #power
+    | expr (op=STAR | op=SLASH | op=MOD | op=DSTAR) expr #mulDivMod
+    | expr (op=PLUS | op=MINUS) expr                     #addSub
+    | expr (op=GT | op=LT | op=GE | op=LE) expr          #gtLtCond
+    | expr (op=EQ | op=NE) expr                          #eqNeCond
+    | CHARACTER                                          #literalChar
+    | INT                                                #literalInt
+    | ID                                                 #identifier
     ;
 
 qualifier: CONST | LET;
@@ -45,11 +50,24 @@ LET: 'let';
 SEMI: ';';
 COLON: ':';
 COMMA: ',';
-EQ: '=';
+EQUAL: '=';
 L_PAREN: '(';
 R_PAREN: ')';
 L_CURLY: '{';
 R_CURLY: '}';
+PLUS: '+';
+MINUS: '-';
+STAR: '*';
+DSTAR: '**';
+SLASH: '/';
+MOD: '%';
+GT: '>';
+LT: '<';
+GE: '>=';
+LE: '<=';
+NE: '!=';
+EQ: '==';
+CARET: '^';
 
 // comments
 LINE_COMMENT: '//' .*? ('\n' | EOF) -> skip;

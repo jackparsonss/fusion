@@ -32,6 +32,35 @@ std::string ast::qualifier_to_string(ast::Qualifier qualifier) {
     throw std::runtime_error("invalid qualifier case");
 }
 
+std::string ast::binary_op_type_to_string(ast::BinaryOpType type) {
+    switch (type) {
+        case ast::BinaryOpType::POW:
+            return "POW";
+        case ast::BinaryOpType::ADD:
+            return "ADD";
+        case ast::BinaryOpType::SUB:
+            return "SUB";
+        case ast::BinaryOpType::MUL:
+            return "MUL";
+        case ast::BinaryOpType::DIV:
+            return "DIV";
+        case ast::BinaryOpType::MOD:
+            return "MOD";
+        case ast::BinaryOpType::GT:
+            return "GT";
+        case ast::BinaryOpType::GTE:
+            return "GTE";
+        case ast::BinaryOpType::LT:
+            return "LT";
+        case ast::BinaryOpType::LTE:
+            return "LTE";
+        case ast::BinaryOpType::EQ:
+            return "EQ";
+        case ast::BinaryOpType::NE:
+            return "NE";
+    }
+}
+
 ast::Node::Node(Token* token) {
     if (token == nullptr) {
         return;
@@ -273,4 +302,29 @@ void ast::Return::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "<return>\n";
     this->expr->xml(level + 1);
     std::cout << std::string(level * 4, ' ') << "</return>\n";
+}
+
+ast::BinaryOperator::BinaryOperator(BinaryOpType type,
+                                    shared_ptr<Expression> lhs,
+                                    shared_ptr<Expression> rhs,
+                                    Token* token)
+    : Expression(lhs->get_type(), token) {
+    this->type = type;
+    this->lhs = lhs;
+    this->rhs = rhs;
+}
+
+void ast::BinaryOperator::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<binary operator type=\""
+              << ast::binary_op_type_to_string(type) << "\">\n";
+
+    std::cout << std::string((level + 1) * 4, ' ') << "<lhs>\n";
+    this->lhs->xml(level + 1);
+    std::cout << std::string((level + 1) * 4, ' ') << "</lhs>\n";
+
+    std::cout << std::string((level + 1) * 4, ' ') << "<rhs>\n";
+    this->rhs->xml(level + 1);
+    std::cout << std::string((level + 1) * 4, ' ') << "</rhs>\n";
+
+    std::cout << std::string(level * 4, ' ') << "</binary operator>\n";
 }

@@ -7,9 +7,7 @@
 
 #include "shared/type.h"
 
-using antlr4::Token;
-using std::make_shared;
-using std::shared_ptr;
+using antlr4::Token, std::make_shared, std::shared_ptr;
 
 namespace ast {
 enum class Qualifier {
@@ -17,8 +15,24 @@ enum class Qualifier {
     Let,
 };
 
+enum class BinaryOpType {
+    POW,
+    ADD,
+    SUB,
+    MUL,
+    DIV,
+    MOD,
+    GT,
+    GTE,
+    LT,
+    LTE,
+    EQ,
+    NE,
+};
+
 std::string random_name();
 std::string qualifier_to_string(Qualifier qualifier);
+std::string binary_op_type_to_string(BinaryOpType type);
 
 class Node {
    public:
@@ -160,6 +174,19 @@ class Return : public Node {
    public:
     shared_ptr<Expression> expr;
     Return(shared_ptr<Expression> expr, Token* token);
+    void xml(int level) override;
+};
+
+class BinaryOperator : public Expression {
+   public:
+    BinaryOpType type;
+    shared_ptr<Expression> lhs;
+    shared_ptr<Expression> rhs;
+
+    BinaryOperator(BinaryOpType type,
+                   shared_ptr<Expression> lhs,
+                   shared_ptr<Expression> rhs,
+                   Token* token);
     void xml(int level) override;
 };
 }  // namespace ast

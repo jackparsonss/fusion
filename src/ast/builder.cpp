@@ -58,7 +58,7 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
 }
 
 std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
-    Token* token = ctx->EQ()->getSymbol();
+    Token* token = ctx->EQUAL()->getSymbol();
 
     auto expr = cast_node(ast::Expression, visit(ctx->expr()));
     auto var = cast_node(ast::Variable, visit(ctx->variable()));
@@ -198,4 +198,66 @@ std::any Builder::visitReturn(FusionParser::ReturnContext* ctx) {
     auto ret = make_shared<ast::Return>(expr, token);
 
     return to_node(ret);
+}
+
+std::any Builder::visitPower(FusionParser::PowerContext* ctx) {
+    Token* token = ctx->CARET()->getSymbol();
+    auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
+    auto binop = make_shared<ast::BinaryOperator>(ast::BinaryOpType::POW, lhs,
+                                                  rhs, token);
+
+    return to_node(binop);
+}
+
+std::any Builder::visitMulDivMod(FusionParser::MulDivModContext* ctx) {
+    Token* token;
+    ast::BinaryOpType type;
+
+    if (ctx->STAR() != nullptr) {
+        type = ast::BinaryOpType::MUL;
+        token = ctx->STAR()->getSymbol();
+    } else if (ctx->SLASH() != nullptr) {
+        type = ast::BinaryOpType::DIV;
+        token = ctx->SLASH()->getSymbol();
+    } else if (ctx->MOD() != nullptr) {
+        type = ast::BinaryOpType::MOD;
+        token = ctx->MOD()->getSymbol();
+    } else {
+        throw std::runtime_error(
+            "Unrecognized operator when visiting mul div mod");
+    }
+    auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
+    auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
+
+    return to_node(binop);
+}
+
+std::any Builder::visitAddSub(FusionParser::AddSubContext* ctx) {
+    Token* token;
+    ast::BinaryOpType type;
+
+    if (ctx->PLUS() != nullptr) {
+        type = ast::BinaryOpType::ADD;
+        token = ctx->PLUS()->getSymbol();
+    } else if (ctx->MINUS() != nullptr) {
+        type = ast::BinaryOpType::SUB;
+        token = ctx->MINUS()->getSymbol();
+    } else {
+        throw std::runtime_error("Unrecognized operator when visiting add sub");
+    }
+    auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
+    auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
+
+    return to_node(binop);
+}
+
+std::any Builder::visitGtLtCond(FusionParser::GtLtCondContext* ctx) {
+    throw std::runtime_error("gt, lt conds not implemented yet");
+}
+
+std::any Builder::visitEqNeCond(FusionParser::EqNeCondContext* ctx) {
+    throw std::runtime_error("eq, ne conds not implemented yet");
 }
