@@ -3,5 +3,7 @@ fn main(): i32 {
     print(x);
     print('\n');
 
+    println('z');
+
     return 0;
 }

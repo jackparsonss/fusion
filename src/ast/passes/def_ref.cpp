@@ -89,7 +89,7 @@ void DefRef::visit_call(shared_ptr<ast::Call> node) {
 }
 
 bool DefRef::is_builtin(std::string name) {
-    if (name == "print") {
+    if (name == "print" || name == "println") {
         return true;
     }
 

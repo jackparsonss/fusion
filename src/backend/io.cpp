@@ -7,10 +7,10 @@
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 
-void io::printf(mlir::Value value, TypePtr type) {
+namespace {
+void print(mlir::Value value, TypePtr type, std::string name) {
     mlir::LLVM::GlobalOp global;
-    if (!(global = ctx::module->lookupSymbol<mlir::LLVM::GlobalOp>(
-              type->get_name()))) {
+    if (!(global = ctx::module->lookupSymbol<mlir::LLVM::GlobalOp>(name))) {
         llvm::errs() << "missing format string!\n";
         return;
     }
@@ -26,4 +26,13 @@ void io::printf(mlir::Value value, TypePtr type) {
     mlir::LLVM::LLVMFuncOp func =
         ctx::module->lookupSymbol<mlir::LLVM::LLVMFuncOp>("printf");
     utils::call(func, {arg, value});
+}
+}  // namespace
+
+void io::printf(mlir::Value value, TypePtr type) {
+    print(value, type, type->get_name());
+}
+
+void io::println(mlir::Value value, TypePtr type) {
+    print(value, type, "newline_" + type->get_name());
 }
