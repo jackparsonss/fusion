@@ -61,3 +61,23 @@ Prints the argument passed into stdout
 ```
 print(5);
 ```
+
+#### Arithmetic
+- addition: `+`
+- subtraction: `-`
+- power: `^`
+- multiplication: `*`
+- division: `/`
+- modulus: `%`
+```
+fn main(): i32 {
+    let a: i32 = 5 + 5;
+    let s: i32 = 5 - 5;
+    let p: i32 = 5 ^ 5;
+    let m: i32 = 5 * 5;
+    let d: i32 = 5 / 5;
+    let r: i32 = 5 % 5;
+}
+```
+```
+```
