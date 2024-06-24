@@ -12,7 +12,7 @@ Type::Type(std::string name) {
     this->name = name;
 }
 
-bool Type::operator==(Type rhs) const {
+bool Type::operator==(const Type rhs) const {
     return this->name == rhs.name;
 }
 

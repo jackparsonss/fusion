@@ -13,7 +13,7 @@ class Type {
     std::string get_name() const;
     mlir::Type get_mlir() const;
 
-    bool operator==(Type rhs) const;
+    bool operator==(const Type rhs) const;
 
     static const Type ch;
     static const Type i32;

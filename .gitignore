@@ -6,3 +6,4 @@ build/
 
 fuse.ll
 fuse.ll.stdout
+lli-temp.out
