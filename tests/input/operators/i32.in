@@ -1,0 +1,22 @@
+fn main(): i32 {
+    print(2 ^ 3);
+    print('\n');
+
+    print(2 + 3);
+    print('\n');
+
+    print(3 - 2);
+    print('\n');
+
+    print(2 * 3);
+    print('\n');
+
+    print(4 / 2);
+    print('\n');
+
+    print(4 % 2);
+    print('\n');
+
+    return 0;
+}
+  

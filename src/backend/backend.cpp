@@ -1,5 +1,7 @@
 #include "backend/backend.h"
 #include "backend/builtin/print.h"
+#include "shared/context.h"
+
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/MC/TargetRegistry.h"
@@ -16,7 +18,6 @@
 #include "mlir/IR/Verifier.h"
 #include "mlir/Target/LLVMIR/Dialect/LLVMIR/LLVMToLLVMIRTranslation.h"
 #include "mlir/Target/LLVMIR/Export.h"
-#include "shared/context.h"
 
 Backend::Backend(shared_ptr<ast::Block> ast) {
     this->ast = ast;

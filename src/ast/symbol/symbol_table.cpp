@@ -20,7 +20,7 @@ void SymbolTable::init_types() {
     define(make_shared<BuiltinTypeSymbol>(ctx::ch->get_name()));
 }
 
-shared_ptr<ast::Function> make_print(shared_ptr<Type> type) {
+shared_ptr<ast::Function> make_print(TypePtr type) {
     Token* token = new antlr4::CommonToken(1);
     auto body = make_shared<ast::Block>(token);
 

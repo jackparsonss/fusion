@@ -17,6 +17,7 @@ class Type {
 
     static const Type ch;
     static const Type i32;
+    static const Type f32;
     static const Type none;
     static const Type unset;
 };

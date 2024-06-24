@@ -36,4 +36,9 @@ class Builder : public FusionBaseVisitor {
     std::any visitVariable(FusionParser::VariableContext* ctx) override;
     std::any visitReturn(FusionParser::ReturnContext* ctx) override;
     std::any visitCallExpr(FusionParser::CallExprContext* ctx) override;
+    std::any visitPower(FusionParser::PowerContext* ctx) override;
+    std::any visitMulDivMod(FusionParser::MulDivModContext* ctx) override;
+    std::any visitAddSub(FusionParser::AddSubContext* ctx) override;
+    std::any visitGtLtCond(FusionParser::GtLtCondContext* ctx) override;
+    std::any visitEqNeCond(FusionParser::EqNeCondContext* ctx) override;
 };

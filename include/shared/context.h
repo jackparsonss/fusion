@@ -18,6 +18,7 @@ extern mlir::MLIRContext context;
 
 extern shared_ptr<Type> ch;
 extern shared_ptr<Type> i32;
+extern shared_ptr<Type> f32;
 extern shared_ptr<Type> none;
 
 extern void initialize_context();

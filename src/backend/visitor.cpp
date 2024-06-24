@@ -2,6 +2,7 @@
 
 #include "ast/ast.h"
 #include "backend/backend.h"
+#include "backend/expressions/arithmetic.h"
 #include "backend/types/character.h"
 #include "backend/types/integer.h"
 #include "backend/utils.h"
@@ -26,6 +27,7 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Call, this->visit_call);
     try_visit(node, ast::Parameter, this->visit_parameter);
     try_visit(node, ast::Return, this->visit_return);
+    try_visit(node, ast::BinaryOperator, this->visit_binary_operator);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -116,4 +118,12 @@ mlir::Value Backend::visit_return(shared_ptr<ast::Return> node) {
     ctx::builder->create<mlir::LLVM::ReturnOp>(*ctx::loc, expr);
 
     return nullptr;
+}
+
+mlir::Value Backend::visit_binary_operator(
+    shared_ptr<ast::BinaryOperator> node) {
+    mlir::Value lhs = visit(node->lhs);
+    mlir::Value rhs = visit(node->rhs);
+
+    return arithmetic::binary_operation(lhs, rhs, node->type, node->get_type());
 }
