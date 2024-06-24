@@ -7,7 +7,7 @@ cd ../
 mkdir build
 cd build
 cmake ..
-make
+make -j 5
 
 cd ../tests
 tester ./ci_config.json
