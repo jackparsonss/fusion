@@ -1,7 +1,9 @@
 #include "backend/expressions/arithmetic.h"
 #include "ast/ast.h"
-#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
+#include "mlir/Dialect/LLVMIR/LLVMAttrs.h"
 #include "shared/context.h"
+
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 
 namespace {
 template <typename OpTy>
@@ -41,6 +43,40 @@ mlir::Value arithmetic::pow(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
         *ctx::loc, ctx::i32->get_mlir(), pow);
 }
 
+mlir::Value arithmetic::eq(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binary_equality(lhs, rhs, type, mlir::LLVM::ICmpPredicate::eq);
+}
+
+mlir::Value arithmetic::ne(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binary_equality(lhs, rhs, type, mlir::LLVM::ICmpPredicate::ne);
+}
+
+mlir::Value arithmetic::gt(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binary_equality(lhs, rhs, type, mlir::LLVM::ICmpPredicate::sgt);
+}
+
+mlir::Value arithmetic::gte(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binary_equality(lhs, rhs, type, mlir::LLVM::ICmpPredicate::sge);
+}
+
+mlir::Value arithmetic::lt(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binary_equality(lhs, rhs, type, mlir::LLVM::ICmpPredicate::slt);
+}
+
+mlir::Value arithmetic::lte(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binary_equality(lhs, rhs, type, mlir::LLVM::ICmpPredicate::sle);
+}
+
+mlir::Value arithmetic::binary_equality(mlir::Value lhs,
+                                        mlir::Value rhs,
+                                        TypePtr type,
+                                        mlir::LLVM::ICmpPredicate predicate) {
+    mlir::Value value = ctx::builder->create<mlir::LLVM::ICmpOp>(
+        *ctx::loc, ctx::t_bool->get_mlir(), predicate, lhs, rhs);
+
+    return value;
+}
+
 mlir::Value arithmetic::binary_operation(mlir::Value lhs,
                                          mlir::Value rhs,
                                          ast::BinaryOpType op_type,
@@ -59,17 +95,16 @@ mlir::Value arithmetic::binary_operation(mlir::Value lhs,
         case ast::BinaryOpType::MOD:
             return mod(lhs, rhs, type);
         case ast::BinaryOpType::GT:
-            throw std::runtime_error("GT not yet implemented on backend");
+            return gt(lhs, rhs, type);
         case ast::BinaryOpType::GTE:
-            throw std::runtime_error("GTE not yet implemented on backend");
+            return gte(lhs, rhs, type);
         case ast::BinaryOpType::LT:
-            throw std::runtime_error("LT not yet implemented on backend");
+            return lt(lhs, rhs, type);
         case ast::BinaryOpType::LTE:
-            throw std::runtime_error("LTE not yet implemented on backend");
+            return lte(lhs, rhs, type);
         case ast::BinaryOpType::EQ:
-            throw std::runtime_error("EQ not yet implemented on backend");
+            return eq(lhs, rhs, type);
         case ast::BinaryOpType::NE:
-            throw std::runtime_error("NE not yet implemented on backend");
-            break;
+            return ne(lhs, rhs, type);
     }
 }

@@ -330,15 +330,16 @@ ast::BinaryOperator::BinaryOperator(BinaryOpType type,
 }
 
 void ast::BinaryOperator::xml(int level) {
-    std::cout << std::string(level * 4, ' ') << "<binary operator type=\""
-              << ast::binary_op_type_to_string(type) << "\">\n";
+    std::cout << std::string(level * 4, ' ') << "<binop op_type=\""
+              << ast::binary_op_type_to_string(type) << "\" type=\""
+              << get_type()->get_name() << "\">\n";
 
     std::cout << std::string((level + 1) * 4, ' ') << "<lhs>\n";
-    this->lhs->xml(level + 1);
+    this->lhs->xml(level + 2);
     std::cout << std::string((level + 1) * 4, ' ') << "</lhs>\n";
 
     std::cout << std::string((level + 1) * 4, ' ') << "<rhs>\n";
-    this->rhs->xml(level + 1);
+    this->rhs->xml(level + 2);
     std::cout << std::string((level + 1) * 4, ' ') << "</rhs>\n";
 
     std::cout << std::string(level * 4, ' ') << "</binary operator>\n";
