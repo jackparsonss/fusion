@@ -16,11 +16,13 @@ extern unique_ptr<mlir::ModuleOp> module;
 extern shared_ptr<mlir::OpBuilder> builder;
 extern mlir::MLIRContext context;
 
-extern shared_ptr<Type> ch;
-extern shared_ptr<Type> i32;
-extern shared_ptr<Type> f32;
-extern shared_ptr<Type> none;
-extern shared_ptr<Type> t_bool;
+extern TypePtr ch;
+extern TypePtr i32;
+extern TypePtr f32;
+extern TypePtr none;
+extern TypePtr t_bool;
+
+extern std::vector<TypePtr> primitives;
 
 extern void initialize_context();
 }  // namespace ctx

@@ -12,6 +12,8 @@ TypePtr ctx::f32;
 TypePtr ctx::none;
 TypePtr ctx::t_bool;
 
+std::vector<TypePtr> ctx::primitives;
+
 void ctx::initialize_context() {
     context.loadDialect<mlir::LLVM::LLVMDialect>();
     builder = std::make_shared<mlir::OpBuilder>(&context);
@@ -21,6 +23,13 @@ void ctx::initialize_context() {
     ctx::f32 = std::make_shared<Type>(Type::f32);
     ctx::none = std::make_shared<Type>(Type::none);
     ctx::t_bool = std::make_shared<Type>(Type::t_bool);
+
+    ctx::primitives = {
+        ctx::ch,
+        ctx::i32,
+        ctx::f32,
+        ctx::t_bool,
+    };
 
     module = std::make_unique<mlir::ModuleOp>(
         mlir::ModuleOp::create(builder->getUnknownLoc()));

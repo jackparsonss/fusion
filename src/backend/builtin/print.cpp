@@ -40,20 +40,15 @@ void newline_type_str(TypePtr type) {
 }
 }  // namespace
 
-void builtin::define_all() {
+void builtin::define_all_print() {
     setupPrintf();
 
-    create_type_str(ctx::i32);
-    create_type_str(ctx::ch);
-
-    newline_type_str(ctx::i32);
-    newline_type_str(ctx::ch);
-
-    define_print(ctx::i32);
-    define_print(ctx::ch);
-
-    define_println(ctx::i32);
-    define_println(ctx::ch);
+    for (const auto& ty : ctx::primitives) {
+        create_type_str(ty);
+        newline_type_str(ty);
+        define_print(ty);
+        define_println(ty);
+    }
 }
 
 void builtin::define_print(TypePtr type) {

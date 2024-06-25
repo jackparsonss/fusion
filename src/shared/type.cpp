@@ -8,7 +8,7 @@ const Type Type::i32 = Type("i32");
 const Type Type::f32 = Type("f32");
 const Type Type::none = Type("none");
 const Type Type::unset = Type("unset");
-const Type Type::t_bool = Type("t_bool");
+const Type Type::t_bool = Type("bool");
 
 Type::Type(std::string name) {
     this->name = name;
