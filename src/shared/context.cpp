@@ -10,6 +10,7 @@ TypePtr ctx::ch;
 TypePtr ctx::i32;
 TypePtr ctx::f32;
 TypePtr ctx::none;
+TypePtr ctx::t_bool;
 
 void ctx::initialize_context() {
     context.loadDialect<mlir::LLVM::LLVMDialect>();
@@ -19,6 +20,8 @@ void ctx::initialize_context() {
     ctx::i32 = std::make_shared<Type>(Type::i32);
     ctx::f32 = std::make_shared<Type>(Type::f32);
     ctx::none = std::make_shared<Type>(Type::none);
+    ctx::t_bool = std::make_shared<Type>(Type::t_bool);
+
     module = std::make_unique<mlir::ModuleOp>(
         mlir::ModuleOp::create(builder->getUnknownLoc()));
 }

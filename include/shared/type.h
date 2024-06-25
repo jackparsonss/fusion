@@ -22,6 +22,7 @@ class Type {
     static const Type f32;
     static const Type none;
     static const Type unset;
+    static const Type t_bool;
 };
 
 typedef std::shared_ptr<Type> TypePtr;

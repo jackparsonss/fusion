@@ -31,6 +31,7 @@ expr
     | expr (op=PLUS | op=MINUS) expr                     #addSub
     | expr (op=GT | op=LT | op=GE | op=LE) expr          #gtLtCond
     | expr (op=EQ | op=NE) expr                          #eqNeCond
+    | BOOLEAN                                            #literalBool
     | CHARACTER                                          #literalChar
     | INT                                                #literalInt
     | ID                                                 #identifier
@@ -38,7 +39,11 @@ expr
 
 qualifier: CONST | LET;
 
-type: I32 | CHAR;
+type
+    : I32 
+    | CHAR
+    | BOOL
+    ;
 
 // keywords
 RETURN: 'return';
@@ -76,8 +81,10 @@ COMMENT: '/*' .*? '*/' -> skip;
 // types
 I32: 'i32';
 CHAR: 'ch';
+BOOL: 'bool';
 
 // literals
+BOOLEAN: ('true' | 'false');
 INT: [0-9]+;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 CHARACTER: '\'' ( '\\\\' | '\\0' | '\\a' | '\\b' | '\\t' | '\\n' | '\\r' | '\\"' | '\\\'' | ~[\\'] ) '\'';

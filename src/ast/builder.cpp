@@ -102,6 +102,17 @@ std::any Builder::visitLiteralInt(FusionParser::LiteralIntContext* ctx) {
     return to_node(node);
 }
 
+std::any Builder::visitLiteralBool(FusionParser::LiteralBoolContext* ctx) {
+    Token* token = ctx->BOOLEAN()->getSymbol();
+    bool value = true;
+    if (ctx->BOOLEAN()->getText() == "false") {
+        value = false;
+    }
+
+    auto node = make_shared<ast::BooleanLiteral>(value, token);
+    return to_node(node);
+}
+
 std::any Builder::visitLiteralChar(FusionParser::LiteralCharContext* ctx) {
     std::unordered_map<std::string, char> special_characters = {
         {"\\0", '\0'},  {"\\a", '\a'},  {"\\b", '\b'},
