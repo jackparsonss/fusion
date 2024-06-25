@@ -50,21 +50,19 @@ SymbolTable::SymbolTable() {
 }
 
 void SymbolTable::init_types() {
-    define(make_shared<BuiltinTypeSymbol>(ctx::i32->get_name()));
-    define(make_shared<BuiltinTypeSymbol>(ctx::ch->get_name()));
+    for (const auto& ty : ctx::primitives) {
+        define(make_shared<BuiltinTypeSymbol>(ty->get_name()));
+    }
 }
 
 void SymbolTable::init_builtins() {
-    auto print_i32 = make_print(ctx::i32);
-    auto print_ch = make_print(ctx::ch);
+    for (const auto& ty : ctx::primitives) {
+        auto print = make_print(ty);
+        auto println = make_println(ty);
 
-    auto println_i32 = make_println(ctx::i32);
-    auto println_ch = make_println(ctx::ch);
-
-    define(make_shared<FunctionSymbol>(print_i32, this->current_scope));
-    define(make_shared<FunctionSymbol>(print_ch, this->current_scope));
-    define(make_shared<FunctionSymbol>(println_i32, this->current_scope));
-    define(make_shared<FunctionSymbol>(println_ch, this->current_scope));
+        define(make_shared<FunctionSymbol>(print, this->current_scope));
+        define(make_shared<FunctionSymbol>(println, this->current_scope));
+    }
 }
 
 void SymbolTable::push() {

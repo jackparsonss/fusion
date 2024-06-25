@@ -26,6 +26,7 @@ class Builder : public FusionBaseVisitor {
     std::any visitStatement(FusionParser::StatementContext* ctx) override;
     std::any visitLiteralInt(FusionParser::LiteralIntContext* ctx) override;
     std::any visitLiteralChar(FusionParser::LiteralCharContext* ctx) override;
+    std::any visitLiteralBool(FusionParser::LiteralBoolContext* ctx) override;
     std::any visitDeclaration(FusionParser::DeclarationContext* ctx) override;
     std::any visitType(FusionParser::TypeContext* ctx) override;
     std::any visitQualifier(FusionParser::QualifierContext* ctx) override;

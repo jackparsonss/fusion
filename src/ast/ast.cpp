@@ -93,6 +93,21 @@ TypePtr ast::Expression::get_type() const {
     return this->type;
 }
 
+ast::BooleanLiteral::BooleanLiteral(bool value, Token* token)
+    : Expression(ctx::t_bool, token) {
+    this->value = value;
+}
+
+bool ast::BooleanLiteral::get_value() const {
+    return this->value;
+}
+
+void ast::BooleanLiteral::xml(int level) {
+    std::string s = value ? "true" : "false";
+    std::cout << std::string(level * 4, ' ') << "<bool value=\"" << s
+              << "\"/>\n";
+}
+
 ast::CharacterLiteral::CharacterLiteral(char value, Token* token)
     : Expression(ctx::ch, token) {
     this->value = value;

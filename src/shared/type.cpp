@@ -8,6 +8,7 @@ const Type Type::i32 = Type("i32");
 const Type Type::f32 = Type("f32");
 const Type Type::none = Type("none");
 const Type Type::unset = Type("unset");
+const Type Type::t_bool = Type("bool");
 
 Type::Type(std::string name) {
     this->name = name;
@@ -34,6 +35,10 @@ std::string Type::get_specifier() const {
         return "%g";
     }
 
+    if (*this == Type::t_bool) {
+        return "%d";
+    }
+
     throw std::runtime_error("type is not printable");
 }
 
@@ -48,6 +53,10 @@ mlir::Type Type::get_mlir() const {
 
     if (*this == Type::f32) {
         return ctx::builder->getF32Type();
+    }
+
+    if (*this == Type::t_bool) {
+        return ctx::builder->getI1Type();
     }
 
     if (*this == Type::none) {

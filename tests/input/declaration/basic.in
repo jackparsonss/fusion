@@ -9,5 +9,10 @@ fn main(): i32 {
     print(z);
     print(w);
 
+    let t: bool = true;
+    let f: bool = false;
+    println(t);
+    println(f);
+
     return 0;
 }

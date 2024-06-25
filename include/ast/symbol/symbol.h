@@ -11,14 +11,14 @@ using std::shared_ptr;
 class Symbol {
    private:
     std::string name;
-    shared_ptr<Type> type;
+    TypePtr type;
 
    public:
     virtual std::string get_name();
-    virtual shared_ptr<Type> get_type();
+    virtual TypePtr get_type();
 
     Symbol(std::string name);
-    Symbol(std::string name, shared_ptr<Type> type);
+    Symbol(std::string name, TypePtr type);
 };
 
 typedef shared_ptr<Symbol> SymbolPtr;

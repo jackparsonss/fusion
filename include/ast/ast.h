@@ -83,6 +83,17 @@ class CharacterLiteral : public Expression {
     void xml(int level) override;
 };
 
+class BooleanLiteral : public Expression {
+   private:
+    bool value;
+
+   public:
+    explicit BooleanLiteral(bool value, Token* token);
+    bool get_value() const;
+
+    void xml(int level) override;
+};
+
 class Variable : public Expression {
    private:
     std::string name;

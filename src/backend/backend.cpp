@@ -1,5 +1,5 @@
 #include "backend/backend.h"
-#include "backend/builtin/print.h"
+#include "backend/builtin/builtin.h"
 #include "shared/context.h"
 
 #include "llvm/IR/LegacyPassManager.h"
