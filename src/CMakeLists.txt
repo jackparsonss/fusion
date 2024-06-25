@@ -7,6 +7,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/utils.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/types/integer.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/types/character.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/backend/types/boolean.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/builtin/builtin.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/builtin/print.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/expressions/arithmetic.cpp"
