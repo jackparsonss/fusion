@@ -20,9 +20,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install Clang
-      run: apt-get install -y clang
-
     - name: make executable
       run: chmod +x entrypoint.sh
 

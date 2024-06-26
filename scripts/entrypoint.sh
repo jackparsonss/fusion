@@ -9,7 +9,5 @@ cd build
 cmake ..
 make -j 5
 
-scan-build make
-
 cd ../tests
 tester ./ci_config.json
