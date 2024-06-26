@@ -1,0 +1,16 @@
+fn main(): i32 {
+    let t: bool = true;
+    let f: bool = false;
+
+    println(t == f);
+    println(t == t);
+    println(t == true);
+    println(t == false);
+
+    println(t != t);
+    println(t != f);
+    println(t != true);
+    println(t != false);
+
+    return 0;
+}
