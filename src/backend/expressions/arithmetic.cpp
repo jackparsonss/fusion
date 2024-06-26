@@ -1,8 +1,10 @@
 #include "backend/expressions/arithmetic.h"
 #include "ast/ast.h"
-#include "mlir/Dialect/LLVMIR/LLVMAttrs.h"
+#include "backend/types/boolean.h"
+#include "backend/types/integer.h"
 #include "shared/context.h"
 
+#include "mlir/Dialect/LLVMIR/LLVMAttrs.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 
 namespace {
@@ -75,6 +77,16 @@ mlir::Value arithmetic::lte(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
     return binary_equality(lhs, rhs, type, mlir::LLVM::ICmpPredicate::sle);
 }
 
+mlir::Value arithmetic::not_(mlir::Value value) {
+    mlir::Value f = boolean::create_bool(false);
+    return eq(f, value, ctx::t_bool);
+}
+
+mlir::Value arithmetic::negate(mlir::Value value, TypePtr type) {
+    mlir::Value neg_one = integer::create_i32(-1);
+    return mul(neg_one, value, type);
+}
+
 mlir::Value arithmetic::binary_equality(mlir::Value lhs,
                                         mlir::Value rhs,
                                         TypePtr type,
@@ -118,5 +130,16 @@ mlir::Value arithmetic::binary_operation(mlir::Value lhs,
             return and_(lhs, rhs, type);
         case ast::BinaryOpType::OR:
             return or_(lhs, rhs, type);
+    }
+}
+
+mlir::Value arithmetic::unary_operation(mlir::Value rhs,
+                                        ast::UnaryOpType op_type,
+                                        TypePtr type) {
+    switch (op_type) {
+        case ast::UnaryOpType::MINUS:
+            return negate(rhs, type);
+        case ast::UnaryOpType::NOT:
+            return not_(rhs);
     }
 }
