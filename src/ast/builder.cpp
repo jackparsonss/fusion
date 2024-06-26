@@ -313,3 +313,24 @@ std::any Builder::visitEqNeCond(FusionParser::EqNeCondContext* ctx) {
 
     return to_node(binop);
 }
+
+std::any Builder::visitAndOrCond(FusionParser::AndOrCondContext* ctx) {
+    Token* token;
+    ast::BinaryOpType type;
+
+    if (ctx->DOR() != nullptr) {
+        type = ast::BinaryOpType::OR;
+        token = ctx->DOR()->getSymbol();
+    } else if (ctx->DAND() != nullptr) {
+        type = ast::BinaryOpType::AND;
+        token = ctx->DAND()->getSymbol();
+    } else {
+        throw std::runtime_error("Unrecognized operator when visiting eq ne");
+    }
+    auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
+    auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
+    binop->set_type(ctx::t_bool);
+
+    return to_node(binop);
+}

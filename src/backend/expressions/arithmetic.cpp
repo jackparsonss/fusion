@@ -33,6 +33,14 @@ mlir::Value arithmetic::mod(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
     return binop<mlir::LLVM::SRemOp>(lhs, rhs, type);
 }
 
+mlir::Value arithmetic::and_(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binop<mlir::LLVM::AndOp>(lhs, rhs, ctx::t_bool);
+}
+
+mlir::Value arithmetic::or_(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
+    return binop<mlir::LLVM::OrOp>(lhs, rhs, ctx::t_bool);
+}
+
 mlir::Value arithmetic::pow(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
     mlir::Value flhs = ctx::builder->create<mlir::LLVM::SIToFPOp>(
         *ctx::loc, ctx::f32->get_mlir(), lhs);
@@ -106,5 +114,9 @@ mlir::Value arithmetic::binary_operation(mlir::Value lhs,
             return eq(lhs, rhs, type);
         case ast::BinaryOpType::NE:
             return ne(lhs, rhs, type);
+        case ast::BinaryOpType::AND:
+            return and_(lhs, rhs, type);
+        case ast::BinaryOpType::OR:
+            return or_(lhs, rhs, type);
     }
 }

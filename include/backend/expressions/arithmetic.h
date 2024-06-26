@@ -20,6 +20,8 @@ mlir::Value gt(mlir::Value lhs, mlir::Value rhs, TypePtr type);
 mlir::Value gte(mlir::Value lhs, mlir::Value rhs, TypePtr type);
 mlir::Value lt(mlir::Value lhs, mlir::Value rhs, TypePtr type);
 mlir::Value lte(mlir::Value lhs, mlir::Value rhs, TypePtr type);
+mlir::Value and_(mlir::Value lhs, mlir::Value rhs, TypePtr type);
+mlir::Value or_(mlir::Value lhs, mlir::Value rhs, TypePtr type);
 
 mlir::Value binary_equality(mlir::Value lhs,
                             mlir::Value rhs,

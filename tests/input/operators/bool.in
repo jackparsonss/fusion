@@ -12,5 +12,19 @@ fn main(): i32 {
     println(t != true);
     println(t != false);
 
+    println(t && t);
+    println(t && f);
+    println(t && true);
+    println(t && false);
+    println(f && false);
+    println(f && f);
+
+    println(t || t);
+    println(t || f);
+    println(t || true);
+    println(t || false);
+    println(f || false);
+    println(f || f);
+
     return 0;
 }

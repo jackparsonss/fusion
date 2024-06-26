@@ -58,6 +58,10 @@ std::string ast::binary_op_type_to_string(ast::BinaryOpType type) {
             return "EQ";
         case ast::BinaryOpType::NE:
             return "NE";
+        case ast::BinaryOpType::AND:
+            return "AND";
+        case ast::BinaryOpType::OR:
+            return "OR";
     }
 }
 
