@@ -334,3 +334,22 @@ std::any Builder::visitAndOrCond(FusionParser::AndOrCondContext* ctx) {
 
     return to_node(binop);
 }
+
+std::any Builder::visitUnary(FusionParser::UnaryContext* ctx) {
+    Token* token;
+    ast::UnaryOpType type;
+
+    if (ctx->MINUS() != nullptr) {
+        type = ast::UnaryOpType::MINUS;
+        token = ctx->MINUS()->getSymbol();
+    } else if (ctx->BANG() != nullptr) {
+        type = ast::UnaryOpType::NOT;
+        token = ctx->BANG()->getSymbol();
+    } else {
+        throw std::runtime_error("Unrecognized unary operator");
+    }
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()));
+    auto binop = make_shared<ast::UnaryOperator>(type, rhs, token);
+
+    return to_node(binop);
+}

@@ -30,6 +30,7 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Parameter, this->visit_parameter);
     try_visit(node, ast::Return, this->visit_return);
     try_visit(node, ast::BinaryOperator, this->visit_binary_operator);
+    try_visit(node, ast::UnaryOperator, this->visit_unary_operator);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -133,4 +134,10 @@ mlir::Value Backend::visit_binary_operator(
     mlir::Value rhs = visit(node->rhs);
 
     return arithmetic::binary_operation(lhs, rhs, node->type, node->get_type());
+}
+
+mlir::Value Backend::visit_unary_operator(shared_ptr<ast::UnaryOperator> node) {
+    mlir::Value rhs = visit(node->rhs);
+
+    return arithmetic::unary_operation(rhs, node->type, node->get_type());
 }

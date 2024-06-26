@@ -32,9 +32,15 @@ enum class BinaryOpType {
     OR,
 };
 
+enum class UnaryOpType {
+    MINUS,
+    NOT,
+};
+
 std::string random_name();
 std::string qualifier_to_string(Qualifier qualifier);
 std::string binary_op_type_to_string(BinaryOpType type);
+std::string unary_op_type_to_string(UnaryOpType type);
 
 class Node {
    public:
@@ -200,6 +206,15 @@ class BinaryOperator : public Expression {
                    shared_ptr<Expression> lhs,
                    shared_ptr<Expression> rhs,
                    Token* token);
+    void xml(int level) override;
+};
+
+class UnaryOperator : public Expression {
+   public:
+    UnaryOpType type;
+    shared_ptr<Expression> rhs;
+
+    UnaryOperator(UnaryOpType type, shared_ptr<Expression> rhs, Token* token);
     void xml(int level) override;
 };
 }  // namespace ast

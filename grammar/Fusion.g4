@@ -26,6 +26,7 @@ return: RETURN expr SEMI;
 
 expr
     : call                                               #callExpr
+    | (op=MINUS | op=BANG) expr                          #unary
     | <assoc='right'> expr CARET expr                    #power
     | expr (op=STAR | op=SLASH | op=MOD | op=DSTAR) expr #mulDivMod
     | expr (op=PLUS | op=MINUS) expr                     #addSub
@@ -76,6 +77,7 @@ EQ: '==';
 CARET: '^';
 DAND: '&&';
 DOR: '||';
+BANG: '!';
 
 // comments
 LINE_COMMENT: '//' .*? ('\n' | EOF) -> skip;

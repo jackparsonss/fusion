@@ -65,6 +65,15 @@ std::string ast::binary_op_type_to_string(ast::BinaryOpType type) {
     }
 }
 
+std::string ast::unary_op_type_to_string(ast::UnaryOpType type) {
+    switch (type) {
+        case ast::UnaryOpType::MINUS:
+            return "MINUS";
+        case ast::UnaryOpType::NOT:
+            return "NOT";
+    }
+}
+
 ast::Node::Node(Token* token) {
     if (token == nullptr) {
         return;
@@ -341,6 +350,26 @@ void ast::BinaryOperator::xml(int level) {
     std::cout << std::string((level + 1) * 4, ' ') << "<lhs>\n";
     this->lhs->xml(level + 2);
     std::cout << std::string((level + 1) * 4, ' ') << "</lhs>\n";
+
+    std::cout << std::string((level + 1) * 4, ' ') << "<rhs>\n";
+    this->rhs->xml(level + 2);
+    std::cout << std::string((level + 1) * 4, ' ') << "</rhs>\n";
+
+    std::cout << std::string(level * 4, ' ') << "</binary operator>\n";
+}
+
+ast::UnaryOperator::UnaryOperator(UnaryOpType type,
+                                  shared_ptr<Expression> rhs,
+                                  Token* token)
+    : Expression(rhs->get_type(), token) {
+    this->type = type;
+    this->rhs = rhs;
+}
+
+void ast::UnaryOperator::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<binop op_type=\""
+              << ast::unary_op_type_to_string(type) << "\" type=\""
+              << get_type()->get_name() << "\">\n";
 
     std::cout << std::string((level + 1) * 4, ' ') << "<rhs>\n";
     this->rhs->xml(level + 2);
