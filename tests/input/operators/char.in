@@ -1,0 +1,11 @@
+fn main(): i32 {
+    let x: ch = 'a';
+    let y: ch = 'z';
+
+    println(x == y);
+    println(x == 'a');
+    println(x != y);
+    println(x != 'a');
+
+    return 0;
+}

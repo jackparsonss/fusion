@@ -28,6 +28,8 @@ enum class BinaryOpType {
     LTE,
     EQ,
     NE,
+    AND,
+    OR,
 };
 
 std::string random_name();

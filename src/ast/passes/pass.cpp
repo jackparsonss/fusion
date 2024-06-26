@@ -36,12 +36,15 @@ void Pass::run(shared_ptr<ast::Block> ast) {
 void Pass::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Block, this->visit_block);
     try_visit(node, ast::IntegerLiteral, this->visit_integer_literal);
+    try_visit(node, ast::CharacterLiteral, this->visit_character_literal);
+    try_visit(node, ast::BooleanLiteral, this->visit_boolean_literal);
     try_visit(node, ast::Variable, this->visit_variable);
     try_visit(node, ast::Declaration, this->visit_declaration);
     try_visit(node, ast::Function, this->visit_function);
     try_visit(node, ast::Call, this->visit_call);
     try_visit(node, ast::Parameter, this->visit_parameter);
     try_visit(node, ast::Return, this->visit_return);
+    try_visit(node, ast::BinaryOperator, this->visit_binary_operator);
 }
 
 void Pass::visit_block(shared_ptr<ast::Block> node) {
@@ -51,6 +54,8 @@ void Pass::visit_block(shared_ptr<ast::Block> node) {
 }
 
 void Pass::visit_integer_literal(shared_ptr<ast::IntegerLiteral> node) {}
+void Pass::visit_character_literal(shared_ptr<ast::CharacterLiteral> node) {}
+void Pass::visit_boolean_literal(shared_ptr<ast::BooleanLiteral> node) {}
 
 void Pass::visit_declaration(shared_ptr<ast::Declaration> node) {
     visit(node->var);
@@ -77,4 +82,9 @@ void Pass::visit_call(shared_ptr<ast::Call> node) {
 
 void Pass::visit_return(shared_ptr<ast::Return> node) {
     visit(node->expr);
+}
+
+void Pass::visit_binary_operator(shared_ptr<ast::BinaryOperator> node) {
+    visit(node->lhs);
+    visit(node->rhs);
 }

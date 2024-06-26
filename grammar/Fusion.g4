@@ -31,6 +31,7 @@ expr
     | expr (op=PLUS | op=MINUS) expr                     #addSub
     | expr (op=GT | op=LT | op=GE | op=LE) expr          #gtLtCond
     | expr (op=EQ | op=NE) expr                          #eqNeCond
+    | expr (op=DOR | op=DAND) expr                       #andOrCond
     | BOOLEAN                                            #literalBool
     | CHARACTER                                          #literalChar
     | INT                                                #literalInt
@@ -73,6 +74,8 @@ LE: '<=';
 NE: '!=';
 EQ: '==';
 CARET: '^';
+DAND: '&&';
+DOR: '||';
 
 // comments
 LINE_COMMENT: '//' .*? ('\n' | EOF) -> skip;

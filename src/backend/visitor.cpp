@@ -61,7 +61,7 @@ mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
     auto pair = variables.find(node->get_ref_name());
     if (pair == variables.end()) {
         throw std::runtime_error("backend found undefined variable: " +
-                                 node->get_ref_name());
+                                 node->get_name());
     }
 
     mlir::Value address = pair->second;

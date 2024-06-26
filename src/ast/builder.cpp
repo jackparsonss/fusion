@@ -4,6 +4,7 @@
 #include "FusionParser.h"
 #include "ast/ast.h"
 #include "ast/builder.h"
+#include "shared/context.h"
 
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
@@ -266,9 +267,70 @@ std::any Builder::visitAddSub(FusionParser::AddSubContext* ctx) {
 }
 
 std::any Builder::visitGtLtCond(FusionParser::GtLtCondContext* ctx) {
-    throw std::runtime_error("gt, lt conds not implemented yet");
+    Token* token;
+    ast::BinaryOpType type;
+
+    if (ctx->GT() != nullptr) {
+        type = ast::BinaryOpType::GT;
+        token = ctx->GT()->getSymbol();
+    } else if (ctx->GE() != nullptr) {
+        type = ast::BinaryOpType::GTE;
+        token = ctx->GE()->getSymbol();
+    } else if (ctx->LT() != nullptr) {
+        type = ast::BinaryOpType::LT;
+        token = ctx->LT()->getSymbol();
+    } else if (ctx->LE() != nullptr) {
+        type = ast::BinaryOpType::LTE;
+        token = ctx->LE()->getSymbol();
+    } else {
+        throw std::runtime_error("Unrecognized operator when visiting gt lt");
+    }
+    auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
+    auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
+    binop->set_type(ctx::t_bool);
+
+    return to_node(binop);
 }
 
 std::any Builder::visitEqNeCond(FusionParser::EqNeCondContext* ctx) {
-    throw std::runtime_error("eq, ne conds not implemented yet");
+    Token* token;
+    ast::BinaryOpType type;
+
+    if (ctx->EQ() != nullptr) {
+        type = ast::BinaryOpType::EQ;
+        token = ctx->EQ()->getSymbol();
+    } else if (ctx->NE() != nullptr) {
+        type = ast::BinaryOpType::NE;
+        token = ctx->NE()->getSymbol();
+    } else {
+        throw std::runtime_error("Unrecognized operator when visiting eq ne");
+    }
+    auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
+    auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
+    binop->set_type(ctx::t_bool);
+
+    return to_node(binop);
+}
+
+std::any Builder::visitAndOrCond(FusionParser::AndOrCondContext* ctx) {
+    Token* token;
+    ast::BinaryOpType type;
+
+    if (ctx->DOR() != nullptr) {
+        type = ast::BinaryOpType::OR;
+        token = ctx->DOR()->getSymbol();
+    } else if (ctx->DAND() != nullptr) {
+        type = ast::BinaryOpType::AND;
+        token = ctx->DAND()->getSymbol();
+    } else {
+        throw std::runtime_error("Unrecognized operator when visiting eq ne");
+    }
+    auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
+    auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
+    auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
+    binop->set_type(ctx::t_bool);
+
+    return to_node(binop);
 }
