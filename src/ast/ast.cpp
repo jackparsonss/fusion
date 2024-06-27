@@ -260,11 +260,11 @@ void ast::Function::xml(int level) {
               << type->get_name() << "\" name=\"" << name << "\" ref_name=\""
               << ref_name << "\">\n";
 
-    std::cout << std::string(level * 4, ' ') << "<parameters>\n";
+    std::cout << std::string((level + 1) * 4, ' ') << "<parameters>\n";
     for (const auto& param : params) {
-        param->xml(level + 1);
+        param->xml(level + 2);
     }
-    std::cout << std::string(level * 4, ' ') << "</parameters>\n";
+    std::cout << std::string((level + 1) * 4, ' ') << "</parameters>\n";
     body->xml(level + 1);
 
     std::cout << std::string(level * 4, ' ') << "</function>\n";

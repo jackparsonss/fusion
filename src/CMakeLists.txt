@@ -1,6 +1,7 @@
 set(
   fusion_src_files
   "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/compiler.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/backend.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/visitor.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/io.cpp"

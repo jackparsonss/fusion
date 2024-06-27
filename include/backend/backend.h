@@ -17,13 +17,12 @@ class Backend {
     mlir::Value visit(shared_ptr<ast::Node>);
 
    public:
-    shared_ptr<ast::Block> ast;
-    explicit Backend(shared_ptr<ast::Block>);
+    explicit Backend();
 
     void codegen(std::ostream& outstream);
     void to_object(std::string filename);
 
-    shared_ptr<ast::Block> traverse();
+    shared_ptr<ast::Block> traverse(shared_ptr<ast::Block> ast);
     mlir::Value visit_block(shared_ptr<ast::Block>);
     mlir::Value visit_integer_literal(shared_ptr<ast::IntegerLiteral>);
     mlir::Value visit_character_literal(shared_ptr<ast::CharacterLiteral>);
