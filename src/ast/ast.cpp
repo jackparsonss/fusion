@@ -310,10 +310,6 @@ void ast::Call::xml(int level) {
 }
 
 void ast::Call::set_function(shared_ptr<Function> func) {
-    if (this->function != nullptr) {
-        throw std::runtime_error("this call already has a function");
-    }
-
     this->function = func;
     this->set_type(func->get_type());
 }
@@ -336,7 +332,7 @@ ast::BinaryOperator::BinaryOperator(BinaryOpType type,
                                     shared_ptr<Expression> lhs,
                                     shared_ptr<Expression> rhs,
                                     Token* token)
-    : Expression(lhs->get_type(), token) {
+    : Expression(ctx::any, token) {
     this->type = type;
     this->lhs = lhs;
     this->rhs = rhs;

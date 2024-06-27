@@ -288,7 +288,6 @@ std::any Builder::visitGtLtCond(FusionParser::GtLtCondContext* ctx) {
     auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
     auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
     auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
-    binop->set_type(ctx::t_bool);
 
     return to_node(binop);
 }
@@ -309,7 +308,6 @@ std::any Builder::visitEqNeCond(FusionParser::EqNeCondContext* ctx) {
     auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
     auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
     auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
-    binop->set_type(ctx::t_bool);
 
     return to_node(binop);
 }
@@ -330,7 +328,6 @@ std::any Builder::visitAndOrCond(FusionParser::AndOrCondContext* ctx) {
     auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
     auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
     auto binop = make_shared<ast::BinaryOperator>(type, lhs, rhs, token);
-    binop->set_type(ctx::t_bool);
 
     return to_node(binop);
 }

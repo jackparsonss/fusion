@@ -18,6 +18,7 @@ class Type {
     bool operator==(const Type rhs) const;
 
     static const Type ch;
+    static const Type any;
     static const Type i32;
     static const Type f32;
     static const Type none;

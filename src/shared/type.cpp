@@ -4,6 +4,7 @@
 #include "shared/type.h"
 
 const Type Type::ch = Type("ch");
+const Type Type::any = Type("any");
 const Type Type::i32 = Type("i32");
 const Type Type::f32 = Type("f32");
 const Type Type::none = Type("none");
@@ -15,7 +16,7 @@ Type::Type(std::string name) {
 }
 
 bool Type::operator==(const Type rhs) const {
-    return name == rhs.name;
+    return name == rhs.name || rhs.name == "any";
 }
 
 std::string Type::get_name() const {

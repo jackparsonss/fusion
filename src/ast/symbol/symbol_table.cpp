@@ -3,6 +3,7 @@
 #include "CommonToken.h"
 #include "ast/ast.h"
 #include "ast/symbol/function_symbol.h"
+#include "ast/symbol/symbol.h"
 #include "ast/symbol/symbol_table.h"
 #include "shared/context.h"
 
@@ -53,6 +54,7 @@ void SymbolTable::init_types() {
     for (const auto& ty : ctx::primitives) {
         define(make_shared<BuiltinTypeSymbol>(ty->get_name()));
     }
+    define(make_shared<BuiltinTypeSymbol>(ctx::any->get_name()));
 }
 
 void SymbolTable::init_builtins() {
@@ -63,6 +65,11 @@ void SymbolTable::init_builtins() {
         define(make_shared<FunctionSymbol>(print, this->current_scope));
         define(make_shared<FunctionSymbol>(println, this->current_scope));
     }
+
+    auto print = make_print(ctx::any);
+    auto println = make_println(ctx::any);
+    define(make_shared<FunctionSymbol>(print, this->current_scope));
+    define(make_shared<FunctionSymbol>(println, this->current_scope));
 }
 
 void SymbolTable::push() {

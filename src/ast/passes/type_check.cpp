@@ -18,8 +18,6 @@ void TypeCheck::visit_declaration(shared_ptr<ast::Declaration> node) {
     }
 }
 
-void TypeCheck::visit_variable(shared_ptr<ast::Variable> node) {}
-
 void TypeCheck::visit_function(shared_ptr<ast::Function> node) {
     for (const auto& param : node->params) {
         visit(param);
@@ -61,6 +59,46 @@ void TypeCheck::visit_return(shared_ptr<ast::Return> node) {
 void TypeCheck::visit_binary_operator(shared_ptr<ast::BinaryOperator> node) {
     visit(node->lhs);
     visit(node->rhs);
+
+    size_t line = node->token->getLine();
+    Type lhs = *node->lhs->get_type();
+    Type rhs = *node->rhs->get_type();
+    if (lhs != rhs) {
+        throw TypeError(line, "mismatched lhs(" + lhs.get_name() +
+                                  ") and rhs(" + rhs.get_name() +
+                                  ") types on binary operator: " +
+                                  ast::binary_op_type_to_string(node->type));
+    }
+
+    switch (node->type) {
+        case ast::BinaryOpType::LT:
+        case ast::BinaryOpType::LTE:
+        case ast::BinaryOpType::GT:
+        case ast::BinaryOpType::GTE:
+            check_numeric(lhs, line);
+            check_numeric(rhs, line);
+            node->set_type(ctx::t_bool);
+            break;
+        case ast::BinaryOpType::ADD:
+        case ast::BinaryOpType::SUB:
+        case ast::BinaryOpType::MUL:
+        case ast::BinaryOpType::DIV:
+        case ast::BinaryOpType::POW:
+        case ast::BinaryOpType::MOD:
+            check_numeric(lhs, line);
+            check_numeric(rhs, line);
+            node->set_type(node->lhs->get_type());
+            break;
+        case ast::BinaryOpType::AND:
+        case ast::BinaryOpType::OR:
+            check_bool(lhs, line);
+            check_bool(rhs, line);
+            node->set_type(ctx::t_bool);
+            break;
+        case ast::BinaryOpType::EQ:
+        case ast::BinaryOpType::NE:
+            node->set_type(ctx::t_bool);
+    }
 }
 
 void TypeCheck::visit_unary_operator(shared_ptr<ast::UnaryOperator> node) {
@@ -78,5 +116,17 @@ void TypeCheck::visit_unary_operator(shared_ptr<ast::UnaryOperator> node) {
         throw TypeError(line,
                         "unary minus only works on booleans, found type: " +
                             rhs.get_name());
+    }
+}
+
+void TypeCheck::check_numeric(Type type, size_t line) {
+    if (type != *ctx::i32) {
+        throw TypeError(line, "type(" + type.get_name() + ") is not numeric");
+    }
+}
+
+void TypeCheck::check_bool(Type type, size_t line) {
+    if (type != *ctx::t_bool) {
+        throw TypeError(line, "type(" + type.get_name() + ") is not boolean");
     }
 }
