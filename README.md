@@ -29,7 +29,8 @@ const y: i32 = x;
 
 ### Types
 - **i32**: 32-bit integer
-- **ch**: 8-bit character
+- **ch**: 8-bit ascii character
+- **bool**: 1-bit boolean(true/false)
 
 ### Functions
 ```
@@ -77,6 +78,12 @@ println(100);
 - multiplication: `*`
 - division: `/`
 - modulus: `%`
+- greater than(eq)
+- less than(eq)
+- equal
+- not equal
+- and
+- or
 ```
 fn main(): i32 {
     let a: i32 = 5 + 5;
@@ -85,6 +92,15 @@ fn main(): i32 {
     let m: i32 = 5 * 5;
     let d: i32 = 5 / 5;
     let r: i32 = 5 % 5;
+
+    let gt: bool = 5 > 4;
+    let lt: bool = 4 < 5;
+    let gte: bool = 5 >= 5;
+    let lte: bool = 5 >= 5;
+    let eq: bool = 5 == 5;
+    let ne: bool = 5 != 5;
+    let o: bool = 5 != 5 || 5 == 5;
+    let a: bool = 5 != 5 && 5 == 5;
 }
 ```
 ```
