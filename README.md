@@ -78,12 +78,12 @@ println(100);
 - multiplication: `*`
 - division: `/`
 - modulus: `%`
-- greater than(eq)
-- less than(eq)
-- equal
-- not equal
-- and
-- or
+- greater than(eq): `>`, `>=`
+- less than(eq): `<`, `<=`
+- equal: `==`
+- not equal: `!=`
+- and: `&&`
+- or: `||`
 ```
 fn main(): i32 {
     let a: i32 = 5 + 5;
