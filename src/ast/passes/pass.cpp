@@ -65,15 +65,13 @@ void Pass::visit_block(shared_ptr<ast::Block> node) {
 void Pass::visit_integer_literal(shared_ptr<ast::IntegerLiteral> node) {}
 void Pass::visit_character_literal(shared_ptr<ast::CharacterLiteral> node) {}
 void Pass::visit_boolean_literal(shared_ptr<ast::BooleanLiteral> node) {}
+void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
+void Pass::visit_parameter(shared_ptr<ast::Parameter> node) {}
 
 void Pass::visit_declaration(shared_ptr<ast::Declaration> node) {
     visit(node->var);
     visit(node->expr);
 }
-
-void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
-
-void Pass::visit_parameter(shared_ptr<ast::Parameter> node) {}
 
 void Pass::visit_function(shared_ptr<ast::Function> node) {
     for (const auto& param : node->params) {
