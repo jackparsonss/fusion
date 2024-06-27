@@ -1,6 +1,7 @@
 #include "ast/passes/pass.h"
 #include "ast/ast.h"
 #include "ast/passes/def_ref.h"
+#include "ast/passes/type_check.h"
 
 constexpr bool debug = false;
 #define try_visit(node, t, f)                                    \
@@ -8,10 +9,11 @@ constexpr bool debug = false;
         return f(n);                                             \
     }
 
-void pass::run_passes(std::shared_ptr<ast::Block> ast,
+void Pass::run_passes(std::shared_ptr<ast::Block> ast,
                       shared_ptr<SymbolTable> symtab) {
     std::vector<std::shared_ptr<Pass>> passes = {
         std::make_shared<DefRef>(symtab),
+        std::make_shared<TypeCheck>(),
     };
 
     for (std::shared_ptr<Pass>& pass : passes) {

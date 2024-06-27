@@ -15,7 +15,7 @@ Type::Type(std::string name) {
 }
 
 bool Type::operator==(const Type rhs) const {
-    return this->name == rhs.name;
+    return name == rhs.name;
 }
 
 std::string Type::get_name() const {
