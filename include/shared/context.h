@@ -17,6 +17,7 @@ extern shared_ptr<mlir::OpBuilder> builder;
 extern mlir::MLIRContext context;
 
 extern TypePtr ch;
+extern TypePtr any;
 extern TypePtr i32;
 extern TypePtr f32;
 extern TypePtr none;

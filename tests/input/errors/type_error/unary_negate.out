@@ -1,0 +1,4 @@
+fn main(): i32 {
+    println(!'c');
+    return 0;
+}

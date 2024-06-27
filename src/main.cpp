@@ -9,6 +9,7 @@
 #include "ast/passes/pass.h"
 #include "ast/symbol/symbol_table.h"
 #include "backend/backend.h"
+#include "errors.h"
 #include "shared/context.h"
 
 #include <iostream>
@@ -26,23 +27,28 @@ int main(int argc, char** argv) {
     std::shared_ptr<SymbolTable> symtab = std::make_shared<SymbolTable>();
 
     Builder builder = Builder(symtab);
-    builder.visit(tree);
-    assert(builder.has_ast());
 
-    pass::run_passes(builder.get_ast(), symtab);
-    assert(builder.has_ast());
-
-    // frontend args
-    for (size_t i = 0; i < argc; i++) {
-        std::string arg = std::string(argv[i]);
-        if (arg == "--xml") {
-            builder.get_ast()->xml(0);
+    try {
+        builder.visit(tree);
+        assert(builder.has_ast());
+        for (size_t i = 0; i < argc; i++) {
+            std::string arg = std::string(argv[i]);
+            if (arg == "--xml") {
+                builder.get_ast()->xml(0);
+            }
         }
 
-        if (arg == "-o" && i == argc - 1 && argv[i + 1][0] != '-') {
-            std::cerr << "You must provide a file to target" << std::endl;
-            return 1;
+        Pass::run_passes(builder.get_ast(), symtab);
+        assert(builder.has_ast());
+        for (size_t i = 0; i < argc; i++) {
+            std::string arg = std::string(argv[i]);
+            if (arg == "--pass-xml") {
+                builder.get_ast()->xml(0);
+            }
         }
+    } catch (CompileTimeException const& e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     Backend backend = Backend(builder.get_ast());
@@ -54,6 +60,11 @@ int main(int argc, char** argv) {
         if (arg == "--emit-llvm" && i == argc - 1) {
             std::cerr << "You must provide a file to target llvm ir"
                       << std::endl;
+            return 1;
+        }
+
+        if (arg == "-o" && i == argc - 1 && argv[i + 1][0] != '-') {
+            std::cerr << "You must provide a file to target" << std::endl;
             return 1;
         }
 

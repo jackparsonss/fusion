@@ -1,6 +1,9 @@
 #include "ast/passes/pass.h"
 #include "ast/ast.h"
-#include "ast/passes/def_ref.h"
+#include "ast/passes/builtin.h"
+#include "ast/passes/define.h"
+#include "ast/passes/reference.h"
+#include "ast/passes/type_check.h"
 
 constexpr bool debug = false;
 #define try_visit(node, t, f)                                    \
@@ -8,10 +11,13 @@ constexpr bool debug = false;
         return f(n);                                             \
     }
 
-void pass::run_passes(std::shared_ptr<ast::Block> ast,
+void Pass::run_passes(std::shared_ptr<ast::Block> ast,
                       shared_ptr<SymbolTable> symtab) {
     std::vector<std::shared_ptr<Pass>> passes = {
-        std::make_shared<DefRef>(symtab),
+        std::make_shared<Define>(symtab),
+        std::make_shared<Reference>(symtab),
+        std::make_shared<TypeCheck>(),
+        std::make_shared<Builtin>(symtab),
     };
 
     for (std::shared_ptr<Pass>& pass : passes) {
@@ -59,15 +65,13 @@ void Pass::visit_block(shared_ptr<ast::Block> node) {
 void Pass::visit_integer_literal(shared_ptr<ast::IntegerLiteral> node) {}
 void Pass::visit_character_literal(shared_ptr<ast::CharacterLiteral> node) {}
 void Pass::visit_boolean_literal(shared_ptr<ast::BooleanLiteral> node) {}
+void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
+void Pass::visit_parameter(shared_ptr<ast::Parameter> node) {}
 
 void Pass::visit_declaration(shared_ptr<ast::Declaration> node) {
     visit(node->var);
     visit(node->expr);
 }
-
-void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
-
-void Pass::visit_parameter(shared_ptr<ast::Parameter> node) {}
 
 void Pass::visit_function(shared_ptr<ast::Function> node) {
     for (const auto& param : node->params) {
