@@ -29,16 +29,21 @@ void TypeCheck::visit_function(shared_ptr<ast::Function> node) {
 }
 
 void TypeCheck::visit_call(shared_ptr<ast::Call> node) {
+    size_t line = node->token->getLine();
+    if (node->arguments.size() != node->get_function()->params.size()) {
+        throw TypeError(line, "calling function " + node->get_name() +
+                                  " with the wrong number of parameters");
+    }
+
     for (size_t i = 0; i < node->arguments.size(); i++) {
         visit(node->arguments[i]);
 
         Type arg = *node->arguments[i]->get_type();
         Type param = *node->get_function()->params[i]->var->get_type();
         if (arg != param) {
-            throw TypeError(node->token->getLine(),
-                            "mismatched argument(" + arg.get_name() +
-                                ") and parameter(" + param.get_name() +
-                                ") types on function call");
+            throw TypeError(line, "mismatched argument(" + arg.get_name() +
+                                      ") and parameter(" + param.get_name() +
+                                      ") types on function call");
         }
     }
 }

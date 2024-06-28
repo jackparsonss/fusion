@@ -1,3 +1,4 @@
+#include <any>
 #include <stdexcept>
 #include <vector>
 
@@ -6,8 +7,10 @@
 #include "ast/builder.h"
 #include "shared/context.h"
 
+using std::any_cast;
+
 #define cast_node(a, b) \
-    (dynamic_pointer_cast<a>(std::any_cast<shared_ptr<ast::Node>>(b)))
+    (dynamic_pointer_cast<a>(any_cast<shared_ptr<ast::Node>>(b)))
 #define to_node(a) static_cast<shared_ptr<ast::Node>>(a)
 
 Builder::Builder(shared_ptr<SymbolTable> symbol_table) {
@@ -147,7 +150,7 @@ std::any Builder::visitIdentifier(FusionParser::IdentifierContext* ctx) {
 
 std::any Builder::visitBlock(FusionParser::BlockContext* ctx) {
     Token* token = ctx->L_CURLY()->getSymbol();
-    auto block = std::make_shared<ast::Block>(token);
+    auto block = make_shared<ast::Block>(token);
 
     for (auto const& s : ctx->statement()) {
         shared_ptr<ast::Node> node = cast_node(ast::Node, visit(s));
@@ -163,8 +166,8 @@ std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
     std::string name = ctx->ID()->getText();
 
     ast::Qualifier qualifier =
-        std::any_cast<ast::Qualifier>(visit(ctx->qualifier()));
-    TypePtr type = std::any_cast<TypePtr>(visit(ctx->type()));
+        any_cast<ast::Qualifier>(visit(ctx->qualifier()));
+    TypePtr type = any_cast<TypePtr>(visit(ctx->type()));
 
     auto var = make_shared<ast::Variable>(qualifier, type, name, token);
     return to_node(var);
@@ -172,7 +175,7 @@ std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
 
 std::any Builder::visitFunction(FusionParser::FunctionContext* ctx) {
     Token* token = ctx->FUNCTION()->getSymbol();
-    TypePtr type = std::any_cast<TypePtr>(visit(ctx->type()));
+    TypePtr type = any_cast<TypePtr>(visit(ctx->type()));
     std::string name = ctx->ID()->getText();
     auto block = cast_node(ast::Block, visit(ctx->block()));
 

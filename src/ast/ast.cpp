@@ -260,13 +260,15 @@ void ast::Function::xml(int level) {
               << type->get_name() << "\" name=\"" << name << "\" ref_name=\""
               << ref_name << "\">\n";
 
-    std::cout << std::string((level + 1) * 4, ' ') << "<parameters>\n";
-    for (const auto& param : params) {
-        param->xml(level + 2);
+    if (params.size() > 0) {
+        std::cout << std::string((level + 1) * 4, ' ') << "<parameters>\n";
+        for (const auto& param : params) {
+            param->xml(level + 2);
+        }
+        std::cout << std::string((level + 1) * 4, ' ') << "</parameters>\n";
     }
-    std::cout << std::string((level + 1) * 4, ' ') << "</parameters>\n";
-    body->xml(level + 1);
 
+    body->xml(level + 1);
     std::cout << std::string(level * 4, ' ') << "</function>\n";
 }
 
@@ -294,16 +296,17 @@ std::string ast::Call::get_name() {
 }
 
 void ast::Call::xml(int level) {
-    std::cout << std::string(level * 4, ' ') << "<call name=\"" << this->name
-              << "\" ref_name=\"" << this->function->get_ref_name()
-              << "\" type=\"" << this->type->get_name() << "\">\n";
+    std::string ref = function ? function->get_ref_name() : "(unset)";
+    std::cout << std::string(level * 4, ' ') << "<call name=\"" << name
+              << "\" ref_name=\"" << ref << "\" type=\"" << type->get_name()
+              << "\">\n";
 
     if (arguments.size() > 0) {
-        std::cout << std::string((level + 1) * 4, ' ') << "<args>\n";
+        std::cout << std::string((level + 1) * 4, ' ') << "<arguments>\n";
         for (auto const& a : arguments) {
             a->xml(level + 2);
         }
-        std::cout << std::string((level + 1) * 4, ' ') << "</args>\n";
+        std::cout << std::string((level + 1) * 4, ' ') << "</arguments>\n";
     }
 
     std::cout << std::string(level * 4, ' ') << "</call>\n";
