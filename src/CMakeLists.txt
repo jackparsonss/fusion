@@ -24,6 +24,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/builtin.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/shared/type.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/shared/context.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/errors/syntax.cpp"
 )
 
 # Build our executable from the source files.
