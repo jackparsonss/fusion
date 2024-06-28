@@ -6,6 +6,7 @@ statement
     : function
     | call SEMI
     | declaration
+    | assignment
     | block
     | return
     ;
@@ -19,6 +20,8 @@ block: L_CURLY statement* R_CURLY;
 function: FUNCTION ID L_PAREN variable? (COMMA variable)* R_PAREN COLON type block;
 
 variable: qualifier ID COLON type;
+
+assignment: ID EQUAL expr SEMI;
 
 call: ID L_PAREN expr? (COMMA expr)* R_PAREN;
 

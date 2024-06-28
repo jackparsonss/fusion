@@ -44,6 +44,7 @@ void Pass::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::BooleanLiteral, this->visit_boolean_literal);
     try_visit(node, ast::Variable, this->visit_variable);
     try_visit(node, ast::Declaration, this->visit_declaration);
+    try_visit(node, ast::Assignment, this->visit_assignment);
     try_visit(node, ast::Function, this->visit_function);
     try_visit(node, ast::Call, this->visit_call);
     try_visit(node, ast::Parameter, this->visit_parameter);
@@ -67,6 +68,11 @@ void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
 void Pass::visit_parameter(shared_ptr<ast::Parameter> node) {}
 
 void Pass::visit_declaration(shared_ptr<ast::Declaration> node) {
+    visit(node->var);
+    visit(node->expr);
+}
+
+void Pass::visit_assignment(shared_ptr<ast::Assignment> node) {
     visit(node->var);
     visit(node->expr);
 }

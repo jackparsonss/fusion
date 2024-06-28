@@ -21,6 +21,7 @@ class Pass {
     virtual void visit_character_literal(shared_ptr<ast::CharacterLiteral>);
     virtual void visit_boolean_literal(shared_ptr<ast::BooleanLiteral>);
     virtual void visit_declaration(shared_ptr<ast::Declaration>);
+    virtual void visit_assignment(shared_ptr<ast::Assignment>);
     virtual void visit_variable(shared_ptr<ast::Variable>);
     virtual void visit_function(shared_ptr<ast::Function>);
     virtual void visit_call(shared_ptr<ast::Call>);

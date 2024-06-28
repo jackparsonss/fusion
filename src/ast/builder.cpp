@@ -353,3 +353,16 @@ std::any Builder::visitUnary(FusionParser::UnaryContext* ctx) {
 
     return to_node(binop);
 }
+
+std::any Builder::visitAssignment(FusionParser::AssignmentContext* ctx) {
+    Token* token = ctx->ID()->getSymbol();
+    std::string name = ctx->ID()->getText();
+    TypePtr type = make_shared<Type>(Type::unset);
+
+    auto var =
+        make_shared<ast::Variable>(ast::Qualifier::Let, type, name, token);
+    auto expr = cast_node(ast::Expression, visit(ctx->expr()));
+
+    auto assn = make_shared<ast::Assignment>(var, expr, token);
+    return to_node(assn);
+}

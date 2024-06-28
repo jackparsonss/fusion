@@ -25,6 +25,7 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::BooleanLiteral, this->visit_boolean_literal);
     try_visit(node, ast::Variable, this->visit_variable);
     try_visit(node, ast::Declaration, this->visit_declaration);
+    try_visit(node, ast::Assignment, this->visit_assignment);
     try_visit(node, ast::Function, this->visit_function);
     try_visit(node, ast::Call, this->visit_call);
     try_visit(node, ast::Parameter, this->visit_parameter);
@@ -75,6 +76,16 @@ mlir::Value Backend::visit_declaration(shared_ptr<ast::Declaration> node) {
     mlir::Value address = utils::stack_allocate(expr.getType());
 
     variables[name] = address;
+    utils::store(address, expr);
+
+    return nullptr;
+}
+
+mlir::Value Backend::visit_assignment(shared_ptr<ast::Assignment> node) {
+    std::string name = node->var->get_ref_name();
+    mlir::Value expr = visit(node->expr);
+    mlir::Value address = variables[name];
+
     utils::store(address, expr);
 
     return nullptr;
