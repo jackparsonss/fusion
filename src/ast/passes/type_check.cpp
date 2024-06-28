@@ -1,6 +1,6 @@
 #include "ast/passes/type_check.h"
 #include "ast/ast.h"
-#include "errors.h"
+#include "errors/errors.h"
 #include "shared/context.h"
 
 TypeCheck::TypeCheck() : Pass("Typecheck") {}
@@ -15,6 +15,19 @@ void TypeCheck::visit_declaration(shared_ptr<ast::Declaration> node) {
         throw TypeError(node->token->getLine(),
                         "mismatched lhs(" + var.get_name() + ") and rhs(" +
                             expr.get_name() + ") types on declaration");
+    }
+}
+
+void TypeCheck::visit_assignment(shared_ptr<ast::Assignment> node) {
+    visit(node->var);
+    visit(node->expr);
+
+    Type var = *node->var->get_type();
+    Type expr = *node->expr->get_type();
+    if (var != expr) {
+        throw TypeError(node->token->getLine(),
+                        "mismatched lhs(" + var.get_name() + ") and rhs(" +
+                            expr.get_name() + ") types on assignment");
     }
 }
 

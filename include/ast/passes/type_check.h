@@ -13,6 +13,7 @@ class TypeCheck : public Pass {
    public:
     explicit TypeCheck();
     void visit_declaration(shared_ptr<ast::Declaration>) override;
+    void visit_assignment(shared_ptr<ast::Assignment>) override;
     void visit_function(shared_ptr<ast::Function>) override;
     void visit_call(shared_ptr<ast::Call>) override;
     void visit_return(shared_ptr<ast::Return>) override;

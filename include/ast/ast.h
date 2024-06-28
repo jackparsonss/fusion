@@ -67,6 +67,7 @@ class Expression : public Node {
 
     void set_type(TypePtr type);
     TypePtr get_type() const;
+    virtual bool is_l_value();
 };
 
 class IntegerLiteral : public Expression {
@@ -121,6 +122,7 @@ class Variable : public Expression {
     void set_qualifier(Qualifier qualifer);
     void set_ref_name(std::string name);
     void xml(int level) override;
+    bool is_l_value() override;
 };
 
 class Declaration : public Node {
@@ -130,6 +132,17 @@ class Declaration : public Node {
     explicit Declaration(shared_ptr<Variable> var,
                          shared_ptr<Expression> expr,
                          Token* token);
+
+    void xml(int level) override;
+};
+
+class Assignment : public Node {
+   public:
+    shared_ptr<Variable> var;
+    shared_ptr<Expression> expr;
+    explicit Assignment(shared_ptr<Variable> var,
+                        shared_ptr<Expression> expr,
+                        Token* token);
 
     void xml(int level) override;
 };

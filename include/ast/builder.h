@@ -44,4 +44,5 @@ class Builder : public FusionBaseVisitor {
     std::any visitEqNeCond(FusionParser::EqNeCondContext* ctx) override;
     std::any visitAndOrCond(FusionParser::AndOrCondContext* ctx) override;
     std::any visitUnary(FusionParser::UnaryContext* ctx) override;
+    std::any visitAssignment(FusionParser::AssignmentContext* ctx) override;
 };

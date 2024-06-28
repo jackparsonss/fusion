@@ -1,7 +1,7 @@
 #include "ast/passes/def_ref.h"
 #include "ast/ast.h"
 #include "ast/symbol/function_symbol.h"
-#include "errors.h"
+#include "errors/errors.h"
 
 DefRef::DefRef(shared_ptr<SymbolTable> symbol_table) : Pass("DefRef") {
     this->symbol_table = symbol_table;
@@ -26,6 +26,17 @@ void DefRef::visit_declaration(shared_ptr<ast::Declaration> node) {
     shared_ptr<VariableSymbol> sym = make_shared<VariableSymbol>(var);
 
     symbol_table->define(sym);
+
+    visit(node->expr);
+}
+
+void DefRef::visit_assignment(shared_ptr<ast::Assignment> node) {
+    visit(node->var);
+    if (!node->var->is_l_value()) {
+        throw AssignError(
+            node->token->getLine(),
+            "Cannot assign to const variable " + node->var->get_name());
+    }
 
     visit(node->expr);
 }

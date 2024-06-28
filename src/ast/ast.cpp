@@ -98,6 +98,10 @@ ast::Expression::Expression(TypePtr type, Token* token) : Node(token) {
     this->type = type;
 }
 
+bool ast::Expression::is_l_value() {
+    return false;
+}
+
 void ast::Expression::set_type(TypePtr type) {
     this->type = type;
 }
@@ -179,6 +183,10 @@ std::string ast::Variable::get_ref_name() {
     return this->ref_name;
 }
 
+bool ast::Variable::is_l_value() {
+    return this->qualifier == ast::Qualifier::Let;
+}
+
 void ast::Variable::xml(int level) {
     std::cout << std::string(level * 4, ' ');
     std::cout << "<variable qualifier=\"" << ast::qualifier_to_string(qualifier)
@@ -203,6 +211,25 @@ void ast::Declaration::xml(int level) {
     std::cout << std::string((level + 1) * 4, ' ') << "</rhs>\n";
 
     std::cout << std::string(level * 4, ' ') << "</declaration>\n";
+}
+
+ast::Assignment::Assignment(shared_ptr<Variable> var,
+                            shared_ptr<Expression> expr,
+                            Token* token)
+    : Node(token) {
+    this->var = var;
+    this->expr = expr;
+}
+
+void ast::Assignment::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<assignment>\n";
+    this->var->xml(level + 1);
+
+    std::cout << std::string((level + 1) * 4, ' ') << "<rhs>\n";
+    this->expr->xml(level + 2);
+    std::cout << std::string((level + 1) * 4, ' ') << "</rhs>\n";
+
+    std::cout << std::string(level * 4, ' ') << "</assignment>\n";
 }
 
 ast::Parameter::Parameter(shared_ptr<Variable> var, Token* token)

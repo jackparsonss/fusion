@@ -6,7 +6,8 @@
 #include "FusionParser.h"
 #include "ast/passes/pass.h"
 #include "compiler.h"
-#include "errors.h"
+#include "errors/errors.h"
+#include "errors/syntax.h"
 
 Compiler::Compiler(std::string filename,
                    shared_ptr<SymbolTable> symbol_table,
@@ -19,9 +20,17 @@ Compiler::Compiler(std::string filename,
     file = new antlr4::ANTLRFileStream();
     file->loadFromFile(filename);
 
+    lexer_error = new LexerErrorListener();
     lexer = new fusion::FusionLexer(file);
+    lexer->removeErrorListeners();
+    lexer->addErrorListener(lexer_error);
+
     tokens = new antlr4::CommonTokenStream(lexer);
+
+    syntax_error = new SyntaxErrorListener();
     parser = new fusion::FusionParser(tokens);
+    parser->removeErrorListeners();
+    parser->addErrorListener(syntax_error);
 
     tree = parser->file();
 }
@@ -31,6 +40,8 @@ Compiler::~Compiler() {
     delete lexer;
     delete tokens;
     delete parser;
+    delete lexer_error;
+    delete syntax_error;
 }
 
 void Compiler::build_ast() {

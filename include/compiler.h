@@ -8,6 +8,7 @@
 #include "ast/builder.h"
 #include "ast/symbol/symbol_table.h"
 #include "backend/backend.h"
+#include "errors/syntax.h"
 
 using std::shared_ptr, std::unique_ptr;
 
@@ -22,6 +23,8 @@ class Compiler {
     antlr4::tree::ParseTree* tree;
     antlr4::CommonTokenStream* tokens;
     fusion::FusionParser* parser;
+    LexerErrorListener* lexer_error;
+    SyntaxErrorListener* syntax_error;
 
    public:
     Compiler(std::string filename,

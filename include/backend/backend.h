@@ -29,6 +29,7 @@ class Backend {
     mlir::Value visit_boolean_literal(shared_ptr<ast::BooleanLiteral>);
     mlir::Value visit_variable(shared_ptr<ast::Variable>);
     mlir::Value visit_declaration(shared_ptr<ast::Declaration>);
+    mlir::Value visit_assignment(shared_ptr<ast::Assignment>);
     mlir::Value visit_function(shared_ptr<ast::Function>);
     mlir::Value visit_call(shared_ptr<ast::Call>);
     mlir::Value visit_parameter(shared_ptr<ast::Parameter>);

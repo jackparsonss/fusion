@@ -42,6 +42,10 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->declaration());
     }
 
+    if (ctx->assignment() != nullptr) {
+        return visit(ctx->assignment());
+    }
+
     if (ctx->function() != nullptr) {
         return visit(ctx->function());
     }
@@ -352,4 +356,17 @@ std::any Builder::visitUnary(FusionParser::UnaryContext* ctx) {
     auto binop = make_shared<ast::UnaryOperator>(type, rhs, token);
 
     return to_node(binop);
+}
+
+std::any Builder::visitAssignment(FusionParser::AssignmentContext* ctx) {
+    Token* token = ctx->ID()->getSymbol();
+    std::string name = ctx->ID()->getText();
+    TypePtr type = make_shared<Type>(Type::unset);
+
+    auto var =
+        make_shared<ast::Variable>(ast::Qualifier::Let, type, name, token);
+    auto expr = cast_node(ast::Expression, visit(ctx->expr()));
+
+    auto assn = make_shared<ast::Assignment>(var, expr, token);
+    return to_node(assn);
 }

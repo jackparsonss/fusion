@@ -1,9 +1,8 @@
-fn foo(): i32 {
-    return 90;
+fn foo(let x: i32): i32 {
+    return x;
 }
 
 fn main(): i32 {
-    print(foo())
-
+    println(foo(90));
     return 0;
 }
