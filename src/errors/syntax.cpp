@@ -20,7 +20,7 @@ void LexerErrorListener::syntaxError(antlr4::Recognizer* recognizer,
                                      size_t char_position_in_line,
                                      const std::string& msg,
                                      std::exception_ptr e) {
-    throw SyntaxError(line, msg);
+    throw LexerError(line, msg);
 }
 
 void underline_error(antlr4::Recognizer* recognizer,
