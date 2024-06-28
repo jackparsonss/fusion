@@ -30,6 +30,17 @@ void DefRef::visit_declaration(shared_ptr<ast::Declaration> node) {
     visit(node->expr);
 }
 
+void DefRef::visit_assignment(shared_ptr<ast::Assignment> node) {
+    visit(node->var);
+    if (!node->var->is_l_value()) {
+        throw AssignError(
+            node->token->getLine(),
+            "Cannot assign to const variable " + node->var->get_name());
+    }
+
+    visit(node->expr);
+}
+
 void DefRef::visit_parameter(shared_ptr<ast::Parameter> node) {
     shared_ptr<ast::Variable> var = node->var;
     if (symbol_table->resolve_local(var->get_name()).has_value()) {
