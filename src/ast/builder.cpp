@@ -42,6 +42,10 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->declaration());
     }
 
+    if (ctx->assignment() != nullptr) {
+        return visit(ctx->assignment());
+    }
+
     if (ctx->function() != nullptr) {
         return visit(ctx->function());
     }
