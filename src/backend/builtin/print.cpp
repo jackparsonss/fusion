@@ -9,7 +9,7 @@
 namespace {
 void create_type_str(TypePtr type) {
     std::string ty = type->get_specifier();
-    auto gvalue = mlir::StringRef(ty.c_str(), 3);
+    auto gvalue = mlir::StringRef(ty.c_str(), ty.size() + 1);
 
     auto gtype =
         mlir::LLVM::LLVMArrayType::get(ctx::ch->get_mlir(), gvalue.size());

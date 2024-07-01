@@ -312,7 +312,7 @@ ast::Call::Call(std::string name,
 ast::Call::Call(std::string name,
                 std::vector<shared_ptr<Expression>> args,
                 Token* token)
-    : Expression(make_shared<Type>(Type::unset), token) {
+    : Expression(make_shared<Unset>(), token) {
     this->name = name;
     this->arguments = args;
     this->function = nullptr;

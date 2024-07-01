@@ -15,8 +15,8 @@ TypePtr Symbol::get_type() {
     return this->type;
 }
 
-BuiltinTypeSymbol::BuiltinTypeSymbol(std::string name)
-    : Symbol(name), Type(name) {}
+BuiltinTypeSymbol::BuiltinTypeSymbol(TypePtr type)
+    : Symbol(type->get_name(), type) {}
 
 std::string BuiltinTypeSymbol::get_name() {
     return Symbol::get_name();

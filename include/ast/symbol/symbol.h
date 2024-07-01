@@ -4,7 +4,7 @@
 #include <string>
 
 #include "ast/ast.h"
-#include "shared/type.h"
+#include "shared/type/type.h"
 
 using std::shared_ptr;
 
@@ -23,9 +23,9 @@ class Symbol {
 
 typedef shared_ptr<Symbol> SymbolPtr;
 
-class BuiltinTypeSymbol : public Symbol, public Type {
+class BuiltinTypeSymbol : public Symbol {
    public:
-    BuiltinTypeSymbol(std::string name);
+    BuiltinTypeSymbol(TypePtr type);
     std::string get_name() override;
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ast/ast.h"
-#include "shared/type.h"
+#include "shared/type/type.h"
 
 #include "mlir/Dialect/LLVMIR/LLVMAttrs.h"
 #include "mlir/IR/Value.h"

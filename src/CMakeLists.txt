@@ -22,7 +22,12 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/def_ref.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/type_check.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/passes/builtin.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type/type.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type/character.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type/integer.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type/float.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type/boolean.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/shared/type/type.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/shared/context.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/errors/syntax.cpp"
 )
