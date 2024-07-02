@@ -36,11 +36,11 @@ mlir::Value arithmetic::mod(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
 }
 
 mlir::Value arithmetic::and_(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
-    return binop<mlir::LLVM::AndOp>(lhs, rhs, ctx::t_bool);
+    return binop<mlir::LLVM::AndOp>(lhs, rhs, ctx::bool_);
 }
 
 mlir::Value arithmetic::or_(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
-    return binop<mlir::LLVM::OrOp>(lhs, rhs, ctx::t_bool);
+    return binop<mlir::LLVM::OrOp>(lhs, rhs, ctx::bool_);
 }
 
 mlir::Value arithmetic::pow(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
@@ -79,7 +79,7 @@ mlir::Value arithmetic::lte(mlir::Value lhs, mlir::Value rhs, TypePtr type) {
 
 mlir::Value arithmetic::not_(mlir::Value value) {
     mlir::Value f = boolean::create_bool(false);
-    return eq(f, value, ctx::t_bool);
+    return eq(f, value, ctx::bool_);
 }
 
 mlir::Value arithmetic::negate(mlir::Value value, TypePtr type) {
@@ -92,7 +92,7 @@ mlir::Value arithmetic::binary_equality(mlir::Value lhs,
                                         TypePtr type,
                                         mlir::LLVM::ICmpPredicate predicate) {
     mlir::Value value = ctx::builder->create<mlir::LLVM::ICmpOp>(
-        *ctx::loc, ctx::t_bool->get_mlir(), predicate, lhs, rhs);
+        *ctx::loc, ctx::bool_->get_mlir(), predicate, lhs, rhs);
 
     return value;
 }

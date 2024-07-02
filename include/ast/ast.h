@@ -72,11 +72,11 @@ class Expression : public Node {
 
 class IntegerLiteral : public Expression {
    private:
-    int value;
+    long long value;
 
    public:
-    explicit IntegerLiteral(int value, Token* token);
-    int get_value() const;
+    explicit IntegerLiteral(long long value, TypePtr type, Token* token);
+    long long get_value() const;
 
     void xml(int level) override;
 };

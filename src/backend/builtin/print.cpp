@@ -29,7 +29,7 @@ void setupPrintf() {
 
 void newline_type_str(TypePtr type) {
     std::string ty = type->get_specifier() + "\n";
-    auto gvalue = mlir::StringRef(ty.c_str(), 4);
+    auto gvalue = mlir::StringRef(ty.c_str(), ty.size() + 1);
 
     auto gtype =
         mlir::LLVM::LLVMArrayType::get(ctx::ch->get_mlir(), gvalue.size());

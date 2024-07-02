@@ -9,12 +9,17 @@ void TypeCheck::visit_declaration(shared_ptr<ast::Declaration> node) {
     visit(node->var);
     visit(node->expr);
 
-    Type var = *node->var->get_type();
-    Type expr = *node->expr->get_type();
-    if (var != expr) {
+    TypePtr var = node->var->get_type();
+    TypePtr expr = node->expr->get_type();
+    if (*var == *ctx::i64 && *expr == *ctx::i32) {
+        node->expr->set_type(ctx::i64);
+        return;
+    }
+
+    if (*var != *expr) {
         throw TypeError(node->token->getLine(),
-                        "mismatched lhs(" + var.get_name() + ") and rhs(" +
-                            expr.get_name() + ") types on declaration");
+                        "mismatched lhs(" + var->get_name() + ") and rhs(" +
+                            expr->get_name() + ") types on declaration");
     }
 }
 
@@ -96,7 +101,7 @@ void TypeCheck::visit_binary_operator(shared_ptr<ast::BinaryOperator> node) {
         case ast::BinaryOpType::GTE:
             check_numeric(lhs, line);
             check_numeric(rhs, line);
-            node->set_type(ctx::t_bool);
+            node->set_type(ctx::bool_);
             break;
         case ast::BinaryOpType::ADD:
         case ast::BinaryOpType::SUB:
@@ -112,11 +117,11 @@ void TypeCheck::visit_binary_operator(shared_ptr<ast::BinaryOperator> node) {
         case ast::BinaryOpType::OR:
             check_bool(lhs, line);
             check_bool(rhs, line);
-            node->set_type(ctx::t_bool);
+            node->set_type(ctx::bool_);
             break;
         case ast::BinaryOpType::EQ:
         case ast::BinaryOpType::NE:
-            node->set_type(ctx::t_bool);
+            node->set_type(ctx::bool_);
             break;
     }
 }
@@ -125,17 +130,17 @@ void TypeCheck::visit_unary_operator(shared_ptr<ast::UnaryOperator> node) {
     visit(node->rhs);
 
     size_t line = node->token->getLine();
-    Type rhs = *node->get_type();
-    if (node->type == ast::UnaryOpType::MINUS && rhs != *ctx::i32) {
+    TypePtr rhs = node->get_type();
+    if (node->type == ast::UnaryOpType::MINUS && !rhs->is_numeric()) {
         throw TypeError(
             line, "unary minus only works on numeric types, found type: " +
-                      rhs.get_name());
+                      rhs->get_name());
     }
 
-    if (node->type == ast::UnaryOpType::NOT && rhs != *ctx::t_bool) {
+    if (node->type == ast::UnaryOpType::NOT && *rhs != *ctx::bool_) {
         throw TypeError(line,
                         "unary minus only works on booleans, found type: " +
-                            rhs.get_name());
+                            rhs->get_name());
     }
 }
 
@@ -146,7 +151,7 @@ void TypeCheck::check_numeric(TypePtr type, size_t line) {
 }
 
 void TypeCheck::check_bool(TypePtr type, size_t line) {
-    if (*type != *ctx::t_bool) {
+    if (*type != *ctx::bool_) {
         throw TypeError(line, "type(" + type->get_name() + ") is not boolean");
     }
 }

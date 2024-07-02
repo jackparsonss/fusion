@@ -14,5 +14,8 @@ fn main(): i32 {
     println(t);
     println(f);
 
+    let r: i64 = 10000000000000;
+    println(r);
+
     return 0;
 }

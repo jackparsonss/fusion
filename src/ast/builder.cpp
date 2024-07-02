@@ -5,6 +5,7 @@
 #include "FusionParser.h"
 #include "ast/ast.h"
 #include "ast/builder.h"
+#include "errors/errors.h"
 #include "shared/context.h"
 #include "shared/type/type.h"
 
@@ -99,16 +100,23 @@ std::any Builder::visitQualifier(FusionParser::QualifierContext* ctx) {
 
 std::any Builder::visitLiteralInt(FusionParser::LiteralIntContext* ctx) {
     Token* token = ctx->INT()->getSymbol();
-    int value = 0;
+    std::string str = ctx->INT()->getText();
 
     try {
-        value = std::stoi(ctx->INT()->getText());
-    } catch (const std::out_of_range& oor) {
-        std::runtime_error(oor.what());
+        int num = std::stoi(str);
+        auto node = make_shared<ast::IntegerLiteral>(num, ctx::i32, token);
+        return to_node(node);
+    } catch (const std::out_of_range&) {
+        try {
+            long long num = std::stoll(str);
+            auto node = make_shared<ast::IntegerLiteral>(num, ctx::i64, token);
+            return to_node(node);
+        } catch (const std::out_of_range&) {
+            throw SyntaxError(token->getLine(), "number overflowed 64 bits");
+        }
     }
 
-    auto node = make_shared<ast::IntegerLiteral>(value, token);
-    return to_node(node);
+    throw std::runtime_error("failed to parse integer");
 }
 
 std::any Builder::visitLiteralBool(FusionParser::LiteralBoolContext* ctx) {

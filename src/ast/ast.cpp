@@ -111,7 +111,7 @@ TypePtr ast::Expression::get_type() const {
 }
 
 ast::BooleanLiteral::BooleanLiteral(bool value, Token* token)
-    : Expression(ctx::t_bool, token) {
+    : Expression(ctx::bool_, token) {
     this->value = value;
 }
 
@@ -135,22 +135,23 @@ char ast::CharacterLiteral::get_value() const {
 }
 
 void ast::CharacterLiteral::xml(int level) {
-    std::cout << std::string(level * 4, ' ') << "<ch value=\"" << this->value
+    std::cout << std::string(level * 4, ' ') << "<ch value=\"" << value
               << "\"/>\n";
 }
 
-ast::IntegerLiteral::IntegerLiteral(int value, Token* token)
-    : Expression(ctx::i32, token) {
+ast::IntegerLiteral::IntegerLiteral(long long value, TypePtr type, Token* token)
+    : Expression(type, token) {
+    assert(*type == *ctx::i32 || *type == *ctx::i64);
     this->value = value;
 }
 
-int ast::IntegerLiteral::get_value() const {
+long long ast::IntegerLiteral::get_value() const {
     return this->value;
 }
 
 void ast::IntegerLiteral::xml(int level) {
-    std::cout << std::string(level * 4, ' ') << "<i32 value=\"" << this->value
-              << "\"/>\n";
+    std::cout << std::string(level * 4, ' ')
+              << "<" + type->get_name() + " value=\"" << value << "\"/>\n";
 }
 
 ast::Variable::Variable(Qualifier qualifier,

@@ -14,9 +14,10 @@ std::unique_ptr<mlir::ModuleOp> ctx::module;
 TypePtr ctx::ch;
 TypePtr ctx::any;
 TypePtr ctx::i32;
+TypePtr ctx::i64;
 TypePtr ctx::f32;
 TypePtr ctx::none;
-TypePtr ctx::t_bool;
+TypePtr ctx::bool_;
 
 std::vector<TypePtr> ctx::primitives;
 
@@ -26,16 +27,14 @@ void ctx::initialize_context() {
 
     ctx::any = make_shared<Any>();
     ctx::i32 = make_shared<I32>();
+    ctx::i64 = make_shared<I64>();
     ctx::f32 = make_shared<F32>();
     ctx::none = make_shared<None>();
     ctx::ch = make_shared<Character>();
-    ctx::t_bool = make_shared<Boolean>();
+    ctx::bool_ = make_shared<Boolean>();
 
     ctx::primitives = {
-        ctx::ch,
-        ctx::i32,
-        ctx::f32,
-        ctx::t_bool,
+        ctx::ch, ctx::i32, ctx::i64, ctx::f32, ctx::bool_,
     };
 
     module = std::make_unique<mlir::ModuleOp>(
