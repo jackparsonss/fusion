@@ -29,6 +29,7 @@ const y: i32 = x;
 
 ### Types
 - **i32**: 32-bit integer
+- **i64**: 64-bit integer
 - **ch**: 8-bit ascii character
 - **bool**: 1-bit boolean(true/false)
 
@@ -102,6 +103,4 @@ fn main(): i32 {
     let o: bool = 5 != 5 || 5 == 5;
     let a: bool = 5 != 5 && 5 == 5;
 }
-```
-```
 ```
