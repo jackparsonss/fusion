@@ -5,6 +5,7 @@ file: statement* EOF;
 statement
     : function
     | call SEMI
+    | if
     | declaration
     | assignment
     | block
@@ -24,6 +25,10 @@ variable: qualifier ID COLON type;
 assignment: ID EQUAL expr SEMI;
 
 call: ID L_PAREN expr? (COMMA expr)* R_PAREN;
+
+if: IF L_PAREN expr R_PAREN block else?;
+
+else: ELSE (block | if);
 
 return: RETURN expr SEMI;
 
@@ -56,6 +61,8 @@ RETURN: 'return';
 FUNCTION: 'fn';
 CONST: 'const';
 LET: 'let';
+IF: 'if';
+ELSE: 'else';
 
 // symbols
 SEMI: ';';
