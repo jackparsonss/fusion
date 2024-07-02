@@ -64,6 +64,10 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->return_());
     }
 
+    if (ctx->if_() != nullptr) {
+        return visit(ctx->if_());
+    }
+
     throw std::runtime_error("found an invalid statement");
 }
 
@@ -378,4 +382,31 @@ std::any Builder::visitAssignment(FusionParser::AssignmentContext* ctx) {
 
     auto assn = make_shared<ast::Assignment>(var, expr, token);
     return to_node(assn);
+}
+std::any Builder::visitIf(FusionParser::IfContext* ctx) {
+    Token* token = ctx->IF()->getSymbol();
+
+    auto condition = cast_node(ast::Expression, visit(ctx->expr()));
+    auto block = cast_node(ast::Block, visit(ctx->block()));
+
+    std::optional<shared_ptr<ast::Conditional>> else_if = std::nullopt;
+    if (ctx->else_() != nullptr) {
+        else_if = cast_node(ast::Conditional, visit(ctx->else_()));
+    }
+
+    auto node = make_shared<ast::Conditional>(condition, block, token);
+    return to_node(node);
+}
+
+std::any Builder::visitElse(FusionParser::ElseContext* ctx) {
+    Token* token = ctx->ELSE()->getSymbol();
+
+    if (ctx->if_() != nullptr) {
+        return cast_node(ast::Node, visit(ctx->if_()));
+    }
+
+    auto block = cast_node(ast::Block, visit(ctx->block()));
+    auto condition = make_shared<ast::BooleanLiteral>(true, token);
+    auto node = make_shared<ast::Conditional>(condition, block, token);
+    return to_node(node);
 }

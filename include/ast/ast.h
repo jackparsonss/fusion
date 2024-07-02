@@ -230,4 +230,21 @@ class UnaryOperator : public Expression {
     UnaryOperator(UnaryOpType type, shared_ptr<Expression> rhs, Token* token);
     void xml(int level) override;
 };
+
+class Conditional : public Node {
+   public:
+    shared_ptr<Expression> condition;
+    shared_ptr<Block> body;
+    std::optional<shared_ptr<Conditional>> else_if;
+
+    Conditional(shared_ptr<Expression> condition,
+                shared_ptr<Block> body,
+                std::optional<shared_ptr<Conditional>> else_if,
+                Token* token);
+    Conditional(shared_ptr<Expression> condition,
+                shared_ptr<Block> body,
+                Token* token);
+
+    void xml(int level) override;
+};
 }  // namespace ast
