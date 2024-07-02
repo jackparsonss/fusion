@@ -3,12 +3,13 @@
 #include <stack>
 #include "ast/ast.h"
 #include "ast/passes/pass.h"
+#include "shared/type/type.h"
 
 class TypeCheck : public Pass {
    private:
     std::stack<shared_ptr<ast::Function>> func_stack;
-    void check_numeric(Type type, size_t line);
-    void check_bool(Type type, size_t line);
+    void check_numeric(TypePtr type, size_t line);
+    void check_bool(TypePtr type, size_t line);
 
    public:
     explicit TypeCheck();

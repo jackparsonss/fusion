@@ -1,4 +1,9 @@
 #include "shared/context.h"
+#include "shared/type/boolean.h"
+#include "shared/type/character.h"
+#include "shared/type/float.h"
+#include "shared/type/integer.h"
+#include "shared/type/type.h"
 
 mlir::MLIRContext ctx::context;
 std::unique_ptr<mlir::Location> ctx::loc =
@@ -19,12 +24,12 @@ void ctx::initialize_context() {
     context.loadDialect<mlir::LLVM::LLVMDialect>();
     builder = std::make_shared<mlir::OpBuilder>(&context);
 
-    ctx::ch = std::make_shared<Type>(Type::ch);
-    ctx::any = std::make_shared<Type>(Type::any);
-    ctx::i32 = std::make_shared<Type>(Type::i32);
-    ctx::f32 = std::make_shared<Type>(Type::f32);
-    ctx::none = std::make_shared<Type>(Type::none);
-    ctx::t_bool = std::make_shared<Type>(Type::t_bool);
+    ctx::any = make_shared<Any>();
+    ctx::i32 = make_shared<I32>();
+    ctx::f32 = make_shared<F32>();
+    ctx::none = make_shared<None>();
+    ctx::ch = make_shared<Character>();
+    ctx::t_bool = make_shared<Boolean>();
 
     ctx::primitives = {
         ctx::ch,

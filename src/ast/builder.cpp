@@ -6,6 +6,7 @@
 #include "ast/ast.h"
 #include "ast/builder.h"
 #include "shared/context.h"
+#include "shared/type/type.h"
 
 using std::any_cast;
 
@@ -81,7 +82,7 @@ std::any Builder::visitType(FusionParser::TypeContext* ctx) {
         throw std::runtime_error("invalid type found");
     }
 
-    return dynamic_pointer_cast<Type>(type.value());
+    return dynamic_pointer_cast<Type>(type.value()->get_type());
 }
 
 std::any Builder::visitQualifier(FusionParser::QualifierContext* ctx) {
@@ -144,7 +145,7 @@ std::any Builder::visitLiteralChar(FusionParser::LiteralCharContext* ctx) {
 std::any Builder::visitIdentifier(FusionParser::IdentifierContext* ctx) {
     Token* token = ctx->ID()->getSymbol();
     std::string name = ctx->ID()->getText();
-    TypePtr type = make_shared<Type>(Type::unset);
+    TypePtr type = make_shared<Unset>();
 
     auto var =
         make_shared<ast::Variable>(ast::Qualifier::Let, type, name, token);
@@ -361,7 +362,7 @@ std::any Builder::visitUnary(FusionParser::UnaryContext* ctx) {
 std::any Builder::visitAssignment(FusionParser::AssignmentContext* ctx) {
     Token* token = ctx->ID()->getSymbol();
     std::string name = ctx->ID()->getText();
-    TypePtr type = make_shared<Type>(Type::unset);
+    TypePtr type = make_shared<Unset>();
 
     auto var =
         make_shared<ast::Variable>(ast::Qualifier::Let, type, name, token);

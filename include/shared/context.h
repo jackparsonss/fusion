@@ -6,7 +6,7 @@
 #include <mlir/IR/Types.h>
 #include <memory>
 
-#include "shared/type.h"
+#include "shared/type/type.h"
 
 using std::shared_ptr, std::make_shared, std::unique_ptr;
 

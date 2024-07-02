@@ -5,7 +5,7 @@
 
 #include "Token.h"
 
-#include "shared/type.h"
+#include "shared/type/type.h"
 
 using antlr4::Token, std::make_shared, std::shared_ptr;
 

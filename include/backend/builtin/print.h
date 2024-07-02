@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shared/type.h"
+#include "shared/type/type.h"
 
 namespace builtin {
 void define_all_print();
