@@ -1,4 +1,5 @@
 #include "shared/context.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "shared/type/boolean.h"
 #include "shared/type/character.h"
 #include "shared/type/float.h"
@@ -20,6 +21,7 @@ TypePtr ctx::none;
 TypePtr ctx::bool_;
 
 std::vector<TypePtr> ctx::primitives;
+std::stack<mlir::LLVM::LLVMFuncOp> ctx::function_stack;
 
 void ctx::initialize_context() {
     context.loadDialect<mlir::LLVM::LLVMDialect>();
@@ -39,4 +41,12 @@ void ctx::initialize_context() {
 
     module = std::make_unique<mlir::ModuleOp>(
         mlir::ModuleOp::create(builder->getUnknownLoc()));
+}
+
+mlir::LLVM::LLVMFuncOp ctx::current_function() {
+    if (function_stack.empty()) {
+        throw std::runtime_error("you are not within a function");
+    }
+
+    return function_stack.top();
 }

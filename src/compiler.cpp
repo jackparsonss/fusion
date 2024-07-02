@@ -69,7 +69,12 @@ void Compiler::xml() {
 }
 
 void Compiler::build_backend() {
-    backend->traverse(this->builder->get_ast());
+    try {
+        backend->traverse(this->builder->get_ast());
+    } catch (CompileTimeException const& e) {
+        std::cerr << e.what() << std::endl;
+        exit(1);
+    }
 }
 
 void Compiler::to_object(std::string filename) {

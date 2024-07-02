@@ -3,6 +3,7 @@
 #include "ast/ast.h"
 #include "backend/backend.h"
 #include "backend/expressions/arithmetic.h"
+#include "backend/expressions/flow.h"
 #include "backend/types/boolean.h"
 #include "backend/types/character.h"
 #include "backend/types/integer.h"
@@ -32,6 +33,7 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Return, this->visit_return);
     try_visit(node, ast::BinaryOperator, this->visit_binary_operator);
     try_visit(node, ast::UnaryOperator, this->visit_unary_operator);
+    try_visit(node, ast::Conditional, this->visit_conditional);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -110,6 +112,7 @@ mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
 
     mlir::Block* b_body = func.addEntryBlock();
     ctx::builder->setInsertionPointToStart(b_body);
+    ctx::function_stack.push(func);
 
     for (size_t i = 0; i < node->params.size(); i++) {
         mlir::Value address = visit(node->params[i]);
@@ -119,6 +122,7 @@ mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
 
     visit(node->body);
 
+    ctx::function_stack.pop();
     ctx::builder->setInsertionPointToEnd(ctx::module->getBody());
 
     return nullptr;
@@ -155,4 +159,27 @@ mlir::Value Backend::visit_unary_operator(shared_ptr<ast::UnaryOperator> node) {
     mlir::Value rhs = visit(node->rhs);
 
     return arithmetic::unary_operation(rhs, node->type, node->get_type());
+}
+
+mlir::Value Backend::visit_conditional(shared_ptr<ast::Conditional> node) {
+    mlir::Value condition = visit(node->condition);
+    mlir::Block* b_cond = ctx::current_function().addBlock();
+    mlir::Block* b_else = ctx::current_function().addBlock();
+    mlir::Block* b_exit = ctx::current_function().addBlock();
+
+    flow::branch(condition, b_cond, b_else);
+
+    ctx::builder->setInsertionPointToStart(b_cond);
+    visit(node->body);
+    flow::jump(b_exit);
+
+    ctx::builder->setInsertionPointToStart(b_else);
+    if (node->else_if.has_value()) {
+        visit(node->else_if.value());
+    }
+    flow::jump(b_exit);
+
+    ctx::builder->setInsertionPointToStart(b_exit);
+
+    return nullptr;
 }

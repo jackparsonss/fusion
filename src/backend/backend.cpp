@@ -1,5 +1,6 @@
 #include "backend/backend.h"
 #include "backend/builtin/builtin.h"
+#include "errors/errors.h"
 #include "shared/context.h"
 
 #include "llvm/IR/LegacyPassManager.h"
@@ -28,8 +29,7 @@ shared_ptr<ast::Block> Backend::traverse(shared_ptr<ast::Block> ast) {
     visit(ast);
 
     if (mlir::failed(mlir::verify(*ctx::module))) {
-        ctx::module->emitError("module failed to verify");
-        return nullptr;
+        throw BackendError("backend failed to build");
     }
 
     return ast;
