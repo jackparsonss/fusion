@@ -14,3 +14,17 @@ mlir::Type I32::get_mlir() const {
 bool I32::is_numeric() const {
     return true;
 }
+
+I64::I64() : Type("i64") {}
+
+std::string I64::get_specifier() const {
+    return "%ld";
+}
+
+mlir::Type I64::get_mlir() const {
+    return ctx::builder->getI64Type();
+}
+
+bool I64::is_numeric() const {
+    return true;
+}

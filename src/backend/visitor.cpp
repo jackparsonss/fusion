@@ -46,7 +46,11 @@ mlir::Value Backend::visit_block(shared_ptr<ast::Block> node) {
 
 mlir::Value Backend::visit_integer_literal(
     shared_ptr<ast::IntegerLiteral> node) {
-    return integer::create_i32(node->get_value());
+    if (*node->get_type() == *ctx::i32) {
+        return integer::create_i32(node->get_value());
+    }
+
+    return integer::create_i64(node->get_value());
 }
 
 mlir::Value Backend::visit_character_literal(

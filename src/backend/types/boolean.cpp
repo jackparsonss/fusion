@@ -3,7 +3,7 @@
 
 mlir::Value boolean::create_bool(bool value) {
     mlir::Value val = ctx::builder->create<mlir::LLVM::ConstantOp>(
-        *ctx::loc, ctx::t_bool->get_mlir(), value);
+        *ctx::loc, ctx::bool_->get_mlir(), value);
 
     return val;
 }
