@@ -23,6 +23,10 @@ mlir::Type Type::get_mlir() const {
     throw std::runtime_error("invalid mlir type found " + name);
 }
 
+bool Type::is_numeric() const {
+    return false;
+}
+
 mlir::Type Type::get_pointer() {
     return mlir::LLVM::LLVMPointerType::get(get_mlir());
 }

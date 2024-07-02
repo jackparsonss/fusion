@@ -10,3 +10,7 @@ std::string I32::get_specifier() const {
 mlir::Type I32::get_mlir() const {
     return ctx::builder->getI32Type();
 }
+
+bool I32::is_numeric() const {
+    return true;
+}

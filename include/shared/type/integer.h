@@ -7,4 +7,5 @@ class I32 : public Type {
     I32();
     std::string get_specifier() const override;
     mlir::Type get_mlir() const override;
+    bool is_numeric() const override;
 };

@@ -79,11 +79,12 @@ void TypeCheck::visit_binary_operator(shared_ptr<ast::BinaryOperator> node) {
     visit(node->rhs);
 
     size_t line = node->token->getLine();
-    Type lhs = *node->lhs->get_type();
-    Type rhs = *node->rhs->get_type();
-    if (lhs != rhs) {
-        throw TypeError(line, "mismatched lhs(" + lhs.get_name() +
-                                  ") and rhs(" + rhs.get_name() +
+    TypePtr lhs = node->lhs->get_type();
+    TypePtr rhs = node->rhs->get_type();
+
+    if (*lhs != *rhs) {
+        throw TypeError(line, "mismatched lhs(" + lhs->get_name() +
+                                  ") and rhs(" + rhs->get_name() +
                                   ") types on binary operator: " +
                                   ast::binary_op_type_to_string(node->type));
     }
@@ -116,6 +117,7 @@ void TypeCheck::visit_binary_operator(shared_ptr<ast::BinaryOperator> node) {
         case ast::BinaryOpType::EQ:
         case ast::BinaryOpType::NE:
             node->set_type(ctx::t_bool);
+            break;
     }
 }
 
@@ -137,14 +139,14 @@ void TypeCheck::visit_unary_operator(shared_ptr<ast::UnaryOperator> node) {
     }
 }
 
-void TypeCheck::check_numeric(Type type, size_t line) {
-    if (type != *ctx::i32) {
-        throw TypeError(line, "type(" + type.get_name() + ") is not numeric");
+void TypeCheck::check_numeric(TypePtr type, size_t line) {
+    if (!type->is_numeric()) {
+        throw TypeError(line, "type(" + type->get_name() + ") is not numeric");
     }
 }
 
-void TypeCheck::check_bool(Type type, size_t line) {
-    if (type != *ctx::t_bool) {
-        throw TypeError(line, "type(" + type.get_name() + ") is not boolean");
+void TypeCheck::check_bool(TypePtr type, size_t line) {
+    if (*type != *ctx::t_bool) {
+        throw TypeError(line, "type(" + type->get_name() + ") is not boolean");
     }
 }
