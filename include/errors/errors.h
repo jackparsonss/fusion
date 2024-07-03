@@ -10,6 +10,14 @@ class CompileTimeException : public std::exception {
     const char* what() const noexcept override { return msg.c_str(); }
 };
 
+class RunTimeException : public std::exception {
+   protected:
+    std::string msg;
+
+   public:
+    const char* what() const noexcept override { return msg.c_str(); }
+};
+
 #define DEF_COMPILE_TIME_EXCEPTION(NAME)                               \
     class NAME : public CompileTimeException {                         \
        public:                                                         \
@@ -19,6 +27,16 @@ class CompileTimeException : public std::exception {
                 << std::endl;                                          \
             msg = buf.str();                                           \
         }                                                              \
+    }
+
+#define DEF_RUNTIME_TIME_EXCEPTION(NAME)                      \
+    class NAME : public CompileTimeException {                \
+       public:                                                \
+        NAME(const std::string& description) {                \
+            std::stringstream buf;                            \
+            buf << #NAME << ": " << description << std::endl; \
+            msg = buf.str();                                  \
+        }                                                     \
     }
 
 DEF_COMPILE_TIME_EXCEPTION(MainError);
@@ -32,3 +50,5 @@ DEF_COMPILE_TIME_EXCEPTION(SyntaxError);
 DEF_COMPILE_TIME_EXCEPTION(TypeError);
 
 DEF_COMPILE_TIME_EXCEPTION(AssignError);
+
+DEF_RUNTIME_TIME_EXCEPTION(BackendError);

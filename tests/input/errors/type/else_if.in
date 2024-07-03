@@ -1,0 +1,8 @@
+fn main(): i32 {
+    if(false) {
+        println(5);
+    } else if('c') {
+        println(9);
+    }
+    return 0;
+}

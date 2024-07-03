@@ -5,6 +5,7 @@
 #include <mlir/IR/Location.h>
 #include <mlir/IR/Types.h>
 #include <memory>
+#include <stack>
 
 #include "shared/type/type.h"
 
@@ -25,6 +26,8 @@ extern TypePtr none;
 extern TypePtr bool_;
 
 extern std::vector<TypePtr> primitives;
+extern std::stack<mlir::LLVM::LLVMFuncOp> function_stack;
 
 extern void initialize_context();
+extern mlir::LLVM::LLVMFuncOp current_function();
 }  // namespace ctx

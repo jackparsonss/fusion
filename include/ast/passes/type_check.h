@@ -20,4 +20,5 @@ class TypeCheck : public Pass {
     void visit_return(shared_ptr<ast::Return>) override;
     void visit_binary_operator(shared_ptr<ast::BinaryOperator>) override;
     void visit_unary_operator(shared_ptr<ast::UnaryOperator>) override;
+    void visit_conditional(shared_ptr<ast::Conditional>) override;
 };

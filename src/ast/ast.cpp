@@ -404,3 +404,34 @@ void ast::UnaryOperator::xml(int level) {
 
     std::cout << std::string(level * 4, ' ') << "</binary operator>\n";
 }
+
+ast::Conditional::Conditional(shared_ptr<Expression> condition,
+                              shared_ptr<Block> body,
+                              std::optional<shared_ptr<Conditional>> else_if,
+                              Token* token)
+    : Node(token) {
+    this->condition = condition;
+    this->body = body;
+    this->else_if = else_if;
+}
+
+ast::Conditional::Conditional(shared_ptr<Expression> condition,
+                              shared_ptr<Block> body,
+                              Token* token)
+    : ast::Conditional(condition, body, std::nullopt, token) {}
+
+void ast::Conditional::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<conditional>\n";
+    std::cout << std::string((level + 1) * 4, ' ') << "<if>\n";
+    condition->xml(level + 2);
+    body->xml(level + 2);
+    std::cout << std::string((level + 1) * 4, ' ') << "</if>\n";
+
+    if (else_if.has_value()) {
+        std::cout << std::string((level + 1) * 4, ' ') << "<else if>\n";
+        else_if.value()->xml(level + 2);
+        std::cout << std::string((level + 1) * 4, ' ') << "</else if>\n";
+    }
+
+    std::cout << std::string(level * 4, ' ') << "</conditional>\n";
+}

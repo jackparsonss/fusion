@@ -144,6 +144,17 @@ void TypeCheck::visit_unary_operator(shared_ptr<ast::UnaryOperator> node) {
     }
 }
 
+void TypeCheck::visit_conditional(shared_ptr<ast::Conditional> node) {
+    visit(node->condition);
+    check_bool(node->condition->get_type(), node->token->getLine());
+
+    visit(node->body);
+
+    if (node->else_if.has_value()) {
+        visit(node->else_if.value());
+    }
+}
+
 void TypeCheck::check_numeric(TypePtr type, size_t line) {
     if (!type->is_numeric()) {
         throw TypeError(line, "type(" + type->get_name() + ") is not numeric");

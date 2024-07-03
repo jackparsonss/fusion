@@ -104,3 +104,17 @@ fn main(): i32 {
     let a: bool = 5 != 5 && 5 == 5;
 }
 ```
+
+#### Conditionals
+Just like `if`/`else` statements in most languages
+```
+let x: i32 = 5;
+if(x == 4){
+    println(0);
+} else if(x == 5) {
+    println(10);
+} else {
+    println(x);
+}
+```
+Conditions **must** be booleans
