@@ -1,0 +1,6 @@
+fn main(): i32 {
+    if(true) {
+        println(5);
+    }
+    return 0;
+}

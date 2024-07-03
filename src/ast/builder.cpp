@@ -394,7 +394,7 @@ std::any Builder::visitIf(FusionParser::IfContext* ctx) {
         else_if = cast_node(ast::Conditional, visit(ctx->else_()));
     }
 
-    auto node = make_shared<ast::Conditional>(condition, block, token);
+    auto node = make_shared<ast::Conditional>(condition, block, else_if, token);
     return to_node(node);
 }
 
