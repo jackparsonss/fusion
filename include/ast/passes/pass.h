@@ -30,6 +30,7 @@ class Pass {
     virtual void visit_binary_operator(shared_ptr<ast::BinaryOperator>);
     virtual void visit_unary_operator(shared_ptr<ast::UnaryOperator>);
     virtual void visit_conditional(shared_ptr<ast::Conditional>);
+    virtual void visit_loop(shared_ptr<ast::Loop>);
 
     static void run_passes(shared_ptr<ast::Block> ast, shared_ptr<SymbolTable>);
 };

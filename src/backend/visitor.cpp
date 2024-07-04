@@ -34,6 +34,7 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::BinaryOperator, this->visit_binary_operator);
     try_visit(node, ast::UnaryOperator, this->visit_unary_operator);
     try_visit(node, ast::Conditional, this->visit_conditional);
+    try_visit(node, ast::Loop, this->visit_loop);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -181,5 +182,27 @@ mlir::Value Backend::visit_conditional(shared_ptr<ast::Conditional> node) {
 
     ctx::builder->setInsertionPointToStart(b_exit);
 
+    return nullptr;
+}
+
+mlir::Value Backend::visit_loop(shared_ptr<ast::Loop> node) {
+    mlir::Block* b_cond = ctx::current_function().addBlock();
+    mlir::Block* b_loop = ctx::current_function().addBlock();
+    mlir::Block* b_exit = ctx::current_function().addBlock();
+
+    visit(node->variable);
+
+    flow::jump(b_cond);
+    ctx::builder->setInsertionPointToStart(b_cond);
+
+    mlir::Value condition = visit(node->condition);
+    flow::branch(condition, b_loop, b_exit);
+
+    ctx::builder->setInsertionPointToStart(b_loop);
+    visit(node->body);
+    visit(node->assignment);
+    flow::jump(b_cond);
+
+    ctx::builder->setInsertionPointToStart(b_exit);
     return nullptr;
 }
