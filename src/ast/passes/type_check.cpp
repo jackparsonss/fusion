@@ -155,6 +155,15 @@ void TypeCheck::visit_conditional(shared_ptr<ast::Conditional> node) {
     }
 }
 
+void TypeCheck::visit_loop(shared_ptr<ast::Loop> node) {
+    visit(node->variable);
+    visit(node->condition);
+    check_bool(node->condition->get_type(), node->token->getLine());
+
+    visit(node->assignment);
+    visit(node->body);
+}
+
 void TypeCheck::check_numeric(TypePtr type, size_t line) {
     if (!type->is_numeric()) {
         throw TypeError(line, "type(" + type->get_name() + ") is not numeric");
