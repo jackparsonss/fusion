@@ -35,6 +35,8 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::UnaryOperator, this->visit_unary_operator);
     try_visit(node, ast::Conditional, this->visit_conditional);
     try_visit(node, ast::Loop, this->visit_loop);
+    try_visit(node, ast::Continue, this->visit_continue);
+    try_visit(node, ast::Break, this->visit_break);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -190,6 +192,9 @@ mlir::Value Backend::visit_loop(shared_ptr<ast::Loop> node) {
     mlir::Block* b_loop = ctx::current_function().addBlock();
     mlir::Block* b_exit = ctx::current_function().addBlock();
 
+    loop_conditions.push(b_cond);
+    loop_exits.push(b_exit);
+
     visit(node->variable);
 
     flow::jump(b_cond);
@@ -204,5 +209,34 @@ mlir::Value Backend::visit_loop(shared_ptr<ast::Loop> node) {
     flow::jump(b_cond);
 
     ctx::builder->setInsertionPointToStart(b_exit);
+    loop_conditions.pop();
+    loop_exits.pop();
+
+    return nullptr;
+}
+
+mlir::Value Backend::visit_continue(shared_ptr<ast::Continue> node) {
+    if (loop_conditions.empty()) {
+        throw std::runtime_error("backend found continue outside of a loop");
+    }
+
+    mlir::Block* b_body = ctx::current_function().addBlock();
+    flow::jump(loop_conditions.top());
+
+    ctx::builder->setInsertionPointToStart(b_body);
+
+    return nullptr;
+}
+
+mlir::Value Backend::visit_break(shared_ptr<ast::Break> node) {
+    if (loop_exits.empty()) {
+        throw std::runtime_error("backend found break outside of a loop");
+    }
+
+    mlir::Block* b_body = ctx::current_function().addBlock();
+    flow::jump(loop_exits.top());
+
+    ctx::builder->setInsertionPointToStart(b_body);
+
     return nullptr;
 }

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <ostream>
+#include <stack>
 #include <string>
 #include <unordered_map>
 
@@ -14,6 +15,11 @@ using std::shared_ptr;
 class Backend {
    private:
     std::unordered_map<std::string, mlir::Value> variables;
+
+    // used by continue/break
+    std::stack<mlir::Block*> loop_conditions;
+    std::stack<mlir::Block*> loop_exits;
+
     mlir::Value visit(shared_ptr<ast::Node>);
 
    public:
@@ -38,4 +44,6 @@ class Backend {
     mlir::Value visit_unary_operator(shared_ptr<ast::UnaryOperator>);
     mlir::Value visit_conditional(shared_ptr<ast::Conditional>);
     mlir::Value visit_loop(shared_ptr<ast::Loop>);
+    mlir::Value visit_continue(shared_ptr<ast::Continue>);
+    mlir::Value visit_break(shared_ptr<ast::Break>);
 };

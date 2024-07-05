@@ -53,6 +53,8 @@ void Pass::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::UnaryOperator, this->visit_unary_operator);
     try_visit(node, ast::Conditional, this->visit_conditional);
     try_visit(node, ast::Loop, this->visit_loop);
+    try_visit(node, ast::Continue, this->visit_continue);
+    try_visit(node, ast::Break, this->visit_break);
 
     throw std::runtime_error("node not added to pass manager");
 }
@@ -68,6 +70,8 @@ void Pass::visit_character_literal(shared_ptr<ast::CharacterLiteral> node) {}
 void Pass::visit_boolean_literal(shared_ptr<ast::BooleanLiteral> node) {}
 void Pass::visit_variable(shared_ptr<ast::Variable> node) {}
 void Pass::visit_parameter(shared_ptr<ast::Parameter> node) {}
+void Pass::visit_continue(shared_ptr<ast::Continue> node) {}
+void Pass::visit_break(shared_ptr<ast::Break> node) {}
 
 void Pass::visit_declaration(shared_ptr<ast::Declaration> node) {
     visit(node->var);

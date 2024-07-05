@@ -456,3 +456,11 @@ void ast::Loop::xml(int level) {
     body->xml(level + 1);
     std::cout << std::string(level * 4, ' ') << "</loop>\n";
 }
+
+void ast::Continue::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "</continue>\n";
+}
+
+void ast::Break::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "</break>\n";
+}
