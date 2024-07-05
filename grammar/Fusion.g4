@@ -6,14 +6,15 @@ statement
     : function
     | call SEMI
     | if
-    | declaration
-    | assignment
+    | loop
+    | declaration SEMI
+    | assignment SEMI
     | block
     | return
     ;
 
 declaration:
-    variable EQUAL expr SEMI
+    variable EQUAL expr
     ;
 
 block: L_CURLY statement* R_CURLY;
@@ -22,11 +23,13 @@ function: FUNCTION ID L_PAREN variable? (COMMA variable)* R_PAREN COLON type blo
 
 variable: qualifier ID COLON type;
 
-assignment: ID EQUAL expr SEMI;
+assignment: ID EQUAL expr;
 
 call: ID L_PAREN expr? (COMMA expr)* R_PAREN;
 
 if: IF L_PAREN expr R_PAREN block else?;
+
+loop: FOR L_PAREN declaration SEMI expr SEMI assignment R_PAREN block;
 
 else: ELSE (block | if);
 
@@ -63,6 +66,7 @@ CONST: 'const';
 LET: 'let';
 IF: 'if';
 ELSE: 'else';
+FOR: 'for';
 
 // symbols
 SEMI: ';';

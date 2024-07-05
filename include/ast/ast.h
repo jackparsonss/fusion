@@ -247,4 +247,19 @@ class Conditional : public Node {
 
     void xml(int level) override;
 };
+
+class Loop : public Node {
+   public:
+    shared_ptr<Declaration> variable;
+    shared_ptr<Expression> condition;
+    shared_ptr<Assignment> assignment;
+    shared_ptr<Block> body;
+    Loop(shared_ptr<Declaration> variable,
+         shared_ptr<Expression> condition,
+         shared_ptr<Assignment> assignment,
+         shared_ptr<Block> body,
+         Token* token);
+
+    void xml(int level) override;
+};
 }  // namespace ast

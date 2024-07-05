@@ -19,4 +19,5 @@ class DefRef : public Pass {
     void visit_function(shared_ptr<ast::Function>) override;
     void visit_variable(shared_ptr<ast::Variable>) override;
     void visit_call(shared_ptr<ast::Call>) override;
+    void visit_loop(shared_ptr<ast::Loop>) override;
 };

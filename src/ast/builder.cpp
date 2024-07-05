@@ -68,6 +68,10 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->if_());
     }
 
+    if (ctx->loop() != nullptr) {
+        return visit(ctx->loop());
+    }
+
     throw std::runtime_error("found an invalid statement");
 }
 
@@ -408,5 +412,18 @@ std::any Builder::visitElse(FusionParser::ElseContext* ctx) {
     auto block = cast_node(ast::Block, visit(ctx->block()));
     auto condition = make_shared<ast::BooleanLiteral>(true, token);
     auto node = make_shared<ast::Conditional>(condition, block, token);
+    return to_node(node);
+}
+
+std::any Builder::visitLoop(FusionParser::LoopContext* ctx) {
+    Token* token = ctx->FOR()->getSymbol();
+
+    auto variable = cast_node(ast::Declaration, visit(ctx->declaration()));
+    auto condition = cast_node(ast::Expression, visit(ctx->expr()));
+    auto assignment = cast_node(ast::Assignment, visit(ctx->assignment()));
+    auto body = cast_node(ast::Block, visit(ctx->block()));
+
+    auto node =
+        make_shared<ast::Loop>(variable, condition, assignment, body, token);
     return to_node(node);
 }

@@ -47,4 +47,5 @@ class Builder : public FusionBaseVisitor {
     std::any visitAssignment(FusionParser::AssignmentContext* ctx) override;
     std::any visitIf(FusionParser::IfContext* ctx) override;
     std::any visitElse(FusionParser::ElseContext* ctx) override;
+    std::any visitLoop(FusionParser::LoopContext* ctx) override;
 };

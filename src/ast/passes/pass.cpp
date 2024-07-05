@@ -52,6 +52,7 @@ void Pass::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::BinaryOperator, this->visit_binary_operator);
     try_visit(node, ast::UnaryOperator, this->visit_unary_operator);
     try_visit(node, ast::Conditional, this->visit_conditional);
+    try_visit(node, ast::Loop, this->visit_loop);
 
     throw std::runtime_error("node not added to pass manager");
 }
@@ -112,4 +113,11 @@ void Pass::visit_conditional(shared_ptr<ast::Conditional> node) {
     if (node->else_if.has_value()) {
         visit(node->else_if.value());
     }
+}
+
+void Pass::visit_loop(shared_ptr<ast::Loop> node) {
+    visit(node->variable);
+    visit(node->condition);
+    visit(node->assignment);
+    visit(node->body);
 }

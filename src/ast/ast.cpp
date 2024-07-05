@@ -435,3 +435,24 @@ void ast::Conditional::xml(int level) {
 
     std::cout << std::string(level * 4, ' ') << "</conditional>\n";
 }
+
+ast::Loop::Loop(shared_ptr<Declaration> variable,
+                shared_ptr<Expression> condition,
+                shared_ptr<Assignment> assignment,
+                shared_ptr<Block> body,
+                Token* token)
+    : Node(token) {
+    this->variable = variable;
+    this->condition = condition;
+    this->assignment = assignment;
+    this->body = body;
+}
+
+void ast::Loop::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<loop>\n";
+    variable->xml(level + 1);
+    condition->xml(level + 1);
+    assignment->xml(level + 1);
+    body->xml(level + 1);
+    std::cout << std::string(level * 4, ' ') << "</loop>\n";
+}

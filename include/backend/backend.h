@@ -37,4 +37,5 @@ class Backend {
     mlir::Value visit_binary_operator(shared_ptr<ast::BinaryOperator>);
     mlir::Value visit_unary_operator(shared_ptr<ast::UnaryOperator>);
     mlir::Value visit_conditional(shared_ptr<ast::Conditional>);
+    mlir::Value visit_loop(shared_ptr<ast::Loop>);
 };
