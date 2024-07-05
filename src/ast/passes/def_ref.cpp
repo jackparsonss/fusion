@@ -118,6 +118,15 @@ void DefRef::visit_call(shared_ptr<ast::Call> node) {
     node->set_function(vs->function);
 }
 
+void DefRef::visit_loop(shared_ptr<ast::Loop> node) {
+    symbol_table->push();
+    visit(node->variable);
+    visit(node->condition);
+    visit(node->assignment);
+    visit(node->body);
+    symbol_table->pop();
+}
+
 bool DefRef::is_builtin(std::string name) {
     if (name == "print" || name == "println") {
         return true;
