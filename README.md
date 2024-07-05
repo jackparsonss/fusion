@@ -118,3 +118,15 @@ if(x == 4){
 }
 ```
 Conditions **must** be booleans
+
+#### Loops
+Similar to c-style for loops, they are composed of 4 parts
+- Variable declaration
+- Loop condition
+- Variable assignment
+- Body
+```
+for(let i: i32 = 0; i < 5; i = i + 1){
+    println(i);
+}
+```
