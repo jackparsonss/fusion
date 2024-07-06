@@ -190,9 +190,10 @@ mlir::Value Backend::visit_conditional(shared_ptr<ast::Conditional> node) {
 mlir::Value Backend::visit_loop(shared_ptr<ast::Loop> node) {
     mlir::Block* b_cond = ctx::current_function().addBlock();
     mlir::Block* b_loop = ctx::current_function().addBlock();
+    mlir::Block* b_assn = ctx::current_function().addBlock();
     mlir::Block* b_exit = ctx::current_function().addBlock();
 
-    loop_conditions.push(b_cond);
+    loop_conditions.push(b_assn);
     loop_exits.push(b_exit);
 
     visit(node->variable);
@@ -205,6 +206,9 @@ mlir::Value Backend::visit_loop(shared_ptr<ast::Loop> node) {
 
     ctx::builder->setInsertionPointToStart(b_loop);
     visit(node->body);
+    flow::jump(b_assn);
+
+    ctx::builder->setInsertionPointToStart(b_assn);
     visit(node->assignment);
     flow::jump(b_cond);
 
