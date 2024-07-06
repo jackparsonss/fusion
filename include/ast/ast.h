@@ -262,4 +262,16 @@ class Loop : public Node {
 
     void xml(int level) override;
 };
+
+class Continue : public Node {
+   public:
+    Continue(Token* token) : Node(token) {}
+    void xml(int level);
+};
+
+class Break : public Node {
+   public:
+    Break(Token* token) : Node(token) {}
+    void xml(int level);
+};
 }  // namespace ast

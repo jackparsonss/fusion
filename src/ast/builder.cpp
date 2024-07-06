@@ -72,6 +72,16 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
         return visit(ctx->loop());
     }
 
+    if (ctx->CONTINUE() != nullptr) {
+        auto node = make_shared<ast::Continue>(ctx->CONTINUE()->getSymbol());
+        return to_node(node);
+    }
+
+    if (ctx->BREAK() != nullptr) {
+        auto node = make_shared<ast::Break>(ctx->BREAK()->getSymbol());
+        return to_node(node);
+    }
+
     throw std::runtime_error("found an invalid statement");
 }
 

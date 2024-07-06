@@ -1,0 +1,13 @@
+fn main(): i32 {
+    for(let i: i32 = 0; i < 5; i = i + 1) {
+      if(i == 0) {
+          continue;
+      }
+
+      if(i > 2) {
+        break;
+      }
+      println(i);
+    }
+    return 0;
+}

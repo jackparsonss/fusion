@@ -11,6 +11,8 @@ statement
     | assignment SEMI
     | block
     | return
+    | CONTINUE SEMI
+    | BREAK SEMI
     ;
 
 declaration:
@@ -67,6 +69,8 @@ LET: 'let';
 IF: 'if';
 ELSE: 'else';
 FOR: 'for';
+BREAK: 'break';
+CONTINUE: 'continue';
 
 // symbols
 SEMI: ';';

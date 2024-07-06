@@ -130,3 +130,7 @@ for(let i: i32 = 0; i < 5; i = i + 1){
     println(i);
 }
 ```
+
+Loops also allow for control flow:
+- `continue`: goes to the next iteration of the loop
+- `break`: exits the loop early
