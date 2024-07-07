@@ -1,6 +1,7 @@
 #include "ast/passes/pass.h"
 #include "ast/ast.h"
 #include "ast/passes/builtin.h"
+#include "ast/passes/control_flow.h"
 #include "ast/passes/def_ref.h"
 #include "ast/passes/type_check.h"
 
@@ -13,6 +14,7 @@ constexpr bool debug = false;
 void Pass::run_passes(std::shared_ptr<ast::Block> ast,
                       shared_ptr<SymbolTable> symtab) {
     std::vector<std::shared_ptr<Pass>> passes = {
+        std::make_shared<ControlFlow>(),
         std::make_shared<DefRef>(symtab),
         std::make_shared<TypeCheck>(),
         std::make_shared<Builtin>(symtab),
