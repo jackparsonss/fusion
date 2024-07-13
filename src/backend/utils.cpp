@@ -46,3 +46,19 @@ mlir::LLVM::LLVMFuncOp utils::get_function(shared_ptr<ast::Function> func) {
     return mlir::LLVM::lookupOrCreateFn(*ctx::module, func->get_ref_name(),
                                         params, return_type);
 }
+
+void utils::define_global(mlir::Type type, std::string name) {
+    ctx::builder->create<mlir::LLVM::GlobalOp>(
+        *ctx::loc, type, false, mlir::LLVM::Linkage::Internal, name, nullptr);
+}
+
+mlir::Value utils::get_global(std::string name) {
+    mlir::LLVM::GlobalOp global;
+    if (!(global = ctx::module->lookupSymbol<mlir::LLVM::GlobalOp>(name))) {
+        throw std::runtime_error("backend failed to get global variable");
+    }
+
+    mlir::Value global_ptr =
+        ctx::builder->create<mlir::LLVM::AddressOfOp>(*ctx::loc, global);
+    return load(global_ptr);
+}

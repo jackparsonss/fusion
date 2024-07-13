@@ -10,6 +10,8 @@
 using antlr4::Token, std::make_shared, std::shared_ptr;
 
 namespace ast {
+enum class DeclarationType { Local, Global };
+
 enum class Qualifier {
     Const,
     Let,
@@ -39,8 +41,9 @@ enum class UnaryOpType {
 
 std::string random_name();
 std::string qualifier_to_string(Qualifier qualifier);
-std::string binary_op_type_to_string(BinaryOpType type);
 std::string unary_op_type_to_string(UnaryOpType type);
+std::string binary_op_type_to_string(BinaryOpType type);
+std::string declaration_type_to_string(DeclarationType type);
 
 class Node {
    public:
@@ -127,9 +130,14 @@ class Variable : public Expression {
 
 class Declaration : public Node {
    public:
+    DeclarationType type;
     shared_ptr<Variable> var;
     shared_ptr<Expression> expr;
     explicit Declaration(shared_ptr<Variable> var,
+                         shared_ptr<Expression> expr,
+                         Token* token);
+    explicit Declaration(DeclarationType type,
+                         shared_ptr<Variable> var,
                          shared_ptr<Expression> expr,
                          Token* token);
 

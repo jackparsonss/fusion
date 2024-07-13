@@ -15,6 +15,7 @@ using std::shared_ptr;
 class Backend {
    private:
     std::unordered_map<std::string, mlir::Value> variables;
+    std::unordered_map<std::string, mlir::Value> globals;
 
     // used by continue/break
     std::stack<mlir::Block*> loop_conditions;

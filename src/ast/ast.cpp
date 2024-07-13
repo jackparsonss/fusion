@@ -21,6 +21,15 @@ std::string ast::random_name() {
     return s;
 }
 
+std::string ast::declaration_type_to_string(DeclarationType type) {
+    switch (type) {
+        case ast::DeclarationType::Global:
+            return "global";
+        case ast::DeclarationType::Local:
+            return "local";
+    }
+}
+
 std::string ast::qualifier_to_string(ast::Qualifier qualifier) {
     switch (qualifier) {
         case ast::Qualifier::Const:
@@ -195,16 +204,28 @@ void ast::Variable::xml(int level) {
               << "\" ref_name=\"" << ref_name << "\"/>\n";
 }
 
+ast::Declaration::Declaration(ast::DeclarationType type,
+                              shared_ptr<Variable> var,
+                              shared_ptr<Expression> expr,
+                              Token* token)
+    : Node(token) {
+    this->type = type;
+    this->var = var;
+    this->expr = expr;
+}
+
 ast::Declaration::Declaration(shared_ptr<Variable> var,
                               shared_ptr<Expression> expr,
                               Token* token)
     : Node(token) {
+    this->type = ast::DeclarationType::Local;
     this->var = var;
     this->expr = expr;
 }
 
 void ast::Declaration::xml(int level) {
-    std::cout << std::string(level * 4, ' ') << "<declaration>\n";
+    std::cout << std::string(level * 4, ' ') << "<declaration type=\""
+              << ast::declaration_type_to_string(type) << "\">\n";
     this->var->xml(level + 1);
 
     std::cout << std::string((level + 1) * 4, ' ') << "<rhs>\n";

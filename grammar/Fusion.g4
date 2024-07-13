@@ -1,6 +1,11 @@
 grammar Fusion;
 
-file: statement* EOF;
+file: topLevel* EOF;
+
+topLevel
+    : function
+    | declaration SEMI
+    ;
 
 statement
     : function
