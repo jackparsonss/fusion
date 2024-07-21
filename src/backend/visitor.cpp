@@ -10,6 +10,7 @@
 #include "backend/utils.h"
 
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/IR/ValueRange.h"
 #include "shared/context.h"
 
@@ -75,19 +76,32 @@ mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
                                  node->get_name());
     }
 
+    return utils::get_global(node->get_ref_name(), node->get_type());
     mlir::Value address = pair->second;
-    return utils::load(address);
+    return utils::load(address, node->get_type());
 }
 
 mlir::Value Backend::visit_declaration(shared_ptr<ast::Declaration> node) {
     std::string name = node->var->get_ref_name();
     mlir::Value expr = visit(node->expr);
-    mlir::Value address = utils::stack_allocate(expr.getType());
 
-    variables[name] = address;
-    utils::store(address, expr);
+    if (node->type == ast::DeclarationType::Local) {
+        mlir::Value address = utils::stack_allocate(expr.getType());
+        variables[name] = address;
+        utils::store(address, expr);
+        return nullptr;
+    }
 
-    return nullptr;
+    if (node->type == ast::DeclarationType::Global) {
+        utils::define_global(expr.getType(), name);
+        mlir::LLVM::AddressOfOp address = utils::get_global_address(name);
+        variables[name] = address;
+
+        utils::store(address, expr);
+        return nullptr;
+    }
+
+    throw std::runtime_error("Backend found declaration without a type");
 }
 
 mlir::Value Backend::visit_assignment(shared_ptr<ast::Assignment> node) {

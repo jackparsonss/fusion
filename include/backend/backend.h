@@ -5,6 +5,7 @@
 #include <stack>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "ast/ast.h"
 
@@ -15,7 +16,7 @@ using std::shared_ptr;
 class Backend {
    private:
     std::unordered_map<std::string, mlir::Value> variables;
-    std::unordered_map<std::string, mlir::Value> globals;
+    std::unordered_set<std::string> globals;
 
     // used by continue/break
     std::stack<mlir::Block*> loop_conditions;

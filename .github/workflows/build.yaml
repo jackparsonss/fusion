@@ -14,7 +14,7 @@ jobs:
         working-directory: ./scripts
 
     container:
-      image: aizuko/gazprea:v0.5
+      image: jackpar/fusion:latest
 
     steps:
     - name: Checkout repository

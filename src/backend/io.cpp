@@ -9,19 +9,13 @@
 
 namespace {
 void print(mlir::Value value, TypePtr type, std::string name) {
-    mlir::LLVM::GlobalOp global;
-    if (!(global = ctx::module->lookupSymbol<mlir::LLVM::GlobalOp>(name))) {
-        llvm::errs() << "missing format string!\n";
-        return;
-    }
-
-    mlir::Value global_ptr =
-        ctx::builder->create<mlir::LLVM::AddressOfOp>(*ctx::loc, global);
+    mlir::Value global_ptr = utils::get_global_address(name);
+    auto gtype = mlir::LLVM::LLVMArrayType::get(ctx::ch->get_mlir(), 3);
 
     mlir::Value cst0 = integer::create_i32(0);
     mlir::Value arg = ctx::builder->create<mlir::LLVM::GEPOp>(
-        *ctx::loc, ctx::ch->get_pointer(), global_ptr,
-        mlir::ArrayRef<mlir::Value>({cst0, cst0}));
+        *ctx::loc, ctx::ch->get_pointer(), gtype, global_ptr,
+        mlir::ValueRange{cst0, cst0});
 
     mlir::LLVM::LLVMFuncOp func =
         ctx::module->lookupSymbol<mlir::LLVM::LLVMFuncOp>("printf");
