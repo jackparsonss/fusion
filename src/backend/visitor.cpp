@@ -42,6 +42,16 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     throw std::runtime_error("node not added to backend visit function");
 }
 
+void Backend::declare_globals() {
+    for (const auto& [name, node] : globals) {
+        mlir::LLVM::AddressOfOp address = utils::get_global_address(name);
+        variables[name] = address;
+
+        mlir::Value expr = visit(node);
+        utils::store(address, expr);
+    }
+}
+
 mlir::Value Backend::visit_block(shared_ptr<ast::Block> node) {
     for (shared_ptr<ast::Node> const& statement : node->nodes) {
         visit(statement);
@@ -70,6 +80,14 @@ mlir::Value Backend::visit_boolean_literal(
 }
 
 mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
+    std::string name = node->get_ref_name();
+
+    auto gl = globals.find(name);
+    if (gl != globals.end()) {
+        mlir::Value address = utils::get_global_address(name);
+        return utils::load(address, node->get_type());
+    }
+
     auto pair = variables.find(node->get_ref_name());
     if (pair == variables.end()) {
         throw std::runtime_error("backend found undefined variable: " +
@@ -82,9 +100,9 @@ mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
 
 mlir::Value Backend::visit_declaration(shared_ptr<ast::Declaration> node) {
     std::string name = node->var->get_ref_name();
-    mlir::Value expr = visit(node->expr);
 
     if (node->type == ast::DeclarationType::Local) {
+        mlir::Value expr = visit(node->expr);
         mlir::Value address = utils::stack_allocate(expr.getType());
         variables[name] = address;
         utils::store(address, expr);
@@ -92,11 +110,9 @@ mlir::Value Backend::visit_declaration(shared_ptr<ast::Declaration> node) {
     }
 
     if (node->type == ast::DeclarationType::Global) {
-        utils::define_global(expr.getType(), name);
-        mlir::LLVM::AddressOfOp address = utils::get_global_address(name);
-        variables[name] = address;
-
-        utils::store(address, expr);
+        mlir::Type ty = node->expr->get_type()->get_mlir();
+        utils::define_global(ty, name);
+        globals[name] = node->expr;
         return nullptr;
     }
 
@@ -134,6 +150,10 @@ mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
         mlir::Value address = visit(node->params[i]);
         mlir::Value arg = func.getArgument(i);
         utils::store(address, arg);
+    }
+
+    if (node->get_name() == "main") {
+        declare_globals();
     }
 
     visit(node->body);
