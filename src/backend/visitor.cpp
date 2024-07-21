@@ -76,7 +76,6 @@ mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
                                  node->get_name());
     }
 
-    return utils::get_global(node->get_ref_name(), node->get_type());
     mlir::Value address = pair->second;
     return utils::load(address, node->get_type());
 }
