@@ -54,6 +54,7 @@ void SymbolTable::init_types() {
     for (const auto& ty : ctx::primitives) {
         define(make_shared<BuiltinTypeSymbol>(ty));
     }
+    define(make_shared<BuiltinTypeSymbol>(ctx::none));
     define(make_shared<BuiltinTypeSymbol>(ctx::any));
 }
 

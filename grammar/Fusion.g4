@@ -64,6 +64,7 @@ type
     | I64 
     | CHAR
     | BOOL
+    | NONE
     ;
 
 // keywords
@@ -112,6 +113,7 @@ I32: 'i32';
 I64: 'i64';
 CHAR: 'ch';
 BOOL: 'bool';
+NONE: 'none';
 
 // literals
 BOOLEAN: ('true' | 'false');
