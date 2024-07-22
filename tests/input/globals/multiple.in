@@ -1,0 +1,8 @@
+const x: i32 = 5;
+const y: i32 = x;
+
+fn main(): i32 {
+    println(x);
+    println(y);
+    return 0;
+}

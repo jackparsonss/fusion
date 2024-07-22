@@ -4,10 +4,10 @@
 #include <ostream>
 #include <stack>
 #include <string>
-#include <unordered_map>
 
 #include "ast/ast.h"
 
+#include "backend/expressions/global.h"
 #include "mlir/IR/Value.h"
 
 using std::shared_ptr;
@@ -15,7 +15,7 @@ using std::shared_ptr;
 class Backend {
    private:
     std::unordered_map<std::string, mlir::Value> variables;
-    std::unordered_map<std::string, shared_ptr<ast::Node>> globals;
+    GlobalManager gm;
 
     // used by continue/break
     std::stack<mlir::Block*> loop_conditions;

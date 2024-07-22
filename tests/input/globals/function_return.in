@@ -1,0 +1,11 @@
+const x: i32 = 5;
+
+fn foo(): i32 {
+    println(x);
+    return x;
+}
+
+fn main(): i32 {
+    println(foo());
+    return 0;
+}

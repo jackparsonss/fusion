@@ -13,6 +13,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/builtin/print.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/expressions/arithmetic.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/backend/expressions/flow.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/backend/expressions/global.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/builder.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/scope.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/ast/symbol/symbol.cpp"

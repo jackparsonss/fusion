@@ -1,0 +1,6 @@
+const x: i32 = 5;
+
+fn main(): i32 {
+    println(x);
+    return 0;
+}

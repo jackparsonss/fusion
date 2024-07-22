@@ -43,11 +43,11 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
 }
 
 void Backend::declare_globals() {
-    for (const auto& [name, node] : globals) {
-        mlir::LLVM::AddressOfOp address = utils::get_global_address(name);
-        variables[name] = address;
+    for (const auto& g : gm.get_store()) {
+        mlir::LLVM::AddressOfOp address = utils::get_global_address(g.name);
+        variables[g.name] = address;
 
-        mlir::Value expr = visit(node);
+        mlir::Value expr = visit(g.node);
         utils::store(address, expr);
     }
 }
@@ -82,13 +82,12 @@ mlir::Value Backend::visit_boolean_literal(
 mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
     std::string name = node->get_ref_name();
 
-    auto gl = globals.find(name);
-    if (gl != globals.end()) {
+    if (gm.exists(name)) {
         mlir::Value address = utils::get_global_address(name);
         return utils::load(address, node->get_type());
     }
 
-    auto pair = variables.find(node->get_ref_name());
+    auto pair = variables.find(name);
     if (pair == variables.end()) {
         throw std::runtime_error("backend found undefined variable: " +
                                  node->get_name());
@@ -110,9 +109,8 @@ mlir::Value Backend::visit_declaration(shared_ptr<ast::Declaration> node) {
     }
 
     if (node->type == ast::DeclarationType::Global) {
-        mlir::Type ty = node->expr->get_type()->get_mlir();
-        utils::define_global(ty, name);
-        globals[name] = node->expr;
+        gm.define(name, node->expr);
+
         return nullptr;
     }
 
