@@ -30,13 +30,27 @@ shared_ptr<ast::Block> Builder::get_ast() {
 std::any Builder::visitFile(FusionParser::FileContext* ctx) {
     this->ast = std::make_shared<ast::Block>(nullptr);
 
-    for (auto const& s : ctx->statement()) {
+    for (auto const& s : ctx->topLevel()) {
         shared_ptr<ast::Node> node = cast_node(ast::Node, visit(s));
 
         this->ast->nodes.push_back(node);
     }
 
     return nullptr;
+}
+
+std::any Builder::visitTopLevel(FusionParser::TopLevelContext* ctx) {
+    if (ctx->function() != nullptr) {
+        return visit(ctx->function());
+    }
+
+    if (ctx->declaration() != nullptr) {
+        auto decl = cast_node(ast::Declaration, visit(ctx->declaration()));
+        decl->type = ast::DeclarationType::Global;
+        return to_node(decl);
+    }
+
+    throw std::runtime_error("found an invalid top level statement");
 }
 
 std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {

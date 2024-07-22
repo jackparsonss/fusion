@@ -23,6 +23,7 @@ class Builder : public FusionBaseVisitor {
     shared_ptr<ast::Block> get_ast();
 
     std::any visitFile(FusionParser::FileContext* ctx) override;
+    std::any visitTopLevel(FusionParser::TopLevelContext* ctx) override;
     std::any visitStatement(FusionParser::StatementContext* ctx) override;
     std::any visitLiteralInt(FusionParser::LiteralIntContext* ctx) override;
     std::any visitLiteralChar(FusionParser::LiteralCharContext* ctx) override;

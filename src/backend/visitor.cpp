@@ -10,6 +10,7 @@
 #include "backend/utils.h"
 
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
+#include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/IR/ValueRange.h"
 #include "shared/context.h"
 
@@ -41,6 +42,16 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     throw std::runtime_error("node not added to backend visit function");
 }
 
+void Backend::declare_globals() {
+    for (const auto& g : gm.get_store()) {
+        mlir::LLVM::AddressOfOp address = utils::get_global_address(g.name);
+        variables[g.name] = address;
+
+        mlir::Value expr = visit(g.node);
+        utils::store(address, expr);
+    }
+}
+
 mlir::Value Backend::visit_block(shared_ptr<ast::Block> node) {
     for (shared_ptr<ast::Node> const& statement : node->nodes) {
         visit(statement);
@@ -69,25 +80,40 @@ mlir::Value Backend::visit_boolean_literal(
 }
 
 mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
-    auto pair = variables.find(node->get_ref_name());
+    std::string name = node->get_ref_name();
+
+    if (gm.exists(name)) {
+        return gm.value(name, node->get_type());
+    }
+
+    auto pair = variables.find(name);
     if (pair == variables.end()) {
         throw std::runtime_error("backend found undefined variable: " +
                                  node->get_name());
     }
 
     mlir::Value address = pair->second;
-    return utils::load(address);
+    return utils::load(address, node->get_type());
 }
 
 mlir::Value Backend::visit_declaration(shared_ptr<ast::Declaration> node) {
     std::string name = node->var->get_ref_name();
-    mlir::Value expr = visit(node->expr);
-    mlir::Value address = utils::stack_allocate(expr.getType());
 
-    variables[name] = address;
-    utils::store(address, expr);
+    if (node->type == ast::DeclarationType::Local) {
+        mlir::Value expr = visit(node->expr);
+        mlir::Value address = utils::stack_allocate(expr.getType());
+        variables[name] = address;
+        utils::store(address, expr);
+        return nullptr;
+    }
 
-    return nullptr;
+    if (node->type == ast::DeclarationType::Global) {
+        gm.define(name, node->expr);
+
+        return nullptr;
+    }
+
+    throw std::runtime_error("Backend found declaration without a type");
 }
 
 mlir::Value Backend::visit_assignment(shared_ptr<ast::Assignment> node) {
@@ -121,6 +147,10 @@ mlir::Value Backend::visit_function(shared_ptr<ast::Function> node) {
         mlir::Value address = visit(node->params[i]);
         mlir::Value arg = func.getArgument(i);
         utils::store(address, arg);
+    }
+
+    if (node->get_name() == "main") {
+        declare_globals();
     }
 
     visit(node->body);

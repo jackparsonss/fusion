@@ -28,7 +28,7 @@ bool Type::is_numeric() const {
 }
 
 mlir::Type Type::get_pointer() {
-    return mlir::LLVM::LLVMPointerType::get(get_mlir());
+    return mlir::LLVM::LLVMPointerType::get(&ctx::context);
 }
 
 Any::Any() : Type("any") {}
