@@ -83,8 +83,7 @@ mlir::Value Backend::visit_variable(shared_ptr<ast::Variable> node) {
     std::string name = node->get_ref_name();
 
     if (gm.exists(name)) {
-        mlir::Value address = utils::get_global_address(name);
-        return utils::load(address, node->get_type());
+        return gm.value(name, node->get_type());
     }
 
     auto pair = variables.find(name);

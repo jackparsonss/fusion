@@ -26,6 +26,11 @@ bool GlobalManager::exists(std::string name) {
     return globals.contains(name);
 }
 
+mlir::Value GlobalManager::value(std::string name, TypePtr type) {
+    mlir::Value address = utils::get_global_address(name);
+    return utils::load(address, type);
+}
+
 std::vector<Global> GlobalManager::get_store() {
     return this->store;
 }
