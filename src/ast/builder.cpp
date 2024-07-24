@@ -28,7 +28,9 @@ shared_ptr<ast::Block> Builder::get_ast() {
 }
 
 std::any Builder::visitFile(FusionParser::FileContext* ctx) {
-    this->ast = std::make_shared<ast::Block>(nullptr);
+    if (this->ast == nullptr) {
+        this->ast = std::make_shared<ast::Block>(nullptr);
+    }
 
     for (auto const& s : ctx->topLevel()) {
         shared_ptr<ast::Node> node = cast_node(ast::Node, visit(s));

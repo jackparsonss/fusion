@@ -12,22 +12,33 @@
 
 using std::shared_ptr, std::unique_ptr;
 
+class Unit {
+   public:
+    antlr4::tree::ParseTree* tree;
+    Unit(std::string filename,
+         LexerErrorListener* lexer_error,
+         SyntaxErrorListener* syntax_error);
+    ~Unit();
+
+   private:
+    antlr4::ANTLRFileStream* file;
+    fusion::FusionLexer* lexer;
+    antlr4::CommonTokenStream* tokens;
+    fusion::FusionParser* parser;
+};
+
 class Compiler {
    private:
     shared_ptr<SymbolTable> symbol_table;
     unique_ptr<Backend> backend;
     unique_ptr<Builder> builder;
 
-    antlr4::ANTLRFileStream* file;
-    fusion::FusionLexer* lexer;
-    antlr4::tree::ParseTree* tree;
-    antlr4::CommonTokenStream* tokens;
-    fusion::FusionParser* parser;
+    std::vector<shared_ptr<Unit>> units;
     LexerErrorListener* lexer_error;
     SyntaxErrorListener* syntax_error;
 
    public:
-    Compiler(std::string filename,
+    Compiler(std::vector<std::string> filenames,
              shared_ptr<SymbolTable> symbol_table,
              unique_ptr<Backend> backend,
              unique_ptr<Builder> builder);

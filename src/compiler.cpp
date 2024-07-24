@@ -9,25 +9,18 @@
 #include "errors/errors.h"
 #include "errors/syntax.h"
 
-Compiler::Compiler(std::string filename,
-                   shared_ptr<SymbolTable> symbol_table,
-                   unique_ptr<Backend> backend,
-                   unique_ptr<Builder> builder) {
-    this->symbol_table = symbol_table;
-    this->backend = std::move(backend);
-    this->builder = std::move(builder);
-
+Unit::Unit(std::string filename,
+           LexerErrorListener* lexer_error,
+           SyntaxErrorListener* syntax_error) {
     file = new antlr4::ANTLRFileStream();
     file->loadFromFile(filename);
 
-    lexer_error = new LexerErrorListener();
     lexer = new fusion::FusionLexer(file);
     lexer->removeErrorListeners();
     lexer->addErrorListener(lexer_error);
 
     tokens = new antlr4::CommonTokenStream(lexer);
 
-    syntax_error = new SyntaxErrorListener();
     parser = new fusion::FusionParser(tokens);
     parser->removeErrorListeners();
     parser->addErrorListener(syntax_error);
@@ -35,22 +28,44 @@ Compiler::Compiler(std::string filename,
     tree = parser->file();
 }
 
-Compiler::~Compiler() {
+Unit::~Unit() {
     delete file;
     delete lexer;
     delete tokens;
     delete parser;
+}
+
+Compiler::Compiler(std::vector<std::string> filenames,
+                   shared_ptr<SymbolTable> symbol_table,
+                   unique_ptr<Backend> backend,
+                   unique_ptr<Builder> builder) {
+    this->symbol_table = symbol_table;
+    this->backend = std::move(backend);
+    this->builder = std::move(builder);
+
+    lexer_error = new LexerErrorListener();
+    syntax_error = new SyntaxErrorListener();
+
+    for (const auto& filename : filenames) {
+        auto unit = make_shared<Unit>(filename, lexer_error, syntax_error);
+        this->units.push_back(unit);
+    }
+}
+
+Compiler::~Compiler() {
     delete lexer_error;
     delete syntax_error;
 }
 
 void Compiler::build_ast() {
-    try {
-        builder->visit(tree);
-        assert(builder->has_ast());
-    } catch (CompileTimeException const& e) {
-        std::cerr << e.what() << std::endl;
-        exit(1);
+    for (const auto& unit : units) {
+        try {
+            builder->visit(unit->tree);
+            assert(builder->has_ast());
+        } catch (CompileTimeException const& e) {
+            std::cerr << e.what() << std::endl;
+            exit(1);
+        }
     }
 }
 

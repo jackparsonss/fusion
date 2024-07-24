@@ -16,11 +16,21 @@ int main(int argc, char** argv) {
     shared_ptr<SymbolTable> symbol_table = make_shared<SymbolTable>();
     unique_ptr<Builder> builder = make_unique<Builder>(symbol_table);
     unique_ptr<Backend> backend = make_unique<Backend>();
-    Compiler compiler =
-        Compiler(argv[1], symbol_table, std::move(backend), std::move(builder));
+
+    std::vector<std::string> filenames;
+    for (size_t i = 1; i < argc; i++) {
+        std::string arg = std::string(argv[i]);
+        if (arg[0] == '-') {
+            break;
+        }
+
+        filenames.push_back(arg);
+    }
+    Compiler compiler = Compiler(filenames, symbol_table, std::move(backend),
+                                 std::move(builder));
 
     compiler.build_ast();
-    for (size_t i = 0; i < argc; i++) {
+    for (size_t i = 1; i < argc; i++) {
         std::string arg = std::string(argv[i]);
         if (arg == "--xml") {
             compiler.xml();
@@ -28,7 +38,7 @@ int main(int argc, char** argv) {
     }
 
     compiler.run_passes();
-    for (size_t i = 0; i < argc; i++) {
+    for (size_t i = 1; i < argc; i++) {
         std::string arg = std::string(argv[i]);
         if (arg == "--pass-xml") {
             compiler.xml();
@@ -36,7 +46,7 @@ int main(int argc, char** argv) {
     }
 
     compiler.build_backend();
-    for (size_t i = 0; i < argc; i++) {
+    for (size_t i = 1; i < argc; i++) {
         std::string arg = std::string(argv[i]);
         if (arg == "--emit-llvm" && i == argc - 1) {
             std::cerr << "You must provide a file emit llvm ir to" << std::endl;
