@@ -485,3 +485,12 @@ void ast::Continue::xml(int level) {
 void ast::Break::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "</break>\n";
 }
+
+ast::Import::Import(std::string name, Token* token) : Node(token) {
+    this->name = name;
+}
+
+void ast::Import::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<import module=\"" << name
+              << "\"/>\n";
+}

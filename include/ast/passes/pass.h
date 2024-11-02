@@ -33,6 +33,6 @@ class Pass {
     virtual void visit_loop(shared_ptr<ast::Loop>);
     virtual void visit_continue(shared_ptr<ast::Continue>);
     virtual void visit_break(shared_ptr<ast::Break>);
-
+    virtual void visit_import(shared_ptr<ast::Import>);
     static void run_passes(shared_ptr<ast::Block> ast, shared_ptr<SymbolTable>);
 };

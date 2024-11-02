@@ -2,30 +2,14 @@
 
 #include <memory>
 
-#include "ANTLRFileStream.h"
-#include "FusionLexer.h"
-#include "ParseTree.h"
 #include "ast/builder.h"
 #include "ast/symbol/symbol_table.h"
 #include "backend/backend.h"
 #include "errors/syntax.h"
+#include "module/manager.h"
 
 using std::shared_ptr, std::unique_ptr;
-
-class Unit {
-   public:
-    antlr4::tree::ParseTree* tree;
-    Unit(std::string filename,
-         LexerErrorListener* lexer_error,
-         SyntaxErrorListener* syntax_error);
-    ~Unit();
-
-   private:
-    antlr4::ANTLRFileStream* file;
-    fusion::FusionLexer* lexer;
-    antlr4::CommonTokenStream* tokens;
-    fusion::FusionParser* parser;
-};
+namespace fs = std::filesystem;
 
 class Compiler {
    private:
@@ -33,12 +17,12 @@ class Compiler {
     unique_ptr<Backend> backend;
     unique_ptr<Builder> builder;
 
-    std::vector<shared_ptr<Unit>> units;
+    shared_ptr<module::Unit> entry;
     LexerErrorListener* lexer_error;
     SyntaxErrorListener* syntax_error;
 
    public:
-    Compiler(std::vector<std::string> filenames,
+    Compiler(fs::path entry,
              shared_ptr<SymbolTable> symbol_table,
              unique_ptr<Backend> backend,
              unique_ptr<Builder> builder);

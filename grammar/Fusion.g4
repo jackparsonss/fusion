@@ -5,6 +5,8 @@ file: topLevel* EOF;
 topLevel
     : function
     | declaration SEMI
+    | module
+    | imp
     ;
 
 statement
@@ -42,6 +44,10 @@ else: ELSE (block | if);
 
 return: RETURN expr SEMI;
 
+module: MODULE ID SEMI;
+
+imp: IMPORT ID SEMI;
+
 expr
     : call                                               #callExpr
     | (op=MINUS | op=BANG) expr                          #unary
@@ -76,6 +82,8 @@ ELSE: 'else';
 FOR: 'for';
 BREAK: 'break';
 CONTINUE: 'continue';
+MODULE: 'module';
+IMPORT: 'import';
 
 // symbols
 SEMI: ';';
@@ -118,6 +126,7 @@ BOOLEAN: ('true' | 'false');
 INT: [0-9]+;
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 CHARACTER: '\'' ( '\\\\' | '\\0' | '\\a' | '\\b' | '\\t' | '\\n' | '\\r' | '\\"' | '\\\'' | ~[\\'] ) '\'';
+STRING: '"' ( '\\\\' | '\\0' | '\\a' | '\\b' | '\\t' | '\\n' | '\\r' | '\\"' | '\\\'' | ~[\\"] )*? '"';
 
 // skip whitespace
 WS : [ \t\r\n]+ -> skip ;

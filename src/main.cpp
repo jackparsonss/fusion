@@ -3,6 +3,7 @@
 #include "ast/symbol/symbol_table.h"
 #include "backend/backend.h"
 #include "compiler.h"
+#include "module/manager.h"
 #include "shared/context.h"
 
 #include <iostream>
@@ -11,23 +12,21 @@
 using std::shared_ptr, std::unique_ptr, std::make_shared, std::make_unique;
 
 int main(int argc, char** argv) {
-    ctx::initialize_context();
+    if (argc < 2) {
+        std::cerr << "must provide an entry point file" << std::endl;
+        exit(1);
+    }
 
+    ctx::initialize_context();
     shared_ptr<SymbolTable> symbol_table = make_shared<SymbolTable>();
-    unique_ptr<Builder> builder = make_unique<Builder>(symbol_table);
+    shared_ptr<module::Manager> module_manager = make_shared<module::Manager>();
+    unique_ptr<Builder> builder =
+        make_unique<Builder>(symbol_table, module_manager);
     unique_ptr<Backend> backend = make_unique<Backend>();
 
-    std::vector<std::string> filenames;
-    for (size_t i = 1; i < argc; i++) {
-        std::string arg = std::string(argv[i]);
-        if (arg[0] == '-') {
-            break;
-        }
-
-        filenames.push_back(arg);
-    }
-    Compiler compiler = Compiler(filenames, symbol_table, std::move(backend),
-                                 std::move(builder));
+    std::string entry = std::string(argv[1]);
+    Compiler compiler =
+        Compiler(entry, symbol_table, std::move(backend), std::move(builder));
 
     compiler.build_ast();
     for (size_t i = 1; i < argc; i++) {

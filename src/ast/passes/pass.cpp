@@ -57,7 +57,7 @@ void Pass::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Loop, this->visit_loop);
     try_visit(node, ast::Continue, this->visit_continue);
     try_visit(node, ast::Break, this->visit_break);
-
+    try_visit(node, ast::Import, this->visit_import);
     throw std::runtime_error("node not added to pass manager");
 }
 
@@ -127,3 +127,5 @@ void Pass::visit_loop(shared_ptr<ast::Loop> node) {
     visit(node->assignment);
     visit(node->body);
 }
+
+void Pass::visit_import(shared_ptr<ast::Import> node) {}

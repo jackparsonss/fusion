@@ -1,4 +1,5 @@
 #include <any>
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -6,6 +7,7 @@
 #include "ast/ast.h"
 #include "ast/builder.h"
 #include "errors/errors.h"
+#include "module/manager.h"
 #include "shared/context.h"
 #include "shared/type/type.h"
 
@@ -14,9 +16,12 @@ using std::any_cast;
 #define cast_node(a, b) \
     (dynamic_pointer_cast<a>(any_cast<shared_ptr<ast::Node>>(b)))
 #define to_node(a) static_cast<shared_ptr<ast::Node>>(a)
+#define DEBUG false
 
-Builder::Builder(shared_ptr<SymbolTable> symbol_table) {
+Builder::Builder(shared_ptr<SymbolTable> symbol_table,
+                 shared_ptr<module::Manager> module_manager) {
     this->symbol_table = symbol_table;
+    this->module_manager = module_manager;
 }
 
 bool Builder::has_ast() {
@@ -28,13 +33,14 @@ shared_ptr<ast::Block> Builder::get_ast() {
 }
 
 std::any Builder::visitFile(FusionParser::FileContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering file" << std::endl;
     if (this->ast == nullptr) {
         this->ast = std::make_shared<ast::Block>(nullptr);
     }
 
     for (auto const& s : ctx->topLevel()) {
         shared_ptr<ast::Node> node = cast_node(ast::Node, visit(s));
-
         this->ast->nodes.push_back(node);
     }
 
@@ -42,6 +48,8 @@ std::any Builder::visitFile(FusionParser::FileContext* ctx) {
 }
 
 std::any Builder::visitTopLevel(FusionParser::TopLevelContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering topLevel" << std::endl;
     if (ctx->function() != nullptr) {
         return visit(ctx->function());
     }
@@ -52,10 +60,20 @@ std::any Builder::visitTopLevel(FusionParser::TopLevelContext* ctx) {
         return to_node(decl);
     }
 
+    if (ctx->imp() != nullptr) {
+        return visit(ctx->imp());
+    }
+
+    if (ctx->module() != nullptr) {
+        return visit(ctx->module());
+    }
+
     throw std::runtime_error("found an invalid top level statement");
 }
 
 std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering statement" << std::endl;
     if (ctx->declaration() != nullptr) {
         return visit(ctx->declaration());
     }
@@ -102,6 +120,8 @@ std::any Builder::visitStatement(FusionParser::StatementContext* ctx) {
 }
 
 std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering declaration" << std::endl;
     Token* token = ctx->EQUAL()->getSymbol();
 
     auto expr = cast_node(ast::Expression, visit(ctx->expr()));
@@ -112,6 +132,8 @@ std::any Builder::visitDeclaration(FusionParser::DeclarationContext* ctx) {
 }
 
 std::any Builder::visitType(FusionParser::TypeContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering type" << std::endl;
     auto type = symbol_table->resolve(ctx->getText());
     if (!type.has_value()) {
         throw std::runtime_error("invalid type found");
@@ -121,6 +143,8 @@ std::any Builder::visitType(FusionParser::TypeContext* ctx) {
 }
 
 std::any Builder::visitQualifier(FusionParser::QualifierContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering qualifier" << std::endl;
     if (ctx->CONST() != nullptr) {
         return ast::Qualifier::Const;
     }
@@ -133,6 +157,8 @@ std::any Builder::visitQualifier(FusionParser::QualifierContext* ctx) {
 }
 
 std::any Builder::visitLiteralInt(FusionParser::LiteralIntContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering literalInt" << std::endl;
     Token* token = ctx->INT()->getSymbol();
     std::string str = ctx->INT()->getText();
 
@@ -154,6 +180,8 @@ std::any Builder::visitLiteralInt(FusionParser::LiteralIntContext* ctx) {
 }
 
 std::any Builder::visitLiteralBool(FusionParser::LiteralBoolContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering literalBool" << std::endl;
     Token* token = ctx->BOOLEAN()->getSymbol();
     bool value = true;
     if (ctx->BOOLEAN()->getText() == "false") {
@@ -165,6 +193,8 @@ std::any Builder::visitLiteralBool(FusionParser::LiteralBoolContext* ctx) {
 }
 
 std::any Builder::visitLiteralChar(FusionParser::LiteralCharContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering literalChar" << std::endl;
     std::unordered_map<std::string, char> special_characters = {
         {"\\0", '\0'},  {"\\a", '\a'},  {"\\b", '\b'},
         {"\\t", '\t'},  {"\\n", '\n'},  {"\\r", '\r'},
@@ -185,6 +215,8 @@ std::any Builder::visitLiteralChar(FusionParser::LiteralCharContext* ctx) {
 }
 
 std::any Builder::visitIdentifier(FusionParser::IdentifierContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering identifier" << std::endl;
     Token* token = ctx->ID()->getSymbol();
     std::string name = ctx->ID()->getText();
     TypePtr type = make_shared<Unset>();
@@ -196,6 +228,8 @@ std::any Builder::visitIdentifier(FusionParser::IdentifierContext* ctx) {
 }
 
 std::any Builder::visitBlock(FusionParser::BlockContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering block" << std::endl;
     Token* token = ctx->L_CURLY()->getSymbol();
     auto block = make_shared<ast::Block>(token);
 
@@ -209,6 +243,8 @@ std::any Builder::visitBlock(FusionParser::BlockContext* ctx) {
 }
 
 std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering variable" << std::endl;
     Token* token = ctx->ID()->getSymbol();
     std::string name = ctx->ID()->getText();
 
@@ -221,6 +257,8 @@ std::any Builder::visitVariable(FusionParser::VariableContext* ctx) {
 }
 
 std::any Builder::visitFunction(FusionParser::FunctionContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering function" << std::endl;
     Token* token = ctx->FUNCTION()->getSymbol();
     TypePtr type = any_cast<TypePtr>(visit(ctx->type()));
     std::string name = ctx->ID()->getText();
@@ -238,6 +276,8 @@ std::any Builder::visitFunction(FusionParser::FunctionContext* ctx) {
 }
 
 std::any Builder::visitCall(FusionParser::CallContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering call" << std::endl;
     Token* token = ctx->L_PAREN()->getSymbol();
     std::string name = ctx->ID()->getText();
     std::vector<shared_ptr<ast::Expression>> args;
@@ -251,10 +291,14 @@ std::any Builder::visitCall(FusionParser::CallContext* ctx) {
 }
 
 std::any Builder::visitCallExpr(FusionParser::CallExprContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering callExpr" << std::endl;
     return visit(ctx->call());
 }
 
 std::any Builder::visitReturn(FusionParser::ReturnContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering return" << std::endl;
     Token* token = ctx->RETURN()->getSymbol();
     auto expr = cast_node(ast::Expression, visit(ctx->expr()));
     auto ret = make_shared<ast::Return>(expr, token);
@@ -263,6 +307,8 @@ std::any Builder::visitReturn(FusionParser::ReturnContext* ctx) {
 }
 
 std::any Builder::visitPower(FusionParser::PowerContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering power" << std::endl;
     Token* token = ctx->CARET()->getSymbol();
     auto lhs = cast_node(ast::Expression, visit(ctx->expr()[0]));
     auto rhs = cast_node(ast::Expression, visit(ctx->expr()[1]));
@@ -273,6 +319,8 @@ std::any Builder::visitPower(FusionParser::PowerContext* ctx) {
 }
 
 std::any Builder::visitMulDivMod(FusionParser::MulDivModContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering mulDivMod" << std::endl;
     Token* token;
     ast::BinaryOpType type;
 
@@ -297,6 +345,8 @@ std::any Builder::visitMulDivMod(FusionParser::MulDivModContext* ctx) {
 }
 
 std::any Builder::visitAddSub(FusionParser::AddSubContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering addSub" << std::endl;
     Token* token;
     ast::BinaryOpType type;
 
@@ -317,6 +367,8 @@ std::any Builder::visitAddSub(FusionParser::AddSubContext* ctx) {
 }
 
 std::any Builder::visitGtLtCond(FusionParser::GtLtCondContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering gtLtCond" << std::endl;
     Token* token;
     ast::BinaryOpType type;
 
@@ -343,6 +395,8 @@ std::any Builder::visitGtLtCond(FusionParser::GtLtCondContext* ctx) {
 }
 
 std::any Builder::visitEqNeCond(FusionParser::EqNeCondContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering eqNeCond" << std::endl;
     Token* token;
     ast::BinaryOpType type;
 
@@ -363,6 +417,8 @@ std::any Builder::visitEqNeCond(FusionParser::EqNeCondContext* ctx) {
 }
 
 std::any Builder::visitAndOrCond(FusionParser::AndOrCondContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering andOrCond" << std::endl;
     Token* token;
     ast::BinaryOpType type;
 
@@ -383,6 +439,8 @@ std::any Builder::visitAndOrCond(FusionParser::AndOrCondContext* ctx) {
 }
 
 std::any Builder::visitUnary(FusionParser::UnaryContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering unary" << std::endl;
     Token* token;
     ast::UnaryOpType type;
 
@@ -402,6 +460,8 @@ std::any Builder::visitUnary(FusionParser::UnaryContext* ctx) {
 }
 
 std::any Builder::visitAssignment(FusionParser::AssignmentContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering assignment" << std::endl;
     Token* token = ctx->ID()->getSymbol();
     std::string name = ctx->ID()->getText();
     TypePtr type = make_shared<Unset>();
@@ -413,7 +473,10 @@ std::any Builder::visitAssignment(FusionParser::AssignmentContext* ctx) {
     auto assn = make_shared<ast::Assignment>(var, expr, token);
     return to_node(assn);
 }
+
 std::any Builder::visitIf(FusionParser::IfContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering if" << std::endl;
     Token* token = ctx->IF()->getSymbol();
 
     auto condition = cast_node(ast::Expression, visit(ctx->expr()));
@@ -429,6 +492,8 @@ std::any Builder::visitIf(FusionParser::IfContext* ctx) {
 }
 
 std::any Builder::visitElse(FusionParser::ElseContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering else" << std::endl;
     Token* token = ctx->ELSE()->getSymbol();
 
     if (ctx->if_() != nullptr) {
@@ -442,6 +507,8 @@ std::any Builder::visitElse(FusionParser::ElseContext* ctx) {
 }
 
 std::any Builder::visitLoop(FusionParser::LoopContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering loop" << std::endl;
     Token* token = ctx->FOR()->getSymbol();
 
     auto variable = cast_node(ast::Declaration, visit(ctx->declaration()));
@@ -451,5 +518,25 @@ std::any Builder::visitLoop(FusionParser::LoopContext* ctx) {
 
     auto node =
         make_shared<ast::Loop>(variable, condition, assignment, body, token);
+    return to_node(node);
+}
+
+std::any Builder::visitModule(FusionParser::ModuleContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering module" << std::endl;
+    std::string name = ctx->ID()->getText();
+    // shared_ptr<ast::Node> ast = get_module(name);
+
+    return nullptr;
+}
+
+std::any Builder::visitImp(FusionParser::ImpContext* ctx) {
+    if (DEBUG)
+        std::cout << "entering imp" << std::endl;
+    std::string name = ctx->ID()->getText();
+    shared_ptr<module::Unit> unit = module_manager->compile_unit(name);
+    visit(unit->tree);
+
+    auto node = make_shared<ast::Import>(name, ctx->ID()->getSymbol());
     return to_node(node);
 }

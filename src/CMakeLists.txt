@@ -33,6 +33,7 @@ set(
   "${CMAKE_CURRENT_SOURCE_DIR}/shared/type/type.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/shared/context.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/errors/syntax.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/module/manager.cpp"
 )
 
 # Build our executable from the source files.

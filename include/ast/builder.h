@@ -7,6 +7,7 @@
 
 #include "ast/ast.h"
 #include "ast/symbol/symbol_table.h"
+#include "module/manager.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -16,9 +17,11 @@ class Builder : public FusionBaseVisitor {
    private:
     shared_ptr<ast::Block> ast;
     shared_ptr<SymbolTable> symbol_table;
+    shared_ptr<module::Manager> module_manager;
 
    public:
-    Builder(shared_ptr<SymbolTable> symbol_table);
+    Builder(shared_ptr<SymbolTable> symbol_table,
+            shared_ptr<module::Manager> module_manager);
     bool has_ast();
     shared_ptr<ast::Block> get_ast();
 
@@ -49,4 +52,6 @@ class Builder : public FusionBaseVisitor {
     std::any visitIf(FusionParser::IfContext* ctx) override;
     std::any visitElse(FusionParser::ElseContext* ctx) override;
     std::any visitLoop(FusionParser::LoopContext* ctx) override;
+    std::any visitModule(FusionParser::ModuleContext* ctx) override;
+    std::any visitImp(FusionParser::ImpContext* ctx) override;
 };
