@@ -1,4 +1,8 @@
+#include <cstddef>
 #include <memory>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 #include "ast/ast.h"
 #include "backend/backend.h"
@@ -11,6 +15,8 @@
 
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
+#include "mlir/IR/Block.h"
+#include "mlir/IR/Value.h"
 #include "mlir/IR/ValueRange.h"
 #include "shared/context.h"
 
