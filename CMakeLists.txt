@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.31)
 set(CMAKE_C_COMPILER "/usr/bin/clang")
 set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 project(FusionBase)
@@ -6,9 +6,11 @@ project(FusionBase)
 
 include(ExternalProject)
 find_package(Git REQUIRED)
-find_package(Java COMPONENTS Runtime REQUIRED) 
+find_package(Java COMPONENTS Runtime REQUIRED)
 
 include("${CMAKE_SOURCE_DIR}/cmake/get_mlir.cmake")
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)

@@ -8,13 +8,14 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 
 using std::shared_ptr, std::unique_ptr, std::make_shared, std::make_unique;
 
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::cerr << "must provide an entry point file" << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     ctx::initialize_context();
