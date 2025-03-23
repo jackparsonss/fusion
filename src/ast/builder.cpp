@@ -1,11 +1,17 @@
 #include <any>
+#include <cstddef>
 #include <iostream>
+#include <memory>
+#include <optional>
 #include <stdexcept>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "FusionParser.h"
 #include "ast/ast.h"
 #include "ast/builder.h"
+#include "ast/symbol/symbol_table.h"
 #include "errors/errors.h"
 #include "module/manager.h"
 #include "shared/context.h"

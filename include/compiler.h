@@ -1,6 +1,9 @@
 #pragma once
 
+#include <filesystem>
+#include <fstream>
 #include <memory>
+#include <string>
 
 #include "ast/builder.h"
 #include "ast/symbol/symbol_table.h"

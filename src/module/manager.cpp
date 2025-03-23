@@ -1,4 +1,10 @@
 #include "module/manager.h"
+#include <string>
+#include "ANTLRFileStream.h"
+#include "CommonTokenStream.h"
+#include "FusionLexer.h"
+#include "FusionParser.h"
+#include "ast/ast.h"
 #include "errors/syntax.h"
 
 module::Unit::Unit(std::string filename) {

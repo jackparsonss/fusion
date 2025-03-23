@@ -1,9 +1,16 @@
 #include "ast/passes/pass.h"
+#include <iostream>
+#include <memory>
+#include <ostream>
+#include <stdexcept>
+#include <string>
+#include <vector>
 #include "ast/ast.h"
 #include "ast/passes/builtin.h"
 #include "ast/passes/control_flow.h"
 #include "ast/passes/def_ref.h"
 #include "ast/passes/type_check.h"
+#include "ast/symbol/symbol_table.h"
 
 constexpr bool debug = false;
 #define try_visit(node, t, f)                                    \

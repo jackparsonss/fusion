@@ -1,9 +1,15 @@
 #include "ast/ast.h"
 #include "CommonToken.h"
 #include "shared/context.h"
+#include "shared/type/type.h"
 
+#include <cassert>
 #include <iostream>
+#include <optional>
 #include <random>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 std::string ast::random_name() {
     std::string s = "_";

@@ -4,6 +4,7 @@
 #include <ostream>
 #include <stack>
 #include <string>
+#include <unordered_map>
 
 #include "ast/ast.h"
 

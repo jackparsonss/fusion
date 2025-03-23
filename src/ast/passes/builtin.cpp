@@ -1,5 +1,13 @@
 #include "ast/passes/builtin.h"
+#include <memory>
+#include <optional>
+#include <stdexcept>
+#include <string>
+#include "ast/ast.h"
+#include "ast/passes/pass.h"
 #include "ast/symbol/function_symbol.h"
+#include "ast/symbol/symbol.h"
+#include "ast/symbol/symbol_table.h"
 
 Builtin::Builtin(shared_ptr<SymbolTable> symbol_table) : Pass("Builtin") {
     this->symbol_table = symbol_table;

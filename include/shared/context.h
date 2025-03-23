@@ -6,7 +6,10 @@
 #include <mlir/IR/Types.h>
 #include <memory>
 #include <stack>
+#include <vector>
 
+#include "mlir/IR/BuiltinOps.h"
+#include "mlir/IR/MLIRContext.h"
 #include "shared/type/type.h"
 
 using std::shared_ptr, std::make_shared, std::unique_ptr;

@@ -1,4 +1,6 @@
 #include "ast/passes/control_flow.h"
+#include "ast/ast.h"
+#include "ast/passes/pass.h"
 #include "errors/errors.h"
 
 ControlFlow::ControlFlow() : Pass("Control Flow") {

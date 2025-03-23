@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+#include "mlir/IR/Types.h"
 #include "shared/type/type.h"
 
 class F32 : public Type {

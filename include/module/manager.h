@@ -3,13 +3,13 @@
 #include <string>
 #include <unordered_map>
 #include "ANTLRFileStream.h"
+#include "CommonTokenStream.h"
 #include "FusionLexer.h"
 #include "FusionParser.h"
 #include "ParseTree.h"
 #include "ast/ast.h"
 
 using std::shared_ptr;
-namespace fs = std::filesystem;
 
 namespace module {
 class Unit {

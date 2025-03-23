@@ -1,4 +1,7 @@
 #include "ast/symbol/symbol.h"
+#include <string>
+#include "ast/ast.h"
+#include "shared/type/type.h"
 
 Symbol::Symbol(std::string name) : Symbol(name, nullptr) {}
 
