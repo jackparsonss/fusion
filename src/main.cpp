@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
         Compiler(argv[1], symbol_table, std::move(backend), std::move(builder));
 
     compiler.build_ast();
-    for (size_t i = 0; i < argc; i++) {
+    for (int i = 0; i < argc; i++) {
         std::string arg = std::string(argv[i]);
         if (arg == "--xml") {
             compiler.xml();
