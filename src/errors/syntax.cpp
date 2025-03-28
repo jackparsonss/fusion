@@ -1,5 +1,15 @@
 #include "errors/syntax.h"
+#include "CommonTokenStream.h"
+#include "Parser.h"
+#include "Recognizer.h"
+#include "Token.h"
+#include <cstddef>
+#include <exception>
+#include <ostream>
+#include <sstream>
+#include <string>
 #include "errors/errors.h"
+#include "antlr4-runtime.h"
 
 void SyntaxErrorListener::syntaxError(antlr4::Recognizer* recognizer,
                                       antlr4::Token* offending_symbol,

@@ -1,7 +1,10 @@
 #include "ast/passes/type_check.h"
+#include <cstddef>
 #include "ast/ast.h"
+#include "ast/passes/pass.h"
 #include "errors/errors.h"
 #include "shared/context.h"
+#include "shared/type/type.h"
 
 TypeCheck::TypeCheck() : Pass("Typecheck") {}
 

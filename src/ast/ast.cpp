@@ -1,9 +1,15 @@
 #include "ast/ast.h"
 #include "CommonToken.h"
 #include "shared/context.h"
+#include "shared/type/type.h"
 
+#include <cassert>
 #include <iostream>
+#include <optional>
 #include <random>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 std::string ast::random_name() {
     std::string s = "_";
@@ -484,4 +490,13 @@ void ast::Continue::xml(int level) {
 
 void ast::Break::xml(int level) {
     std::cout << std::string(level * 4, ' ') << "</break>\n";
+}
+
+ast::Import::Import(std::string name, Token* token) : Node(token) {
+    this->name = name;
+}
+
+void ast::Import::xml(int level) {
+    std::cout << std::string(level * 4, ' ') << "<import module=\"" << name
+              << "\"/>\n";
 }

@@ -4,6 +4,7 @@
 #include <ostream>
 #include <stack>
 #include <string>
+#include <unordered_map>
 
 #include "ast/ast.h"
 
@@ -48,4 +49,5 @@ class Backend {
     mlir::Value visit_loop(shared_ptr<ast::Loop>);
     mlir::Value visit_continue(shared_ptr<ast::Continue>);
     mlir::Value visit_break(shared_ptr<ast::Break>);
+    mlir::Value visit_import(shared_ptr<ast::Import>);
 };

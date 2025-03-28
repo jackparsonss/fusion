@@ -1,10 +1,13 @@
 # Fusion Lang
+
 A toy language to continue learning antlr4 and mlir/llvm and see where I go
 
 ## Setting up environment
+
 If you are on macos then I have made a simple install script which will install all requirements/dependencies needed to develop with antlr and mlir, located [here](https://github.com/jackparsonss/fusion/blob/main/scipts/setup_macos.bash)
 
 ## Building
+
 ```bash
 mkdir build
 cd build
@@ -13,27 +16,33 @@ make
 ```
 
 ## Running
+
 ```bash
 cd bin
 ./fuse <filename>.fuse
 ```
 
 ## Documentation
+
 ### Declarations
+
 The `let` keyword signifies that the variable can be later changed.
 The `const` keyword signifies that the variable cannot be later changed;
+
 ```
 let x: i32 = 5;
 const y: i32 = x;
 ```
 
 ### Types
+
 - **i32**: 32-bit integer
 - **i64**: 64-bit integer
 - **ch**: 8-bit ascii character
 - **bool**: 1-bit boolean(true/false)
 
 ### Functions
+
 ```
 fn foo(let x: i32, let y: ch): i32 {
     print(x);
@@ -49,8 +58,11 @@ fn main(): i32 {
 ```
 
 #### Builtin Functions
+
 ##### main
+
 Must be defined by the user, is the entry point to the fusion program
+
 ```
 fn main(): i32 {
     // do stuff
@@ -59,20 +71,27 @@ fn main(): i32 {
 ```
 
 ##### print
+
 Prints the argument passed to stdout
+
 ```
 print(5);
 ```
 
 ##### println
+
 Prints the argument passed to stdout with a newline at the end
+
 ```
 println(100);
 ```
+
 ```
+
 ```
 
 #### Arithmetic
+
 - addition: `+`
 - subtraction: `-`
 - power: `^`
@@ -85,6 +104,7 @@ println(100);
 - not equal: `!=`
 - and: `&&`
 - or: `||`
+
 ```
 fn main(): i32 {
     let a: i32 = 5 + 5;
@@ -106,7 +126,9 @@ fn main(): i32 {
 ```
 
 #### Conditionals
+
 Just like `if`/`else` statements in most languages
+
 ```
 let x: i32 = 5;
 if(x == 4){
@@ -117,14 +139,18 @@ if(x == 4){
     println(x);
 }
 ```
+
 Conditions **must** be booleans
 
 #### Loops
+
 Similar to c-style for loops, they are composed of 4 parts
+
 - Variable declaration
 - Loop condition
 - Variable assignment
 - Body
+
 ```
 for(let i: i32 = 0; i < 5; i = i + 1){
     println(i);
@@ -132,5 +158,28 @@ for(let i: i32 = 0; i < 5; i = i + 1){
 ```
 
 Loops also allow for control flow:
+
 - `continue`: goes to the next iteration of the loop
 - `break`: exits the loop early
+
+#### Modules
+
+Fuse's module system follows a simple pattern of the module name is the name of the file. Modules are imported using the `import` keyword followed by the module name.
+
+```
+// foo.fuse
+fn foo(): i32 {
+    println(4);
+
+    return 5;
+}
+
+// main.fuse
+import foo;
+
+fn main(): i32 {
+    println(foo());
+
+    return 0;
+}
+```

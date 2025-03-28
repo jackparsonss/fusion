@@ -1,4 +1,8 @@
+#include <cstddef>
 #include <memory>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 #include "ast/ast.h"
 #include "backend/backend.h"
@@ -11,6 +15,8 @@
 
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
+#include "mlir/IR/Block.h"
+#include "mlir/IR/Value.h"
 #include "mlir/IR/ValueRange.h"
 #include "shared/context.h"
 
@@ -38,6 +44,7 @@ mlir::Value Backend::visit(shared_ptr<ast::Node> node) {
     try_visit(node, ast::Loop, this->visit_loop);
     try_visit(node, ast::Continue, this->visit_continue);
     try_visit(node, ast::Break, this->visit_break);
+    try_visit(node, ast::Import, this->visit_import);
 
     throw std::runtime_error("node not added to backend visit function");
 }
@@ -272,5 +279,9 @@ mlir::Value Backend::visit_break(shared_ptr<ast::Break> node) {
 
     ctx::builder->setInsertionPointToStart(b_body);
 
+    return nullptr;
+}
+
+mlir::Value Backend::visit_import(shared_ptr<ast::Import> node) {
     return nullptr;
 }

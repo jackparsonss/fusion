@@ -1,7 +1,12 @@
 #pragma once
 
+#include <cstddef>
+#include <exception>
+#include <ostream>
+#include <string>
 #include "BaseErrorListener.h"
-#include "antlr4-runtime.h"
+#include "Recognizer.h"
+#include "Token.h"
 
 #define _NC "\033[0m"
 #define _RED "\033[0;31m"

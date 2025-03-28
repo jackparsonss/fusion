@@ -1,4 +1,7 @@
 #include "ast/symbol/scope.h"
+#include <optional>
+#include <string>
+#include "ast/symbol/symbol.h"
 
 Scope::Scope(ScopePtr enclosing_scope) {
     this->enclosing_scope = enclosing_scope;

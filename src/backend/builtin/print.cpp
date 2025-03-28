@@ -1,10 +1,15 @@
 #include "backend/builtin/print.h"
+#include <string>
 #include "backend/io.h"
+#include "mlir/Dialect/LLVMIR/LLVMAttrs.h"
+#include "mlir/IR/Value.h"
+#include "mlir/Support/LLVM.h"
 #include "shared/context.h"
 
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Dialect/LLVMIR/LLVMTypes.h"
 #include "mlir/IR/Block.h"
+#include "shared/type/type.h"
 
 namespace {
 void create_type_str(TypePtr type) {

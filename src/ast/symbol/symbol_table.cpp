@@ -1,11 +1,16 @@
 #include <memory>
+#include <optional>
+#include <string>
+#include <vector>
 
 #include "CommonToken.h"
 #include "ast/ast.h"
 #include "ast/symbol/function_symbol.h"
+#include "ast/symbol/scope.h"
 #include "ast/symbol/symbol.h"
 #include "ast/symbol/symbol_table.h"
 #include "shared/context.h"
+#include "shared/type/type.h"
 
 namespace {
 shared_ptr<ast::Function> make_print(TypePtr type) {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "ast/ast.h"
 
 #include "mlir/Dialect/LLVMIR/FunctionCallUtils.h"
@@ -7,6 +8,7 @@
 #include "mlir/IR/Types.h"
 #include "mlir/IR/Value.h"
 #include "mlir/IR/ValueRange.h"
+#include "shared/type/type.h"
 
 namespace utils {
 mlir::Value stack_allocate(mlir::Type type);

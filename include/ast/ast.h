@@ -282,4 +282,11 @@ class Break : public Node {
     Break(Token* token) : Node(token) {}
     void xml(int level);
 };
+
+class Import : public Node {
+   public:
+    std::string name;
+    Import(std::string name, Token* token);
+    void xml(int level);
+};
 }  // namespace ast

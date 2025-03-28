@@ -1,15 +1,11 @@
 #include <cassert>
+#include <filesystem>
 
-#include "ANTLRFileStream.h"
-#include "CommonTokenStream.h"
-#include "FusionLexer.h"
-#include "FusionParser.h"
 #include "ast/passes/pass.h"
 #include "compiler.h"
 #include "errors/errors.h"
-#include "errors/syntax.h"
 
-Compiler::Compiler(std::string filename,
+Compiler::Compiler(fs::path entry,
                    shared_ptr<SymbolTable> symbol_table,
                    unique_ptr<Backend> backend,
                    unique_ptr<Builder> builder) {
@@ -17,36 +13,17 @@ Compiler::Compiler(std::string filename,
     this->backend = std::move(backend);
     this->builder = std::move(builder);
 
-    file = new antlr4::ANTLRFileStream();
-    file->loadFromFile(filename);
-
-    lexer_error = new LexerErrorListener();
-    lexer = new fusion::FusionLexer(file);
-    lexer->removeErrorListeners();
-    lexer->addErrorListener(lexer_error);
-
-    tokens = new antlr4::CommonTokenStream(lexer);
-
-    syntax_error = new SyntaxErrorListener();
-    parser = new fusion::FusionParser(tokens);
-    parser->removeErrorListeners();
-    parser->addErrorListener(syntax_error);
-
-    tree = parser->file();
+    this->entry = make_shared<module::Unit>(entry);
 }
 
 Compiler::~Compiler() {
-    delete file;
-    delete lexer;
-    delete tokens;
-    delete parser;
     delete lexer_error;
     delete syntax_error;
 }
 
 void Compiler::build_ast() {
     try {
-        builder->visit(tree);
+        builder->visit(entry->tree);
         assert(builder->has_ast());
     } catch (CompileTimeException const& e) {
         std::cerr << e.what() << std::endl;

@@ -1,6 +1,8 @@
 #pragma once
+#include <exception>
 #include <ostream>
 #include <sstream>
+#include <string>
 
 class CompileTimeException : public std::exception {
    protected:
